@@ -1,0 +1,1 @@
+INSERT INTO fhv VALUES (1, 'B00013', 'nguyenthanhha', 'hanguyenthanh', 1, 1, 'N');

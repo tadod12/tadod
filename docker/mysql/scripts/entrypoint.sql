@@ -2,11 +2,11 @@
 GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'root' IDENTIFIED BY 'admin';
 GRANT SELECT, RELOAD, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'root' IDENTIFIED BY 'admin';
 
-CREATE DATABASE tlc_record;
-GRANT ALL PRIVILEGES ON tlc_record.* TO 'root'@'%';
+CREATE DATABASE IF NOT EXISTS tlc;
+GRANT ALL PRIVILEGES ON tlc.* TO 'root'@'%';
 
 -- Switch to this database
-USE tlc_record;
+USE tlc;
 
 -- Create location lookup table
 -- CREATE TABLE location (
@@ -17,7 +17,7 @@ USE tlc_record;
 -- );
 
 -- Create table for yellow taxi record data
-CREATE TABLE yellow_records (
+CREATE TABLE IF NOT EXISTS yellow (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     vendor_id INT,
     tpep_pickup_datetime VARCHAR(30),
@@ -37,13 +37,11 @@ CREATE TABLE yellow_records (
     tolls_amount FLOAT,
     total_amount FLOAT,
     congestion_surcharge FLOAT,
-    airport_fee FLOAT,
-    FOREIGN KEY (pu_location_id) REFERENCES location(location_id),
-    FOREIGN KEY (do_location_id) REFERENCES location(location_id)
+    airport_fee FLOAT
 );
 
 -- Create table for green taxi record data
-CREATE TABLE green_records (
+CREATE TABLE IF NOT EXISTS green (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     vendor_id INT,
     lpep_pickup_datetime VARCHAR(30),
@@ -61,19 +59,16 @@ CREATE TABLE green_records (
     improvement_surcharge FLOAT,
     tip_amount FLOAT,
     tolls_amount FLOAT,
-    trip_type INT,
-    FOREIGN KEY (pu_location_id) REFERENCES location(location_id),
-    FOREIGN KEY (do_location_id) REFERENCES location(location_id)
+    trip_type INT
 );
 
 -- Create table for for-hire vehicle record data
-CREATE TABLE fhv_records (
+CREATE TABLE IF NOT EXISTS fhv (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     dispatching_base_num VARCHAR(10),
     pickup_datetime VARCHAR(30),
     dropoff_datetime VARCHAR(30),
     pu_location_id INT,
     do_location_id INT,
-    sr_flag VARCHAR(1),
-    FOREIGN KEY (pu_location_id) REFERENCES location(location_id),
-    FOREIGN KEY (do_location_id) REFERENCES location(location_id)
+    sr_flag VARCHAR(1)
 );
