@@ -1,10 +1,17 @@
-# TADOD - Data Platform for TLC Trip Record Data
+# TADOD - Data Pipeline for TLC Trip Record Data
 
 ## Table of Contents
 
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [License](#license)
+
 ## Overview
 
+
 ## Architecture
+
+![Architecture](assets/architecture-draft.png)
 
 ## License
 
