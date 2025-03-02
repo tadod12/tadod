@@ -1,9 +1,11 @@
-# Final Project Draft
+# TADOD - Data Platform for TLC Trip Record Data
 
-Tools
-- PostgreSQL: Data Source
-- Debezium: Change Data Capture
-- Kafka + Spark Structured Streaming: Realtime Ingestion
-- MinIO + Iceberg: Data Lakehouse
-- DBT: Data Transform
-- Airflow: Data Orchestration
+## Table of Contents
+
+## Overview
+
+## Architecture
+
+## License
+
+This project is licensed under the [Apache License](./LICENSE)
