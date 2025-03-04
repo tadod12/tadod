@@ -1,0 +1,42 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="VulnerableLibrariesGlobal" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="spark" />
+          <option value="spark" />
+          <option value="spark" />
+          <option value="spark" />
+          <option value="spark" />
+          <option value="spark" />
+          <option value="spark" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="io.airlift:aircompressor:0.25" />
+          <option value="org.apache.avro:avro:1.11.2" />
+          <option value="com.google.protobuf:protobuf-java:3.19.6" />
+          <option value="com.google.guava:guava:16.0.1" />
+          <option value="commons-io:commons-io:2.13.0" />
+          <option value="io.netty:netty-codec-http:4.1.96.Final" />
+          <option value="io.netty:netty-codec-http2:4.1.96.Final" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
