@@ -13,7 +13,7 @@
 
 Draft Architecture
 
-![Architecture](assets/architecture-draft.png)
+![Architecture](assets/architecture.png)
 
 ## License
 
