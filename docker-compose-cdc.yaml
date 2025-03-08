@@ -196,6 +196,19 @@ services:
     restart: always
     depends_on: *connect-common-depends
 
+  # Python for producing messages to MySQL
+  python:
+    build:
+      context: ./docker/python
+      dockerfile: Dockerfile
+    image: tadod/lakehouse:python
+    container_name: python
+    restart: never
+    depends_on: *connect-common-depends
+    volumes:
+      - ./assets/data:/usr/app/src/data/
+    entrypoint: ./entrypoint.sh
+
 # Configure Network
 networks:
   default:
