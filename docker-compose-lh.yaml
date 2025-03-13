@@ -1,5 +1,23 @@
 # Configure services
 services:
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./docker/volume/postgres:/var/lib/postgresql/data
+      - ./docker/postgres/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
   # S3 Storage
   minio:
     container_name: minio
@@ -59,7 +77,6 @@ services:
 
   # Query Engine
   trino:
-    profiles: [ "trino" ]
     container_name: trino
     hostname: trino
     image: "trinodb/trino:425"
@@ -73,7 +90,6 @@ services:
       - hive-metastore
 
   trino-worker:
-    profiles: [ "trino-worker" ]
     container_name: trino-worker
     hostname: trino-worker
     image: "trinodb/trino:425"
@@ -85,7 +101,6 @@ services:
       - trino
 
   spark-master:
-    profiles: [ "spark" ]
     build:
       dockerfile: ./docker/spark/Dockerfile
     image: tadod/lakehouse:spark-master
@@ -109,7 +124,6 @@ services:
       - hive-metastore
 
   spark-worker-1:
-    profiles: [ "spark" ]
     build:
       dockerfile: ./docker/spark/Dockerfile
     image: tadod/lakehouse:spark-worker
