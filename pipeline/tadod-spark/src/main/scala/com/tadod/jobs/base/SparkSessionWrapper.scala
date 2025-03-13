@@ -55,4 +55,31 @@ trait SparkSessionWrapper extends Serializable {
       }
     }.toMap
   }
+
+  lazy val repartitionNumber: Int => Int = (repartitionFactor: Int) => {
+    try {
+      val executorInstances = spark.conf.get("spark.executor.instances").toInt
+      val executorCores = spark.conf.get("spark.executor.cores").toInt
+      executorInstances * executorCores * repartitionFactor
+    } catch {
+      case _: Exception => 200
+    }
+  }
+
+  lazy val getNumberExecutorCoresFromAllExecutors: Int = {
+    try {
+      val executorInstances = spark.conf.get("spark.executor.instances").toInt
+      val executorCores = spark.conf.get("spark.executor.cores").toInt
+      executorInstances * executorCores
+    } catch {
+      case _: Exception => 200
+    }
+  }
+
+  def repartitionByRecords(ds: Dataset[String], recordsPerPartition: Int): Dataset[String] = {
+    val totalRecords = ds.count()
+    // Number of partitions needed
+    val numPartitions = Math.ceil(totalRecords.toDouble / recordsPerPartition).toInt
+    ds.repartition(numPartitions)
+  }
 }
