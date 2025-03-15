@@ -203,10 +203,10 @@ services:
       dockerfile: Dockerfile
     image: tadod/lakehouse:python
     container_name: python
-    restart: never
+    restart: no
     depends_on: *connect-common-depends
     volumes:
-      - ./assets/data:/usr/app/src/data/
+      - ./assets/data:/usr/app/src/data
     entrypoint: ./entrypoint.sh
 
 # Configure Network
