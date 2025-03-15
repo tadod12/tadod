@@ -16,6 +16,10 @@ USE tlc;
 --     service_zone VARCHAR(30)
 -- );
 
+DROP TABLE IF EXISTS yellow;
+DROP TABLE IF EXISTS green;
+DROP TABLE IF EXISTS fhv;
+
 -- Create table for yellow taxi record data
 CREATE TABLE IF NOT EXISTS yellow (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -41,34 +45,34 @@ CREATE TABLE IF NOT EXISTS yellow (
 );
 
 -- Create table for green taxi record data
-CREATE TABLE IF NOT EXISTS green (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    vendor_id INT,
-    lpep_pickup_datetime VARCHAR(30),
-    lpep_dropoff_datetime VARCHAR(30),
-    passenger_count INT,
-    trip_distance FLOAT,
-    pu_location_id INT,
-    do_location_id INT,
-    rate_code_id INT,
-    store_and_fwd_flag VARCHAR(1),
-    payment_type INT,
-    fare_amount FLOAT,
-    extra FLOAT,
-    mta_tax FLOAT,
-    improvement_surcharge FLOAT,
-    tip_amount FLOAT,
-    tolls_amount FLOAT,
-    trip_type INT
-);
+-- CREATE TABLE IF NOT EXISTS green (
+--     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+--     vendor_id INT,
+--     lpep_pickup_datetime VARCHAR(30),
+--     lpep_dropoff_datetime VARCHAR(30),
+--     passenger_count INT,
+--     trip_distance FLOAT,
+--     pu_location_id INT,
+--     do_location_id INT,
+--     rate_code_id INT,
+--     store_and_fwd_flag VARCHAR(1),
+--     payment_type INT,
+--     fare_amount FLOAT,
+--     extra FLOAT,
+--     mta_tax FLOAT,
+--     improvement_surcharge FLOAT,
+--     tip_amount FLOAT,
+--     tolls_amount FLOAT,
+--     trip_type INT
+-- );
 
 -- Create table for for-hire vehicle record data
-CREATE TABLE IF NOT EXISTS fhv (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    dispatching_base_num VARCHAR(10),
-    pickup_datetime VARCHAR(30),
-    dropoff_datetime VARCHAR(30),
-    pu_location_id INT,
-    do_location_id INT,
-    sr_flag VARCHAR(1)
-);
+-- CREATE TABLE IF NOT EXISTS fhv (
+--     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+--     dispatching_base_num VARCHAR(10),
+--     pickup_datetime VARCHAR(30),
+--     dropoff_datetime VARCHAR(30),
+--     pu_location_id INT,
+--     do_location_id INT,
+--     sr_flag VARCHAR(1)
+-- );
