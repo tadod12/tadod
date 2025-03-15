@@ -196,7 +196,7 @@ services:
     restart: always
     depends_on: *connect-common-depends
 
-  # Python for producing messages to MySQL
+  # Python for producing messages to MySQL 
   python:
     build:
       context: ./docker/python
