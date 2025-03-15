@@ -16,6 +16,7 @@ class BaseJob extends SparkSessionWrapper {
     Config.production += ("kafka.checkpoint.location" -> prop.getProperty("kafka.checkpoint.location"))
     Config.production += ("kafka.trigger.interval" -> prop.getProperty("kafka.trigger.interval", "30 seconds"))
     Config.production += ("kafka.max.offsets.per.trigger" -> prop.getProperty("kafka.max.offsets.per.trigger", "10000"))
+    Config.production += ("kafka.starting.offsets" -> prop.getProperty("kafka.starting.offsets", "latest"))
 
     // Iceberg Configurations
     Option(prop.getProperty("iceberg.catalog")).foreach { catalog =>
