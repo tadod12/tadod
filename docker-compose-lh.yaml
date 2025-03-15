@@ -54,11 +54,11 @@ services:
 
   # Metastore
   hive-metastore:
-    container_name: hive-metastore
-    hostname: hive-metastore
     build:
       dockerfile: ./docker/hive-metastore/Dockerfile
     image: tadod/lakehouse:hive-metastore-3.1.2
+    container_name: hive-metastore
+    hostname: hive-metastore
     ports:
       - '9083:9083' # Metastore Thrift
     environment:
@@ -77,9 +77,9 @@ services:
 
   # Query Engine
   trino:
+    image: "trinodb/trino:425"
     container_name: trino
     hostname: trino
-    image: "trinodb/trino:425"
     restart: always
     ports:
       - "8889:8889"
@@ -90,9 +90,9 @@ services:
       - hive-metastore
 
   trino-worker:
+    image: "trinodb/trino:425"
     container_name: trino-worker
     hostname: trino-worker
-    image: "trinodb/trino:425"
     restart: always
     volumes:
       - ./docker/trino/etc-worker:/etc/trino
@@ -103,9 +103,10 @@ services:
   spark-master:
     build:
       dockerfile: ./docker/spark/Dockerfile
-    image: tadod/lakehouse:spark-master
+    image: tadod/lakehouse:spark
     container_name: spark-master
     hostname: spark-master
+    restart: always
     ports:
       - "7077:7077"
       - "8080:8080"
@@ -117,6 +118,7 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - S3_ENDPOINT=http://minio:9000
       - S3_PATH_STYLE_ACCESS=true
+    command: tail -f /dev/null
     volumes:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
     depends_on:
@@ -126,9 +128,10 @@ services:
   spark-worker-1:
     build:
       dockerfile: ./docker/spark/Dockerfile
-    image: tadod/lakehouse:spark-worker
+    image: tadod/lakehouse:spark
     container_name: spark-worker
     hostname: spark-worker
+    restart: always
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER=spark://spark-master:7077
@@ -138,6 +141,7 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - S3_ENDPOINT=http://minio:9000
       - S3_PATH_STYLE_ACCESS=true
+    command: tail -f /dev/null
     volumes:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
     depends_on:
