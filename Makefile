@@ -1,5 +1,18 @@
 TAG = "MAKE"
 
+# All services
+.PHONY: compose.stop-all
+compose.stop-all:
+	docker-compose -f docker-compose-cdc.yaml down
+	docker-compose -f docker-compose-lh.yaml down
+	docker-compose -f docker-compose-cron.yaml down
+
+.PHONY: compose.start-all
+compose.start-all:
+	docker-compose -f docker-compose-cdc.yaml up -d
+	docker-compose -f docker-compose-lh.yaml up -d
+	docker-compose -f docker-compose-cron.yaml up -d
+
 # CDC
 .PHONY: mysql.shell
 mysql.shell:
@@ -32,6 +45,12 @@ debezium.register.green:
 debezium.register.fhv:
 	curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" \
 		http://localhost:8083/connectors/ -d @docker/debezium/register.tlc_fhv.json
+
+
+# Lakehouse
+.PHONY: compose.lakehouse
+compose.lakehouse:
+	docker-compose -f docker-compose-lh.yaml up -d
 
 .PHONY: compose.clean
 compose.clean:
