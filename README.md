@@ -29,12 +29,13 @@ The data pipeline for processing and storing TLC Trip Record Data leverages a Me
 
 ### Data Serving Layer (Gold Layer) - not figure out yet
 
-### Data Quality Focus
+### Data Quality Focus and Tools
 
-- **Schema Validation**: Ensures data consistency and format compliance during ingestion
-- **Data Profiling & Anomaly Detection**: OpenMetadata monitors data metrics and detects outliers or missing data
-- **Audit Trail & Lineage Tracking**: Tracks data flow and transformation history for traceability and compliance
-- **Data Deduplication & Cleansing**: Spark-based jobs handle data normalization and remove duplicates
+| Layer     | OpenMetadata          | Great Expectations                |
+|-----------|-----------------------|-----------------------------------|
+| Bronze    | Tracking schema drift | Check null value, missing data    |
+| Silver    | Data Lineage          | Anomaly detection                 |
+| Gold      | Data Profiling        | Business rule validation          |
 
 ## License
 
