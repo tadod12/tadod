@@ -14,6 +14,7 @@ trait SparkSessionWrapper extends Serializable {
   Logger.getLogger("org.apache.kafka.clients.consumer.internals.SubscriptionState").setLevel(Level.OFF)
   Logger.getLogger("org.apache.kafka.clients.consumer.KafkaConsumer").setLevel(Level.OFF)
 
+
   private val LOGGER: Logger = LogManager.getLogger(getClass.getName)
 
   // SparkSession initialization

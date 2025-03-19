@@ -111,11 +111,14 @@ class YellowStreamingJob(configPath: String) extends BaseStreamingJob(configPath
         .format("console")
         .outputMode("append")
         .trigger(Trigger.ProcessingTime("10 seconds"))
+<<<<<<< HEAD
         .option("checkpointLocation", kafkaConfig.checkpointLocation)
         .foreachBatch {(batchDF: DataFrame, batchId: Long) =>
           println(s"Batch: $batchId, numRows: ${batchDF.count()}")
           batchDF.show(10, truncate = false)
         }
+=======
+>>>>>>> 37224a8e6d7b0c1190472a26c5e6c43aa3c074f6
         .start()
 
       spark.streams.awaitAnyTermination()
