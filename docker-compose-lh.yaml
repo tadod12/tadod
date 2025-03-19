@@ -121,6 +121,7 @@ services:
     command: tail -f /dev/null
     volumes:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
+      - ./pipeline/ingestion:/var/ingestion
     depends_on:
       - minio
       - hive-metastore

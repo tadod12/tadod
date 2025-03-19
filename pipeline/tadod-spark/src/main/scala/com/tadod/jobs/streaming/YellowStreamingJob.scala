@@ -4,6 +4,7 @@ import com.tadod.config.Config
 import com.tadod.models.database.IcebergWriterConfig
 import com.tadod.models.streaming.{IcebergOptimizeConfig, KafkaConfig}
 import com.tadod.processors.YellowStreamingProcessor
+import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.streaming.Trigger
 
 class YellowStreamingJob(configPath: String) extends BaseStreamingJob(configPath) {
@@ -110,6 +111,11 @@ class YellowStreamingJob(configPath: String) extends BaseStreamingJob(configPath
         .format("console")
         .outputMode("append")
         .trigger(Trigger.ProcessingTime("10 seconds"))
+        .option("checkpointLocation", kafkaConfig.checkpointLocation)
+        .foreachBatch {(batchDF: DataFrame, batchId: Long) =>
+          println(s"Batch: $batchId, numRows: ${batchDF.count()}")
+          batchDF.show(10, truncate = false)
+        }
         .start()
 
       spark.streams.awaitAnyTermination()
