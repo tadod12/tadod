@@ -15,7 +15,7 @@ The data pipeline for processing and storing TLC Trip Record Data leverages a Me
 
 ## Architecture
 
-![Architecture](assets/architecture.png)
+![Architecture](assets/draft-200325.png)
 
 ### Data Ingestion Layer (Bronze Layer)
 - **Debezium** captures change data from **MySQL**, which acts as an external system storing public transportation service data, and streams the data to **Apache Kafka**

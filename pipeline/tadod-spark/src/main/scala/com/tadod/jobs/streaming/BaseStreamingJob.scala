@@ -7,7 +7,7 @@ import com.tadod.processors.BaseStreamingProcessor
 import org.apache.log4j.{Level, LogManager, Logger}
 
 abstract class BaseStreamingJob(configPath: String) extends BaseJob {
-  protected val LOGGER = LogManager.getLogger(getClass.getName)
+  protected val LOGGER: Logger = LogManager.getLogger(getClass.getName)
   Logger.getLogger("org").setLevel(Level.ERROR)
 
   // Load configurations
@@ -26,7 +26,7 @@ abstract class BaseStreamingJob(configPath: String) extends BaseJob {
 
   def execute(): Unit = {
     try {
-      LOGGER.info(s"Starting ${getJobName} streaming job")
+      LOGGER.info(s"Starting $getJobName streaming job")
 
       // Read from Kafka
       val kafkaDF = processor.readFromKafka()
@@ -41,7 +41,7 @@ abstract class BaseStreamingJob(configPath: String) extends BaseJob {
       spark.streams.awaitAnyTermination()
     } catch {
       case e: Exception =>
-        handleError(e, "Job failed")
+        handleError(e, "BaseStreamingJob failed")
     } finally {
       processor.stop()
     }

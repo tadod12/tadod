@@ -182,6 +182,26 @@ services:
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./docker/mysql/scripts:/docker-entrypoint-initdb.d
 
+  # Postgres
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./docker/volume/postgres:/var/lib/postgresql/data
+      - ./docker/postgres/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+      - ./docker/postgres/postgres-entrypoint.sql:/docker-entrypoint-initdb.d/entrypoint.sql
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
   # Kafka Producer: Debezium MySQL Connector (Connect Distributed Mode)
   kafka-connect-1:
     <<: *connect-common

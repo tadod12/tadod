@@ -53,3 +53,5 @@
 - Support for diverse workloads
 - End-to-end streaming
 
+
+[The Lakehouse is just a meta data layer built on top of the data lake that provides data warehouse-like querying capabilities (with ACID support) at scale directly from the data lake](https://medium.com/@deep2017.arjun/data-modeling-in-the-lakehouse-9e45db47d9be)

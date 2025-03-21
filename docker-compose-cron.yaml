@@ -38,25 +38,6 @@ x-airflow-common: &airflow-common
 
 # Configure services
 services:
-  # Airflow DB
-  postgres:
-    container_name: postgres
-    hostname: postgres
-    image: postgres:11
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./docker/volume/postgres:/var/lib/postgresql/data
-      - ./docker/postgres/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "postgres" ]
-      interval: 10s
-      retries: 5
-      start_period: 5s
-
   # Airflow Webserver
   airflow-webserver:
     <<: *airflow-common
