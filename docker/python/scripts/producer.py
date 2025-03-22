@@ -1,25 +1,23 @@
 import os
 import pandas as pd
-import mysql.connector
-from mysql.connector import Error
 from sqlalchemy import create_engine
 
 # Data Source
-data_dir = "./data/"
+data_dir = "../data/"
 
 # Destination Configuration
-mysql_config = {
-    'host': 'mysql',
-    'port': '3306',
-    'user': 'root',
-    'password': 'admin',
+postgres_config = {
+    'host': 'postgres',
+    'port': '5432',
+    'user': 'postgres',
+    'password': 'postgres',
     'database': 'tlc'
 }
 table_name = "yellow"
 
 
 def produce():
-    engine = create_engine(f"mysql+mysqlconnector://root:admin@mysql:3306/tlc")
+    engine = create_engine(f"postgresql+psycopg2://postgres:postgres@postgres:5432/tlc")
 
     for file in os.listdir(data_dir):
         print(f"Inserting data from {file}")
@@ -60,12 +58,13 @@ def produce():
                 con=engine,
                 if_exists='append',
                 index=False,
-                chunksize=1000
+                chunksize=10
             )
             print(f"Successfully inserted data from {file}")
         except Exception as e:
             print(f"Failed to insert data from {file}")
             print(e)
+
 
 if __name__ == "__main__":
     produce()
