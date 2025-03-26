@@ -24,6 +24,7 @@ RUN docker-maven-download confluent kafka-avro-serializer "$CONFLUENT_VERSION" &
     docker-maven-download confluent common-utils "$CONFLUENT_VERSION" && \
     docker-maven-download central org/apache/avro avro "$AVRO_VERSION" && \
     docker-maven-download central com/google/guava guava "$GUAVA_VERSION" && \
-    docker-maven-download central com/google/guava failureaccess "$GUAVA_FAILURE_VERSION"
+    docker-maven-download central com/google/guava failureaccess "$GUAVA_FAILURE_VERSION" && \
+    docker-maven-download debezium debezium-connector-postgres "$DEBEZIUM_VERSION"
 
 RUN ls -al /kafka/libs;
