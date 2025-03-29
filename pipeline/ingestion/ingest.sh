@@ -30,8 +30,8 @@ spark_submit() {
         --conf spark.hadoop.fs.s3a.path.style.access=true \
         --conf spark.hadoop.fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider \
         --conf spark.sql.parquet.enableVectorizedReader=false \
-        --conf spark.sql.catalog.minio.warehouse=s3a://raw/ \
-        --jars $JARS_DIR/spark-sql-kafka-0-10_2.12-3.4.1.jar,$JARS_DIR/kafka-clients-3.4.1.jar,$JARS_DIR/spark-streaming-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/commons-pool2-2.11.1.jar,$JARS_DIR/spark-token-provider-kafka-0-10_2.12-3.4.1.jar,$JARS_DIR/aws-java-sdk-bundle-1.12.262.jar,$JARS_DIR/hadoop-aws-3.3.4.jar \
+        --conf spark.sql.catalog.minio.warehouse=s3a://datalake/ \
+        --jars /var/ingestion/jars/spark-sql-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/kafka-clients-3.4.1.jar,/var/ingestion/jars/spark-streaming-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/commons-pool2-2.11.1.jar,/var/ingestion/jars/spark-token-provider-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/aws-java-sdk-bundle-1.12.262.jar,/var/ingestion/jars/hadoop-aws-3.3.4.jar \
         --class com.tadod.App \
         /var/ingestion/tadod-spark-1.0-jar-with-dependencies.jar \
         "$1" "$2" "$3" "$4"
@@ -40,4 +40,3 @@ spark_submit() {
 }
 
 spark_submit "YellowStream" "/var/ingestion/application.properties" $CURRENT_DATE $CURRENT_DATE
-# --conf spark.sql.iceberg.handle-timestamp-without-timezone=true \

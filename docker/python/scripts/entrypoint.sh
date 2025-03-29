@@ -1,4 +1,5 @@
 #!/bin/sh
-echo "Hello, World!"
-sleep 10
+echo "Waiting for Kafka..."
+sleep 30
+echo "Python Producer"
 python3 producer.py

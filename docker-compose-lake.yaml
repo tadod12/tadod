@@ -4,7 +4,7 @@ services:
   postgres:
     container_name: postgres
     hostname: postgres
-    image: debezium/postgres:17-alpine
+    image: postgres:11
     ports:
       - "5432:5432"
     environment:
@@ -12,9 +12,8 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       # For persistent storage
-      # - ./docker/volume/postgres:/var/lib/postgresql/data
+      - ./docker/volume/postgres:/var/lib/postgresql/data
       - ./docker/postgres/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
-      # - ./docker/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
       # command: [ "postgres", "-c", "wal_level=logical" ]
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
@@ -35,6 +34,8 @@ services:
       MINIO_ROOT_PASSWORD: minio123
       MINIO_DOMAIN: minio
     command: server /data --console-address ":9001"
+    volumes:
+      - ./docker/volume/minio:/data
 
   minio-job:
     image: 'minio/mc'
@@ -113,7 +114,7 @@ services:
     restart: always
     ports:
       - "7077:7077"
-      - "8080:8080"
+      - "8081:8081"
     environment:
       - SPARK_MODE=master
       - AWS_ACCESS_KEY_ID=minio

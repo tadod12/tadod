@@ -107,16 +107,18 @@ class YellowStreamingJob(configPath: String) extends BaseStreamingJob(configPath
 
       val processedDF = processor.processStream(kafkaDF)
 
-      processedDF.writeStream
-        .format("console")
-        .outputMode("append")
-        .trigger(Trigger.ProcessingTime("10 seconds"))
-        .option("checkpointLocation", kafkaConfig.checkpointLocation)
-        .foreachBatch {(batchDF: DataFrame, batchId: Long) =>
-          println(s"Batch: $batchId, numRows: ${batchDF.count()}")
-          batchDF.show(10, truncate = false)
-        }
-        .start()
+      //      processedDF.writeStream
+      //        .format("console")
+      //        .outputMode("append")
+      //        .trigger(Trigger.ProcessingTime("10 seconds"))
+      //        .option("checkpointLocation", kafkaConfig.checkpointLocation)
+      //        .foreachBatch {(batchDF: DataFrame, batchId: Long) =>
+      //          println(s"Batch: $batchId, numRows: ${batchDF.count()}")
+      //          batchDF.show(10, truncate = false)
+      //        }
+      //        .start()
+
+      processor.writeToIceberg(processedDF)
 
       spark.streams.awaitAnyTermination()
     } catch {

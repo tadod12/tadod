@@ -1,70 +1,51 @@
-import os
 import pandas as pd
-from sqlalchemy import create_engine
+from confluent_kafka import Producer
+import json
 
-# Data Source
-data_dir = "../data/"
+data_dir = "./data/"
 
-# Destination Configuration
-postgres_config = {
-    'host': 'postgres',
-    'port': '5432',
-    'user': 'postgres',
-    'password': 'postgres',
-    'database': 'tlc'
-}
-table_name = "yellow"
+df = pd.read_parquet(data_dir, engine='pyarrow')
 
+df = df.rename(columns={
+    'VendorID': 'vendor_id',
+    'tpep_pickup_datetime': 'tpep_pickup_datetime',
+    'tpep_dropoff_datetime': 'tpep_dropoff_datetime',
+    'passenger_count': 'passenger_count',
+    'trip_distance': 'trip_distance',
+    'PULocationID': 'pu_location_id',
+    'DOLocationID': 'do_location_id',
+    'RatecodeID': 'rate_code_id',
+    'store_and_fwd_flag': 'store_and_fwd_flag',
+    'payment_type': 'payment_type',
+    'fare_amount': 'fare_amount',
+    'extra': 'extra',
+    'mta_tax': 'mta_tax',
+    'improvement_surcharge': 'improvement_surcharge',
+    'tip_amount': 'tip_amount',
+    'tolls_amount': 'tolls_amount',
+    'total_amount': 'total_amount',
+    'congestion_surcharge': 'congestion_surcharge',
+    'Airport_fee': 'airport_fee'
+})
 
-def produce():
-    engine = create_engine(f"postgresql+psycopg2://postgres:postgres@postgres:5432/tlc")
+df['tpep_pickup_datetime'] = df['tpep_pickup_datetime'].apply(
+    lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(x) else None
+)
 
-    for file in os.listdir(data_dir):
-        print(f"Inserting data from {file}")
+df['tpep_dropoff_datetime'] = df['tpep_dropoff_datetime'].apply(
+    lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(x) else None
+)
 
-        df = pd.read_parquet(os.path.join(data_dir, file))
-        df = df.rename(columns={
-            'VendorID': 'vendor_id',
-            'tpep_pickup_datetime': 'tpep_pickup_datetime',
-            'tpep_dropoff_datetime': 'tpep_dropoff_datetime',
-            'passenger_count': 'passenger_count',
-            'trip_distance': 'trip_distance',
-            'PULocationID': 'pu_location_id',
-            'DOLocationID': 'do_location_id',
-            'RatecodeID': 'rate_code_id',
-            'store_and_fwd_flag': 'store_and_fwd_flag',
-            'payment_type': 'payment_type',
-            'fare_amount': 'fare_amount',
-            'extra': 'extra',
-            'mta_tax': 'mta_tax',
-            'improvement_surcharge': 'improvement_surcharge',
-            'tip_amount': 'tip_amount',
-            'tolls_amount': 'tolls_amount',
-            'total_amount': 'total_amount',
-            'congestion_surcharge': 'congestion_surcharge',
-            'Airport_fee': 'airport_fee'
-        })
+producer = Producer({'bootstrap.servers': 'kafka1:9092,kafka2:9093,kafka3:9094'})
 
-        df['tpep_pickup_datetime'] = df['tpep_pickup_datetime'].apply(
-            lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(x) else None
-        )
-        df['tpep_dropoff_datetime'] = df['tpep_dropoff_datetime'].apply(
-            lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(x) else None
-        )
+def delivery_report(err, msg):
+    if err is not None:
+        print('Message delivery failed: {}'.format(err))
+    else:
+        print('Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
 
-        try:
-            df.to_sql(
-                name=table_name,
-                con=engine,
-                if_exists='append',
-                index=False,
-                chunksize=10
-            )
-            print(f"Successfully inserted data from {file}")
-        except Exception as e:
-            print(f"Failed to insert data from {file}")
-            print(e)
-
-
-if __name__ == "__main__":
-    produce()
+for index, row in df.iterrows():
+    message = row.to_dict()
+    print(f"Producing message: {message}")
+    producer.produce('yellow', key=str(index), value=json.dumps(message), callback=delivery_report)
+    producer.flush()

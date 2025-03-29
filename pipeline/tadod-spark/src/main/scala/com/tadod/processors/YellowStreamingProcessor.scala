@@ -3,7 +3,7 @@ package com.tadod.processors
 import com.tadod.models.database.IcebergWriterConfig
 import com.tadod.models.schema.YellowSchema
 import com.tadod.models.streaming.{IcebergOptimizeConfig, KafkaConfig}
-import org.apache.spark.sql.functions.{col, from_json}
+import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 class YellowStreamingProcessor(
@@ -22,26 +22,25 @@ class YellowStreamingProcessor(
       val jsonDF = parsedDF.withColumn("data", from_json(col("json"), YellowSchema.schema))
 
       val processedDF = jsonDF.select(
-        col("data.payload.after.id").as("id"),
-        col("data.payload.after.vendor_id").as("vendor_id"),
-        col("data.payload.after.tpep_pickup_datetime").as("tpep_pickup_datetime"),
-        col("data.payload.after.tpep_dropoff_datetime").as("tpep_dropoff_datetime"),
-        col("data.payload.after.passenger_count").as("passenger_count"),
-        col("data.payload.after.trip_distance").as("trip_distance"),
-        col("data.payload.after.pu_location_id").as("pu_location_id"),
-        col("data.payload.after.do_location_id").as("do_location_id"),
-        col("data.payload.after.rate_code_id").as("rate_code_id"),
-        col("data.payload.after.store_and_fwd_flag").as("store_and_fwd_flag"),
-        col("data.payload.after.payment_type").as("payment_type"),
-        col("data.payload.after.fare_amount").as("fare_amount"),
-        col("data.payload.after.extra").as("extra"),
-        col("data.payload.after.mta_tax").as("mta_tax"),
-        col("data.payload.after.improvement_surcharge").as("improvement_surcharge"),
-        col("data.payload.after.tip_amount").as("tip_amount"),
-        col("data.payload.after.tolls_amount").as("tolls_amount"),
-        col("data.payload.after.total_amount").as("total_amount"),
-        col("data.payload.after.congestion_surcharge").as("congestion_surcharge"),
-        col("data.payload.after.airport_fee").as("airport_fee")
+        col("data.vendor_id"),
+        to_timestamp(col("data.tpep_pickup_datetime"), "yyyy-MM-dd HH:mm:ss").as("tpep_pickup_datetime"),
+        to_timestamp(col("data.tpep_dropoff_datetime"), "yyyy-MM-dd HH:mm:ss").as("tpep_dropoff_datetime"),
+        col("data.passenger_count").cast("int").as("passenger_count"),
+        col("data.trip_distance"),
+        col("data.rate_code_id").cast("int").as("rate_code_id"),
+        col("data.store_and_fwd_flag"),
+        col("data.pu_location_id"),
+        col("data.do_location_id"),
+        col("data.payment_type"),
+        col("data.fare_amount"),
+        col("data.extra"),
+        col("data.mta_tax"),
+        col("data.tip_amount"),
+        col("data.tolls_amount"),
+        col("data.improvement_surcharge"),
+        col("data.total_amount"),
+        col("data.congestion_surcharge"),
+        col("data.airport_fee")
       )
 
       processedDF
