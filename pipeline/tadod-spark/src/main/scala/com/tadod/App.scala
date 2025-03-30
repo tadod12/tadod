@@ -1,5 +1,6 @@
 package com.tadod
 
+import com.tadod.jobs.compaction.IcebergCompactionJob
 import com.tadod.jobs.streaming.YellowStreamingJob
 
 object App {
@@ -17,6 +18,10 @@ object App {
 
       command match {
         case "YellowStream" => new YellowStreamingJob(
+          configPath = configPath
+        ).execute()
+
+        case "IcebergCompaction" => new IcebergCompactionJob(
           configPath = configPath
         ).execute()
 

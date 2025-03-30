@@ -30,5 +30,5 @@ RUN curl https://repo1.maven.org/maven2/software/amazon/awssdk/url-connection-cl
 RUN curl https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.4.1/spark-sql-kafka-0-10_2.12-3.4.1.jar -o ${SPARK_HOME}/jars/spark-sql-kafka-0-10_2.12-3.4.1.jar
 RUN curl https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.4.1/kafka-clients-3.4.1.jar -o ${SPARK_HOME}/jars/kafka-clients-3.4.1.jar
 RUN curl https://repo1.maven.org/maven2/org/apache/spark/spark-streaming-kafka-0-10_2.12/3.4.1/spark-streaming-kafka-0-10_2.12-3.4.1.jar -o ${SPARK_HOME}/jars/spark-streaming-kafka-0-10_2.12-3.4.1.jar
-RUN curl https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.8.0/commons-pool2-2.8.0.jar -o ${SPARK_HOME}/jars/commons-pool2-2.8.0.jar
+RUN curl https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.8.0/commons-pool2-2.12.1.jar -o ${SPARK_HOME}/jars/commons-pool2-2.12.1.jar
 RUN curl https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.4.1/spark-token-provider-kafka-0-10_2.12-3.4.1.jar -o ${SPARK_HOME}/jars/spark-token-provider-kafka-0-10_2.12-3.4.1.jar
