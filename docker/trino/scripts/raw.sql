@@ -2,8 +2,8 @@ create schema iceberg.raw;
 
 create table iceberg.raw.yellow (
 	vendor_id INT,
-	tpep_pickup_datetime TIMESTAMP(6),
-	tpep_dropoff_datetime TIMESTAMP(6),
+	tpep_pickup_datetime TIMESTAMP(6) WITH TIME ZONE,
+	tpep_dropoff_datetime TIMESTAMP(6) WITH TIME ZONE,
 	passenger_count INT,
 	trip_distance DOUBLE,
 	rate_code_id INT,
@@ -24,5 +24,8 @@ create table iceberg.raw.yellow (
 WITH (
    format = 'PARQUET',
    format_version = 2,
-   location = 's3://datalake/raw.db/yellow'
+   location = 's3://datalake/raw.db/yellow',
+   partitioning = ARRAY['day(tpep_pickup_datetime)']
 );
+
+drop table iceberg.raw.yellow;

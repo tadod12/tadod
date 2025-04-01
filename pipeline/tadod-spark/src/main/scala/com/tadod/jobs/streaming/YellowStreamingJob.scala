@@ -4,8 +4,8 @@ import com.tadod.config.Config
 import com.tadod.models.database.IcebergWriterConfig
 import com.tadod.models.streaming.{IcebergOptimizeConfig, KafkaConfig}
 import com.tadod.processors.YellowStreamingProcessor
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.streaming.Trigger
+//import org.apache.spark.sql.DataFrame
+//import org.apache.spark.sql.streaming.Trigger
 
 class YellowStreamingJob(configPath: String) extends BaseStreamingJob(configPath) {
 
