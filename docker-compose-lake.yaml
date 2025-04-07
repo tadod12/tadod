@@ -127,6 +127,8 @@ services:
     volumes:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
       - ./pipeline/ingestion:/var/ingestion
+      - ./pipeline/cleaning:/var/cleaning
+      - ./pipeline/jars:/var/jars
     depends_on:
       - minio
       - hive-metastore

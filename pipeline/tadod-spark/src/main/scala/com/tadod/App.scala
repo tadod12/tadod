@@ -2,6 +2,7 @@ package com.tadod
 
 import com.tadod.jobs.compaction.IcebergCompactionJob
 import com.tadod.jobs.streaming.YellowStreamingJob
+import com.tadod.jobs.transformation.{MartRateCodeJob, MartVendorJob, YellowCleaningJob}
 
 object App {
   def main(args: Array[String]): Unit = {
@@ -23,6 +24,21 @@ object App {
 
         case "IcebergCompaction" => new IcebergCompactionJob(
           configPath = configPath
+        ).execute()
+
+        case "YellowClean" => new YellowCleaningJob(
+          configPath = configPath,
+          dateRun = dateRun
+        ).clean()
+
+        case "MartVendor" => new MartVendorJob(
+          configPath = configPath,
+          dateRun = dateRun
+        ).execute()
+
+        case "MartRateCode" => new MartRateCodeJob(
+          configPath = configPath,
+          dateRun = dateRun
         ).execute()
 
         case _ => println(s"Unknown command: $command")

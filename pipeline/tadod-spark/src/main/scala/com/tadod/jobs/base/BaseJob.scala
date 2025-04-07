@@ -44,5 +44,10 @@ class BaseJob extends SparkSessionWrapper {
     Config.production += ("iceberg.compaction.sort.columns" -> prop.getProperty("iceberg.compaction.sort.columns"))
     Config.production += ("iceberg.compaction.delete.obsolete" -> prop.getProperty("iceberg.compaction.delete.obsolete", "true"))
     Config.production += ("iceberg.compaction.expire.snapshot.minutes" -> prop.getProperty("iceberg.compaction.expire.snapshot.minutes", "10080"))
+
+    // Iceberg transform Configurations
+    Config.production += ("iceberg.target.catalog" -> prop.getProperty("iceberg.target.catalog"))
+    Config.production += ("iceberg.target.schema" -> prop.getProperty("iceberg.target.schema"))
+    Config.production += ("iceberg.target.table" -> prop.getProperty("iceberg.target.table"))
   }
 }

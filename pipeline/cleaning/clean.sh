@@ -1,6 +1,7 @@
 #! /bin/bash
 
 echo "[INFO] Current date: $(date +"%Y-%m-%d %T")"
+echo "[INFO] Date run: 2024-02-02"
 
 # Current time
 CURRENT_HOUR=$(date +"-H")
@@ -39,4 +40,4 @@ spark_submit() {
         sleep 1s
 }
 
-spark_submit "YellowStream" "/var/ingestion/application.properties" $CURRENT_DATE $CURRENT_DATE
+spark_submit "YellowClean" "/var/cleaning/application.properties" "2024-02-02" "2024-02-02"
