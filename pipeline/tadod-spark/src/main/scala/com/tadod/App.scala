@@ -2,7 +2,7 @@ package com.tadod
 
 import com.tadod.jobs.compaction.IcebergCompactionJob
 import com.tadod.jobs.streaming.YellowStreamingJob
-import com.tadod.jobs.transformation.{MartRateCodeJob, MartVendorJob, YellowCleaningJob}
+import com.tadod.jobs.transformation.{MartLocationJob, MartPaymentJob, MartRateCodeJob, MartVendorJob, YellowCleaningJob}
 
 object App {
   def main(args: Array[String]): Unit = {
@@ -29,7 +29,7 @@ object App {
         case "YellowClean" => new YellowCleaningJob(
           configPath = configPath,
           dateRun = dateRun
-        ).clean()
+        ).execute()
 
         case "MartVendor" => new MartVendorJob(
           configPath = configPath,
@@ -37,6 +37,16 @@ object App {
         ).execute()
 
         case "MartRateCode" => new MartRateCodeJob(
+          configPath = configPath,
+          dateRun = dateRun
+        ).execute()
+
+        case "MartLocation" => new MartLocationJob(
+          configPath = configPath,
+          dateRun = dateRun
+        ).execute()
+
+        case "MartPayment" => new MartPaymentJob(
           configPath = configPath,
           dateRun = dateRun
         ).execute()

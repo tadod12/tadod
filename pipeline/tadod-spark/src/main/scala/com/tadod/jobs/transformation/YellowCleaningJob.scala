@@ -18,7 +18,7 @@ class YellowCleaningJob(configPath: String, dateRun: String) extends BaseJob {
   val jobName = "YellowCleaning"
   loadConfig(configPath, jobName)
 
-  def clean(): Unit = {
+  def execute(): Unit = {
     try {
       val icebergConfig = loadIcebergConfig()
 

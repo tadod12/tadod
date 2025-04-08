@@ -129,6 +129,7 @@ services:
       - ./pipeline/ingestion:/var/ingestion
       - ./pipeline/cleaning:/var/cleaning
       - ./pipeline/jars:/var/jars
+      - ./assets/map:/var/map
     depends_on:
       - minio
       - hive-metastore

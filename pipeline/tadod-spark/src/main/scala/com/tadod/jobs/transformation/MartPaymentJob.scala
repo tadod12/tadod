@@ -7,7 +7,7 @@ class MartPaymentJob(configPath: String, dateRun: String) extends BaseMartJob (c
 
   import spark.implicits._
 
-  override protected def getJobName: String = "MartPaymentJob"
+  override protected def getJobName: String = "MartPayment"
 
   override protected def createMart(sourceDf: DataFrame): DataFrame = {
     val targetDf = sourceDf
