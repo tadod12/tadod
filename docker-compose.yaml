@@ -1,0 +1,355 @@
+# Common
+x-airflow-common: &airflow-common
+  build:
+    context: .
+    dockerfile: ./docker/airflow/Dockerfile
+  image: tadod/lakehouse:airflow-2.7.0
+  environment: &airflow-common-env
+    S3_ENDPOINT: http://minio:9000
+    S3_ACCESS_KEY: minio
+    S3_SECRET_KEY: minio123
+    S3_PATH_STYLE_ACCESS: "true"
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS: false
+    AIRFLOW__CORE__DEFAULT_TIMEZONE: Asia/Ho_Chi_Minh
+    AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
+    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
+    AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: Asia/Ho_Chi_Minh
+    # AIRFLOW__WEBSERVER_BASE_URL: http://localhost:8080
+    # AIRFLOW__WEBSERVER__SECRET_KEY: 46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+    # AIRFLOW_UID: '50000' - Switched from user 50000 to root
+    _AIRFLOW_WWW_USER_USERNAME: airflow
+    _AIRFLOW_WWW_USER_PASSWORD: airflow
+    # _PIP_ADDITIONAL_REQUIREMENTS: apache-airflow==2.7.0 apache-airflow-providers-apache-spark trino
+    AIRFLOW_CONN_SPARK_DEFAULT: 'spark://spark-master:7077'
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./docker/airflow/config:/opt/airflow/config
+    - ./docker/airflow/plugins:/opt/airflow/plugins
+    - ./docker/volume/airflow/logs:/opt/airflow/logs
+    - ./pipeline/ingestion:/var/ingestion
+    - ./pipeline/cleaning:/var/cleaning
+    - ./pipeline/curation:/var/curation
+    - ./pipeline/ingestion/jars:/var/jars
+    - ./pipeline/jars:/var/submit/jars
+    - ./assets/map:/var/map
+    - ./assets/data:/var/data
+  user: "50000"
+  depends_on: &airflow-common-depends-on
+    redis:
+      condition: service_healthy # for celery
+    postgres:
+      condition: service_healthy # for airflow db
+
+# Configure services
+services:
+  # Postgres
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      # For persistent storage
+      - ./docker/volume/postgres:/var/lib/postgresql/data
+      - ./docker/postgres/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+      # command: [ "postgres", "-c", "wal_level=logical" ] - for CDC
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
+  # S3 Storage
+  minio:
+    container_name: minio
+    hostname: minio
+    image: 'minio/minio'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+      MINIO_DOMAIN: minio
+    command: server /data --console-address ":9001"
+    volumes:
+      - ./docker/volume/minio:/data
+
+  minio-job:
+    image: 'minio/mc'
+    container_name: minio-job
+    hostname: minio-job
+    entrypoint: |
+      /bin/bash -c "
+      sleep 5;
+      /usr/bin/mc config --quiet host add myminio http://minio:9000 minio minio123 || true;
+      /usr/bin/mc mb --quiet myminio/datalake || true;
+      "
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio:9000
+      - S3_PATH_STYLE_ACCESS=true
+    depends_on:
+      - minio
+
+  # Metastore
+  hive-metastore:
+    build:
+      dockerfile: ./docker/hive-metastore/Dockerfile
+    image: tadod/lakehouse:hive-metastore-3.1.2
+    container_name: hive-metastore
+    hostname: hive-metastore
+    ports:
+      - '9083:9083' # Metastore Thrift
+    environment:
+      HIVE_METASTORE_DRIVER: org.postgresql.Driver
+      HIVE_METASTORE_JDBC_URL: jdbc:postgresql://postgres:5432/metastore
+      HIVE_METASTORE_USER: hive
+      HIVE_METASTORE_PASSWORD: hive
+      HIVE_METASTORE_WAREHOUSE_DIR: s3://datalake/
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: minio
+      S3_SECRET_KEY: minio123
+      S3_PATH_STYLE_ACCESS: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Query Engine
+  trino:
+    image: "trinodb/trino:425"
+    container_name: trino
+    hostname: trino
+    restart: always
+    ports:
+      - "8889:8889"
+    volumes:
+      - ./docker/trino/etc-coordinator:/etc/trino
+      - ./docker/trino/catalog:/etc/trino/catalog
+    depends_on:
+      - hive-metastore
+
+  trino-worker:
+    image: "trinodb/trino:425"
+    container_name: trino-worker
+    hostname: trino-worker
+    restart: always
+    volumes:
+      - ./docker/trino/etc-worker:/etc/trino
+      - ./docker/trino/catalog:/etc/trino/catalog
+    depends_on:
+      - trino
+
+  spark-master:
+    build:
+      dockerfile: ./docker/spark/Dockerfile
+    image: tadod/lakehouse:spark
+    container_name: spark-master
+    hostname: spark-master
+    restart: always
+    ports:
+      - "7077:7077"
+      - "8081:8081"
+    environment:
+      - SPARK_MODE=master
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio:9000
+      - S3_PATH_STYLE_ACCESS=true
+    command: bin/spark-class org.apache.spark.deploy.master.Master
+    volumes:
+      - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
+      - ./pipeline/ingestion:/var/ingestion
+      - ./pipeline/cleaning:/var/cleaning
+      - ./pipeline/curation:/var/curation
+      - ./pipeline/ingestion/jars:/var/jars # for external jar files
+      - ./pipeline/jars:/var/submit/jars
+      - ./assets/map:/var/map
+    depends_on:
+      - minio
+      - hive-metastore
+
+  spark-worker-1:
+    build:
+      dockerfile: ./docker/spark/Dockerfile
+    image: tadod/lakehouse:spark
+    container_name: spark-worker
+    hostname: spark-worker
+    restart: always
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER=spark://spark-master:7077
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio:9000
+      - S3_PATH_STYLE_ACCESS=true
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    volumes:
+      - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
+    depends_on:
+      - spark-master
+      - minio
+      - hive-metastore
+
+  # Superset
+  superset:
+    build:
+      context: ./docker/superset
+      dockerfile: Dockerfile
+    container_name: superset
+    hostname: superset
+    depends_on:
+      # - redis
+      - postgres
+    environment:
+      - SUPERSET_DB_URI=postgresql+psycopg2://superset:superset@postgres:5432/superset
+      # - REDIS_URL=redis://redis:6379/0
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+    ports:
+      - "8088:8088"
+
+  # Airflow Webserver
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: airflow-webserver
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8080/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: airflow-scheduler
+    command: scheduler
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8974/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-worker:
+    <<: *airflow-common
+    container_name: airflow-worker
+    command: celery worker
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}" || celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    environment:
+      <<: *airflow-common-env
+      DUMB_INIT_SETSID: "0"
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  # airflow-triggerer:
+  #   <<: *airflow-common
+  #   container_name: airflow-triggerer
+  #   command: triggerer
+  #   healthcheck:
+  #     test: [ "CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"' ]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 30s
+  #   restart: always
+  #   depends_on:
+  #     <<: *airflow-common-depends-on
+  #     airflow-init:
+  #       condition: service_completed_successfully
+
+  # airflow-cli:
+  #   <<: *airflow-common
+  #   container_name: airflow-cli
+  #   environment:
+  #     <<: *airflow-common-env
+  #     CONNECTION_CHECK_MAX_COUNT: "0"
+  #   # Workaround for entrypoint issue. See: https://github.com/apache/airflow/issues/16252
+  #   command:
+  #     - bash
+  #     - -c
+  #     - airflow
+
+  airflow-init:
+    <<: *airflow-common
+    container_name: airflow-init
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        mkdir -p /opt/airflow/logs /opt/airflow/dags /opt/airflow/plugins
+        chmod -R 777 /opt/airflow/logs /opt/airflow/dags /opt/airflow/plugins
+        exec /entrypoint airflow version
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_MIGRATE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _PIP_ADDITIONAL_REQUIREMENTS: ''
+    user: "0:0"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./docker/airflow/config:/opt/airflow/config
+      - ./docker/airflow/plugins:/opt/airflow/plugins
+      - ./docker/volume/airflow/logs:/opt/airflow/logs
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis:latest
+    expose:
+      - 6379
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 30s
+      retries: 50
+      start_period: 30s
+    restart: always
+
+# Configure Network
+networks:
+  default:
+    name: lakehouse

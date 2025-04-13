@@ -23,10 +23,10 @@ class MartLocationJob(configPath: String, dateRun: String) extends BaseMartJob(c
 
     val tempDf = sourceDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
-      .where($"record_date" === dateRun)
+      .where($"record_date" === to_date(lit(dateRun)))
       .groupBy("record_date", "pu_location_id", "do_location_id")
-      .count().as("total_records")
-      .join(lookupDf, lookupDf("LocationID") === tempDf("pu_location_id"), "inner")
+      .agg(count("*").as("total_records"))
+      .join(lookupDf, lookupDf("LocationID") === $"pu_location_id", "inner")
       .select(
         col("record_date"),
         col("pu_location_id"),
@@ -37,7 +37,7 @@ class MartLocationJob(configPath: String, dateRun: String) extends BaseMartJob(c
         col("total_records")
       )
 
-    tempDf.join(lookupDf, lookupDf("LocationID") === tempDf("do_location_id"), "inner")
+    tempDf.join(lookupDf, lookupDf("LocationID") === $"do_location_id", "inner")
       .select(
         col("record_date"),
         col("pu_location_id"),
@@ -53,6 +53,12 @@ class MartLocationJob(configPath: String, dateRun: String) extends BaseMartJob(c
       .withColumn("record_week", weekofyear($"record_date"))
       .withColumn("record_month", month($"record_date"))
       .withColumn("record_year", year($"record_date"))
+      .select(
+        "record_date",
+        "record_week",
+        "record_month",
+        "record_year"
+      )
   }
 
   override protected def writeToIceberg(targetDf: DataFrame): Unit = {

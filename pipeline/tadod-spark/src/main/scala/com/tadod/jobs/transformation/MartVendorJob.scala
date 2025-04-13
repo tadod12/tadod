@@ -17,7 +17,7 @@ class MartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(con
     val invalidDf = rawDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
       .where(
-        $"record_date" === dateRun &&
+        $"record_date" === to_date(lit(dateRun)) &&
           col("vendor_id").isNotNull && (
           col("passenger_count").isNull ||
             col("passenger_count") <= 0 ||
@@ -31,12 +31,12 @@ class MartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(con
           )
       )
       .groupBy("record_date", "vendor_id")
-      .count().as("total_invalid_records")
+      .agg(count("*").as("total_invalid_records"))
 
 
     val tmpDf = sourceDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
-      .where($"record_date" === dateRun)
+      .where($"record_date" === to_date(lit(dateRun)))
       .groupBy("record_date", "vendor_id")
       .agg(
         count("*").as("total_valid_records"),
@@ -52,7 +52,18 @@ class MartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(con
         when($"vendor_id" === 1, "Creative Mobile Technologies, LLC")
           .when($"vendor_id" === 2, "Curb Mobility, LLC")
           .when($"vendor_id" === 6, "Myle Technologies Inc")
-          .when($"vendor_id" === 7, "Helix")
+          .when($"vendor_id" === 7, "Helix"))
+      .select(
+        "record_date",            // DATE
+        "record_week",            // INT
+        "record_month",           // INT
+        "record_year",            // INT
+        "vendor_id",              // INT
+        "vendor_name",            // VARCHAR
+        "total_valid_records",    // BIGINT
+        "total_invalid_records",  // BIGINT
+        "total_delay_records",    // BIGINT
+        "total_ontime_records"    // BIGINT
       )
   }
 

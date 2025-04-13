@@ -128,7 +128,9 @@ services:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
       - ./pipeline/ingestion:/var/ingestion
       - ./pipeline/cleaning:/var/cleaning
-      - ./pipeline/jars:/var/jars
+      - ./pipeline/curation:/var/curation
+      - ./pipeline/ingestion/jars:/var/jars # for external jar files
+      - ./pipeline/jars:/var/submit/jars
       - ./assets/map:/var/map
     depends_on:
       - minio
@@ -157,6 +159,24 @@ services:
       - spark-master
       - minio
       - hive-metastore
+
+  # Superset
+  superset:
+    build:
+      context: ./docker/superset
+      dockerfile: Dockerfile
+    container_name: superset
+    hostname: superset
+    depends_on:
+      # - redis
+      - postgres
+    environment:
+      - SUPERSET_DB_URI=postgresql+psycopg2://superset:superset@postgres:5432/superset
+      # - REDIS_URL=redis://redis:6379/0
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+    ports:
+      - "8088:8088"
 
 # Configure Network
 networks:

@@ -14,7 +14,7 @@ class MartRateCodeJob(configPath: String, dateRun: String) extends BaseMartJob(c
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
       .where($"record_date" === dateRun)
       .groupBy("record_date", "rate_code_id")
-      .count().as("total_records")
+      .agg(count("*").as("total_records"))
       .withColumn("record_week", weekofyear($"record_date"))
       .withColumn("record_month", month($"record_date"))
       .withColumn("record_year", year($"record_date"))
@@ -28,7 +28,15 @@ class MartRateCodeJob(configPath: String, dateRun: String) extends BaseMartJob(c
           .otherwise("Null/unknown")
       )
 
-    targetDf
+    targetDf.select(
+      "record_date",    // DATE
+      "record_week",    // INT
+      "record_month",   // INT
+      "record_year",    // INT
+      "rate_code_id",   // INT
+      "rate_code_name", // VARCHAR
+      "total_records"   // BIGINT
+    )
   }
 
   override protected def writeToIceberg(targetDf: DataFrame): Unit = {

@@ -27,6 +27,10 @@ abstract class BaseMartJob(configPath: String) extends BaseJob {
 
       val targetDf = createMart(sourceDf)
 
+      LOGGER.info(s"=== $getJobName ===")
+      targetDf.printSchema()
+      targetDf.show(10, truncate = false)
+
       writeToIceberg(targetDf)
 
       println(s"$getJobName job finished successfully")
