@@ -3,17 +3,23 @@ from airflow.utils.dates import days_ago
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.providers.docker.operators.docker import DockerOperator
 from docker.types import Mount
+from datetime import datetime, timedelta
 
 with DAG(
     dag_id='yellow_taxi_vendor_stats',
-    schedule_interval=@daily,
     default_args={
         'owner': 'airflow',
+        'depends_on_past': False,
+        'email_on_failure': False,
+        'email_on_retry': False,
+        'retries': 1,
+        'retry_delay': timedelta(minutes=5),
     },
-    start_date=days_ago(1),
-    end_date=None,
+    description='Yellow taxi DAG for vendor reports',
+    schedule_interval="@daily",
+    start_date=datetime(2020, 1, 1), # year, month, day
     max_active_runs=1,
-    catchup=True,
+    catchup=True, # backfill from 2020
     tags=['yellow_taxi', 'daily', 'vendor'],
 ) as dag:
     start = DummyOperator(task_id="start_dag")
@@ -46,4 +52,4 @@ with DAG(
 
     end = DummyOperator(task_id="end_dag")
 
-    start >> spark_job >> end
+    start >> cleaning >> loading >> end
