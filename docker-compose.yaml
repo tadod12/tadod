@@ -19,7 +19,7 @@ x-airflow-common: &airflow-common
     - ./pipeline/jars:/var/submit/jars
     - ./assets/map:/var/map
     - ./assets/data:/var/data
-  user: "50000"
+  user: airflow # need to grant permission to airflow user
   depends_on:
     postgres:
       condition: service_healthy # for airflow db
@@ -257,14 +257,27 @@ services:
     command: webserver
     ports:
       - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8080/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
     depends_on:
-      scheduler
+      scheduler:
         condition: service_healthy
-      
 
   scheduler:
     <<: *airflow-common
     command: bash -c "airflow db migrate && airflow users create --username airflow --firstname do --lastname dat --role Admin --email tadod.de@gmail.com --password airflow && airflow scheduler"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8974/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
     depends_on:
       postgres:
         condition: service_healthy

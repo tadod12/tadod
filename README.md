@@ -15,7 +15,7 @@
 
 ## Architecture
 
-![Architecture](assets/draft-260325.png)
+![Architecture](assets/draft-170425.png)
 
 ## License
 
