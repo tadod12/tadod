@@ -28,5 +28,6 @@ object HighVolumeFHVSchema {
     StructField("access_a_ride_flag", StringType),
     StructField("wav_request_flag", StringType),
     StructField("wav_match_flag", StringType)
+    // StructField("cbd_congestion_fee")
   ))
 }

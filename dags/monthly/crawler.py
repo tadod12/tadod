@@ -37,7 +37,7 @@ def download_files(type: str, title: str, date_run: str, **kwargs):
                 print(f"Downloading {link_url.split('/')[-1]}...")
                 urllib.request.urlretrieve(url=link_url, filename=file_name)
                 print(f"Downloaded {link_url.split('/')[-1]}")
-                kwargs['ti'].xcom_push(key=f'{type}', value=f'/var/data/{type}/{link_url.split("/")[-1]}')
+                kwargs['ti'].xcom_push(key=f'{type}', value=f'/var/data/{type}/{link_url.split("/")[-1]}'.strip())
                 break
             else:
                 kwargs['ti'].xcom_push(key=f'{type}', value=None)
