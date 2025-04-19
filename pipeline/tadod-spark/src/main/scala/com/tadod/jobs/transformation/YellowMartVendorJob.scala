@@ -3,21 +3,28 @@ package com.tadod.jobs.transformation
 import org.apache.spark.sql.{DataFrame, SaveMode}
 import org.apache.spark.sql.functions._
 
-class MartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
 
   import spark.implicits._
 
-  override protected def getJobName: String = "MartVendorJob"
+  override protected def getJobName: String = "YellowMartVendorJob"
 
   override protected def createMart(sourceDf: DataFrame): DataFrame = {
-    val rawDf = spark.read
+    val yellowRawDf = spark.read
       .format("iceberg")
       .load("iceberg.raw.yellow")
 
-    val invalidDf = rawDf
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val currentDate = LocalDate.parse(dateRun, formatter)
+    val previousDate = currentDate.minusDays(1).format(formatter)
+
+    val invalidDf = yellowRawDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
       .where(
-        $"record_date" === to_date(lit(dateRun)) &&
+        $"record_date" === to_date(lit(previousDate)) &&
           col("vendor_id").isNotNull && (
           col("passenger_count").isNull ||
             col("passenger_count") <= 0 ||
@@ -36,7 +43,7 @@ class MartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(con
 
     val tmpDf = sourceDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
-      .where($"record_date" === to_date(lit(dateRun)))
+      .where($"record_date" === to_date(lit(previousDate)))
       .groupBy("record_date", "vendor_id")
       .agg(
         count("*").as("total_valid_records"),
@@ -63,8 +70,8 @@ class MartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(con
         "total_valid_records",    // BIGINT
         "total_invalid_records",  // BIGINT
         "total_delay_records",    // BIGINT
-        "total_ontime_records"    // BIGINT
-      )
+        "total_ontime_records")
+      .withColumn("record_type", lit("yellow"))
   }
 
   override protected def writeToIceberg(targetDf: DataFrame): Unit = {

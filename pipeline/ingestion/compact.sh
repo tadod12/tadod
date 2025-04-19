@@ -33,10 +33,12 @@ spark_submit() {
         --conf spark.sql.catalog.minio.warehouse=s3a://datalake/ \
         --jars /var/ingestion/jars/spark-sql-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/kafka-clients-3.4.1.jar,/var/ingestion/jars/spark-streaming-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/commons-pool2-2.11.1.jar,/var/ingestion/jars/spark-token-provider-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/aws-java-sdk-bundle-1.12.262.jar,/var/ingestion/jars/hadoop-aws-3.3.4.jar \
         --class com.tadod.App \
-        /var/jars/tadod-spark-1.0-jar-with-dependencies.jar \
+        /var/submit/jars/tadod-spark-1.0-jar-with-dependencies.jar \
         "$1" "$2" "$3" "$4"
         echo "[INFO] Spark app finished"
         sleep 1s
 }
 
-spark_submit "IcebergCompaction" "/var/ingestion/application.properties" $CURRENT_DATE $CURRENT_DATE
+spark_submit "IcebergCompaction" "/var/ingestion/yellow.properties" $CURRENT_DATE $CURRENT_DATE
+
+spark_submit "IcebergCompaction" "/var/ingestion/green.properties" $CURRENT_DATE $CURRENT_DATE

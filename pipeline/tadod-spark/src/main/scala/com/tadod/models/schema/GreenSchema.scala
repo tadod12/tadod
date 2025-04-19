@@ -23,6 +23,7 @@ object GreenSchema {
     StructField("total_amount", DoubleType),
     StructField("congestion_surcharge", DoubleType),
     StructField("trip_type", IntegerType),
-    StructField("cbd_congestion_fee", DoubleType)
+    // StructField("cbd_congestion_fee", DoubleType) - WTF is this TLC
+    StructField("ehail_fee", DoubleType)
   ))
 }

@@ -1,4 +1,4 @@
-version: '3'
+# version: '3'
 services:
   zookeeper:
     image: bitnami/zookeeper:3.9.1
@@ -24,6 +24,10 @@ services:
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_LOG_RETENTION_HOURS: 72
     ports:
       - "9092:9092"
       - "29092:29092"
@@ -44,6 +48,10 @@ services:
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_LOG_RETENTION_HOURS: 72
     ports:
       - "9093:9093"
       - "29093:29093"
@@ -64,6 +72,10 @@ services:
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_LOG_RETENTION_HOURS: 72
     ports:
       - "9094:9094"
       - "29094:29094"
@@ -83,26 +95,27 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092,kafka2:9093,kafka3:9094
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+  # skip Python
 
-  # Python for producing messages
-  python:
-    build:
-      context: ./docker/python
-      dockerfile: Dockerfile
-    image: tadod/lakehouse:python
-    container_name: python
-    restart: no
-    depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
-      - kafka-ui
-    entrypoint: ./entrypoint.sh
-    volumes:
-      - ./assets/data:/usr/app/src/data
-      - ./docker/python/scripts:/usr/app/src/scripts
+  # Python for producing messages - change to use Airflow
+  # python:
+  #   build:
+  #     context: ./docker/python
+  #     dockerfile: Dockerfile
+  #   image: tadod/lakehouse:python
+  #   container_name: python
+  #   restart: no
+  #   depends_on:
+  #     - kafka1
+  #     - kafka2
+  #     - kafka3
+  #     - kafka-ui
+  #   entrypoint: ./entrypoint.sh
+  #   volumes:
+  #     - ./assets/data:/usr/app/src/data
+  #     - ./docker/python/scripts:/usr/app/src/scripts
 
-# Configure Network
+  # Configure Network
 networks:
   default:
     name: lakehouse

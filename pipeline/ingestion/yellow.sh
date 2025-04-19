@@ -1,7 +1,6 @@
 #! /bin/bash
 
 echo "[INFO] Current date: $(date +"%Y-%m-%d %T")"
-echo "[INFO] Date run: 2024-01-02"
 
 # Current time
 CURRENT_HOUR=$(date +"-H")
@@ -32,7 +31,7 @@ spark_submit() {
         --conf spark.hadoop.fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider \
         --conf spark.sql.parquet.enableVectorizedReader=false \
         --conf spark.sql.catalog.minio.warehouse=s3a://datalake/ \
-        --jars /var/jars/spark-sql-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/kafka-clients-3.4.1.jar,/var/ingestion/jars/spark-streaming-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/commons-pool2-2.11.1.jar,/var/ingestion/jars/spark-token-provider-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/aws-java-sdk-bundle-1.12.262.jar,/var/ingestion/jars/hadoop-aws-3.3.4.jar \
+        --jars /var/ingestion/jars/spark-sql-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/kafka-clients-3.4.1.jar,/var/ingestion/jars/spark-streaming-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/commons-pool2-2.11.1.jar,/var/ingestion/jars/spark-token-provider-kafka-0-10_2.12-3.4.1.jar,/var/ingestion/jars/aws-java-sdk-bundle-1.12.262.jar,/var/ingestion/jars/hadoop-aws-3.3.4.jar \
         --class com.tadod.App \
         /var/submit/jars/tadod-spark-1.0-jar-with-dependencies.jar \
         "$1" "$2" "$3" "$4"
@@ -40,4 +39,4 @@ spark_submit() {
         sleep 1s
 }
 
-spark_submit "MartVendor" "/var/curation/application.properties" "2024-01-02" "2024-01-02"
+spark_submit "YellowStream" "/var/ingestion/yellow.properties" $CURRENT_DATE $CURRENT_DATE

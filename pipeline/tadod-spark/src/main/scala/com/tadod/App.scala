@@ -1,8 +1,8 @@
 package com.tadod
 
 import com.tadod.jobs.compaction.IcebergCompactionJob
-import com.tadod.jobs.streaming.YellowStreamingJob
-import com.tadod.jobs.transformation.{MartLocationJob, MartPaymentJob, MartRateCodeJob, MartVendorJob, YellowCleaningJob}
+import com.tadod.jobs.streaming.{GreenStreamingJob, YellowStreamingJob}
+import com.tadod.jobs.transformation.{GreenCleaningJob, GreenMartVendorJob, MartLocationJob, MartPaymentJob, MartRateCodeJob, YellowCleaningJob, YellowMartVendorJob}
 
 object App {
   def main(args: Array[String]): Unit = {
@@ -22,6 +22,10 @@ object App {
           configPath = configPath
         ).execute()
 
+        case "GreenStream" => new GreenStreamingJob(
+          configPath = configPath
+        ).execute()
+
         case "IcebergCompaction" => new IcebergCompactionJob(
           configPath = configPath
         ).execute()
@@ -31,7 +35,17 @@ object App {
           dateRun = dateRun
         ).execute()
 
-        case "MartVendor" => new MartVendorJob(
+        case "GreenClean" => new GreenCleaningJob(
+          configPath = configPath,
+          dateRun = dateRun
+        ).execute()
+
+        case "YellowMartVendor" => new YellowMartVendorJob(
+          configPath = configPath,
+          dateRun = dateRun
+        ).execute()
+
+        case "GreenMartVendor" => new GreenMartVendorJob(
           configPath = configPath,
           dateRun = dateRun
         ).execute()

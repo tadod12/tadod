@@ -26,4 +26,6 @@ RUN pip install --no-cache-dir \
         apache-airflow-providers-postgres \
         pyarrow \
         beautifulsoup4 \
-        lxml
+        lxml \
+        pandas \
+        confluent-kafka

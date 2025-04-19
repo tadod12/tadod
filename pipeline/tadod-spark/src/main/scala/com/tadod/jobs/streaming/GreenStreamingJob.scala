@@ -3,17 +3,15 @@ package com.tadod.jobs.streaming
 import com.tadod.config.Config
 import com.tadod.models.database.IcebergWriterConfig
 import com.tadod.models.streaming.{IcebergOptimizeConfig, KafkaConfig}
-import com.tadod.processors.YellowStreamingProcessor
-//import org.apache.spark.sql.DataFrame
-//import org.apache.spark.sql.streaming.Trigger
+import com.tadod.processors.GreenStreamingProcessor
 
-class YellowStreamingJob(configPath: String) extends BaseStreamingJob(configPath) {
+class GreenStreamingJob(configPath: String) extends BaseStreamingJob(configPath) {
 
-  override protected val processor = new YellowStreamingProcessor(
+  override protected val processor: GreenStreamingProcessor = new GreenStreamingProcessor(
     spark, kafkaConfig, icebergConfig, optimizeConfig
   )
 
-  override protected def getJobName: String = "YellowStreamingJob"
+  override protected def getJobName: String = "GreenStreamingJob"
 
   override protected def loadKafkaConfig(): KafkaConfig = {
     try {
@@ -35,7 +33,8 @@ class YellowStreamingJob(configPath: String) extends BaseStreamingJob(configPath
            |Group ID: ${config.groupId}
            |Checkpoint location: ${config.checkpointLocation}
            |Trigger interval: ${config.triggerInterval}
-           |""".stripMargin)
+           |""".stripMargin
+      )
 
       config
     } catch {
@@ -106,17 +105,6 @@ class YellowStreamingJob(configPath: String) extends BaseStreamingJob(configPath
       val kafkaDF = processor.readFromKafka()
 
       val processedDF = processor.processStream(kafkaDF)
-
-      //      processedDF.writeStream
-      //        .format("console")
-      //        .outputMode("append")
-      //        .trigger(Trigger.ProcessingTime("10 seconds"))
-      //        .option("checkpointLocation", kafkaConfig.checkpointLocation)
-      //        .foreachBatch {(batchDF: DataFrame, batchId: Long) =>
-      //          println(s"Batch: $batchId, numRows: ${batchDF.count()}")
-      //          batchDF.show(10, truncate = false)
-      //        }
-      //        .start()
 
       processor.writeToIceberg(processedDF)
 

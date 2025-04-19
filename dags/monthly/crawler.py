@@ -1,7 +1,6 @@
 import os
 import requests
 import urllib.request
-import json
 
 from datetime import datetime
 from bs4 import BeautifulSoup
