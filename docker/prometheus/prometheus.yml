@@ -1,0 +1,45 @@
+global:
+  scrape_interval: 10s
+  scrape_timeout: 10s
+  evaluation_interval: 10s
+
+rule_files: ["rules/*.yml"]
+
+alerting:
+  alertmanagers:
+    - timeout: "10s"
+      scheme: http
+      static_configs:
+        - targets: ["alertmanager:9093"]
+
+scrape_configs:
+  - job_name: zookeeper
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ["zookeeper-1:9200", "zookeeper-2:9200", "zookeeper-3:9200"]
+
+  - job_name: kafka
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    scheme: http
+    static_configs:
+      - targets: ["kafka-1:9200", "kafka-2:9200", "kafka-3:9200"]
+
+  - job_name: kafka-schema-registry
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ["schema-registry:9200"]
+
+  - job_name: kafka-connect
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ["connect:9200"]
