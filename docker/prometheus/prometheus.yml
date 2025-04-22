@@ -43,3 +43,23 @@ scrape_configs:
     scheme: http
     static_configs:
       - targets: ["connect:9200"]
+
+  - job_name: spark-master
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ["spark-master:7071"]
+        labels:
+          service: spark-master
+
+  - job_name: spark-workers
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ["spark-worker-1:7072", "spark-worker-2:7073", "spark-worker-3:7074"]
+        labels:
+          service: spark-worker

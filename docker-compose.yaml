@@ -140,7 +140,8 @@ services:
     restart: always
     ports:
       - "7077:7077"
-      - "8081:8081"
+      - "8084:8084"
+      - "7071:7071" # Port for JMX exporter
     environment:
       - SPARK_MODE=master
       - AWS_ACCESS_KEY_ID=minio
@@ -149,6 +150,7 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - S3_ENDPOINT=http://minio:9000
       - S3_PATH_STYLE_ACCESS=true
+      - SPARK_MASTER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7071:/opt/jmx-exporter/spark-master-config.yml
     command: bin/spark-class org.apache.spark.deploy.master.Master
     volumes:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
@@ -158,6 +160,7 @@ services:
       - ./pipeline/ingestion/jars:/var/jars # for external jar files
       - ./pipeline/jars:/var/submit/jars
       - ./assets/map:/var/map
+      - ./docker/jmx-exporter:/opt/jmx-exporter
     depends_on:
       - minio
       - hive-metastore
@@ -167,8 +170,10 @@ services:
       dockerfile: ./docker/spark/Dockerfile
     image: tadod/lakehouse:spark
     container_name: spark-worker-1
-    hostname: spark-worker
+    hostname: spark-worker-1
     restart: always
+    ports:
+      - "7072:7072" # Port for JMX exporter
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER=spark://spark-master:7077
@@ -178,9 +183,11 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - S3_ENDPOINT=http://minio:9000
       - S3_PATH_STYLE_ACCESS=true
+      - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7072:/opt/jmx-exporter/spark-worker-config.yml
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     volumes:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
+      - ./docker/jmx-exporter:/opt/jmx-exporter
     depends_on:
       - spark-master
       - minio
@@ -191,8 +198,10 @@ services:
       dockerfile: ./docker/spark/Dockerfile
     image: tadod/lakehouse:spark
     container_name: spark-worker-2
-    hostname: spark-worker
+    hostname: spark-worker-2
     restart: always
+    ports:
+      - "7073:7073" # Port for JMX exporter
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER=spark://spark-master:7077
@@ -202,9 +211,11 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - S3_ENDPOINT=http://minio:9000
       - S3_PATH_STYLE_ACCESS=true
+      - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7073:/opt/jmx-exporter/spark-worker-config.yml
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     volumes:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
+      - ./docker/jmx-exporter:/opt/jmx-exporter
     depends_on:
       - spark-master
       - minio
@@ -215,8 +226,10 @@ services:
       dockerfile: ./docker/spark/Dockerfile
     image: tadod/lakehouse:spark
     container_name: spark-worker-3
-    hostname: spark-worker
+    hostname: spark-worker-3
     restart: always
+    ports:
+      - "7074:7074" # Port for JMX exporter
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER=spark://spark-master:7077
@@ -226,9 +239,11 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - S3_ENDPOINT=http://minio:9000
       - S3_PATH_STYLE_ACCESS=true
+      - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7074:/opt/jmx-exporter/spark-worker-config.yml
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     volumes:
       - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf
+      - ./docker/jmx-exporter:/opt/jmx-exporter
     depends_on:
       - spark-master
       - minio
