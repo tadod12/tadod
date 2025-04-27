@@ -24,12 +24,8 @@ create table iceberg.raw.yellow (
 WITH (
    format = 'PARQUET',
    format_version = 2,
-   location = 's3://datalake/raw.db/yellow',
    partitioning = ARRAY['day(tpep_pickup_datetime)']
 );
-
---drop table iceberg.raw.yellow;
-
 
 create table iceberg.raw.green (
 	vendor_id INT,
@@ -58,3 +54,22 @@ WITH (
    format_version = 2,
    partitioning = ARRAY['day(lpep_pickup_datetime)']
 );
+
+create table iceberg.raw.fhv (
+	dispatching_base_num VARCHAR,
+	pickup_datetime TIMESTAMP(6) with TIME zone,
+	dropoff_datetime TIMESTAMP(6) with TIME zone,
+	pu_location_id INT,
+	do_location_id INT,
+	sr_flag INT,
+	affiliated_base_number VARCHAR
+)
+with (
+	format = 'PARQUET',
+	format_version = 2,
+	partitioning = ARRAY['day(pickup_datetime)']
+);
+
+--drop table iceberg.raw.yellow;
+--drop schema iceberg.raw
+

@@ -38,7 +38,7 @@ def produce_yellow(**kwargs):
             lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(x) else None
         )
 
-        producer = Producer({'bootstrap.servers': 'kafka1:9092,kafka2:9093,kafka3:9094'})
+        producer = Producer({'bootstrap.servers': 'kafka-1:29092,kafka-2:29093,kafka-3:29094'})
         for index, row in df.iterrows():
             message = row.to_dict()
             print(f"Producing message: {message}")
@@ -84,7 +84,7 @@ def produce_green(**kwargs):
             lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(x) else None
         )
 
-        producer = Producer({'bootstrap.servers': 'kafka1:9092,kafka2:9093,kafka3:9094'})
+        producer = Producer({'bootstrap.servers': 'kafka-1:29092,kafka-2:29093,kafka-3:29094'})
         for index, row in df.iterrows():
             message = row.to_dict()
             print(f"Producing message: {message}")
@@ -118,7 +118,7 @@ def produce_fhv(**kwargs):
             lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(x) else None
         )
 
-        producer = Producer({'bootstrap.servers': 'kafka1:9092,kafka2:9093,kafka3:9094'})
+        producer = Producer({'bootstrap.servers': 'kafka-1:29092,kafka-2:29093,kafka-3:29094'})
         for index, row in df.iterrows():
             message = row.to_dict()
             print(f"Producing message: {message}")
@@ -178,7 +178,7 @@ def produce_fhvhv(**kwargs):
             lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(x) else None
         )
 
-        producer = Producer({'bootstrap.servers': 'kafka1:9092,kafka2:9093,kafka3:9094'})
+        producer = Producer({'bootstrap.servers': 'kafka-1:29092,kafka-2:29093,kafka-3:29094'})
         for index, row in df.iterrows():
             message = row.to_dict()
             print(f"Producing message: {message}")

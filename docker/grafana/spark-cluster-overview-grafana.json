@@ -1,4 +1,40 @@
 {
+    "__inputs": [
+        {
+            "name": "DS_PROMETHEUS",
+            "label": "Prometheus",
+            "description": "",
+            "type": "datasource",
+            "pluginId": "prometheus",
+            "pluginName": "Prometheus"
+        }
+    ],
+    "__requires": [
+        {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "5.2.1"
+        },
+        {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph",
+            "version": "5.0.0"
+        },
+        {
+            "type": "datasource",
+            "id": "prometheus",
+            "name": "Prometheus",
+            "version": "5.0.0"
+        },
+        {
+            "type": "panel",
+            "id": "singlestat",
+            "name": "Singlestat",
+            "version": "5.0.0"
+        }
+    ],
     "annotations": {
         "list": [
             {
@@ -15,19 +51,33 @@
     "editable": true,
     "gnetId": null,
     "graphTooltip": 0,
-    "id": 9,
+    "id": null,
+    "iteration": 1705572869760,
     "links": [],
     "panels": [
         {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 25,
+            "panels": [],
+            "title": "Healthcheck",
+            "type": "row"
+        },
+        {
             "cacheTimeout": null,
             "colorBackground": false,
-            "colorValue": false,
+            "colorValue": true,
             "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
+                "#bf1b00",
+                "#7eb26d",
+                "#508642"
             ],
-            "datasource": null,
+            "datasource": "${DS_PROMETHEUS}",
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -37,12 +87,12 @@
                 "thresholdMarkers": true
             },
             "gridPos": {
-                "h": 5,
-                "w": 4,
+                "h": 4,
+                "w": 3,
                 "x": 0,
-                "y": 0
+                "y": 1
             },
-            "id": 7,
+            "id": 2,
             "interval": null,
             "links": [],
             "mappingType": 1,
@@ -59,8 +109,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
-            "pluginVersion": "6.5.0",
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -76,42 +124,36 @@
                 "fillColor": "rgba(31, 118, 189, 0.18)",
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+                "show": false
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_job_allJobs_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"}",
+                    "expr": "sum(spark_master_workers_type_gauges{group=\"spark\", instance=\"master\", job=\"spark-master\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
                     "refId": "A"
                 }
             ],
-            "thresholds": "",
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "All Jobs",
+            "thresholds": "1",
+            "title": "Total number of workers",
             "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-                {
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }
-            ],
+            "valueFontSize": "200%",
+            "valueMaps": [],
             "valueName": "current"
         },
         {
             "cacheTimeout": null,
             "colorBackground": false,
-            "colorValue": false,
+            "colorValue": true,
             "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
+                "#bf1b00",
+                "#f9934e",
+                "#629e51"
             ],
-            "datasource": null,
+            "datasource": "${DS_PROMETHEUS}",
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -121,11 +163,89 @@
                 "thresholdMarkers": true
             },
             "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 4,
-                "y": 0
+                "h": 4,
+                "w": 3,
+                "x": 3,
+                "y": 1
             },
+            "hideTimeOverride": false,
+            "id": 5,
+            "interval": null,
+            "links": [],
+            "mappingType": 1,
+            "mappingTypes": [
+                {
+                    "name": "value to text",
+                    "value": 1
+                },
+                {
+                    "name": "range to text",
+                    "value": 2
+                }
+            ],
+            "maxDataPoints": 100,
+            "nullPointMode": "connected",
+            "nullText": null,
+            "postfix": "",
+            "postfixFontSize": "50%",
+            "prefix": "",
+            "prefixFontSize": "50%",
+            "rangeMaps": [
+                {
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }
+            ],
+            "sparkline": {
+                "fillColor": "rgba(31, 118, 189, 0.18)",
+                "full": false,
+                "lineColor": "rgb(31, 120, 193)",
+                "show": false
+            },
+            "tableColumn": "",
+            "targets": [
+                {
+                    "expr": "count(kafka_server_replicamanager_leadercount{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": "0,2",
+            "title": "# of Brokers Online",
+            "type": "singlestat",
+            "valueFontSize": "200%",
+            "valueMaps": [],
+            "valueName": "current"
+        },
+        {
+            "cacheTimeout": null,
+            "colorBackground": false,
+            "colorValue": true,
+            "colors": [
+                "#629e51",
+                "#f9934e",
+                "#bf1b00"
+            ],
+            "datasource": "${DS_PROMETHEUS}",
+            "format": "none",
+            "gauge": {
+                "maxValue": 100,
+                "minValue": 0,
+                "show": false,
+                "thresholdLabels": false,
+                "thresholdMarkers": true
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 6,
+                "y": 1
+            },
+            "hideTimeOverride": false,
             "id": 6,
             "interval": null,
             "links": [],
@@ -143,8 +263,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
-            "pluginVersion": "6.5.0",
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -160,43 +278,36 @@
                 "fillColor": "rgba(31, 118, 189, 0.18)",
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+                "show": false
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_job_activeJobs_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"}",
+                    "expr": "sum(kafka_controller_controllerstats_uncleanleaderelections_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
                     "refId": "A"
                 }
             ],
-            "thresholds": "",
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Active Jobs",
+            "thresholds": "2",
+            "title": "Unclean Leader Election Rate",
             "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-                {
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }
-            ],
+            "valueFontSize": "200%",
+            "valueMaps": [],
             "valueName": "current"
         },
         {
             "cacheTimeout": null,
             "colorBackground": false,
-            "colorValue": false,
+            "colorValue": true,
             "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
+                "#629e51",
+                "#f9934e",
+                "#bf1b00"
             ],
-            "datasource": null,
-            "description": "No of currently running stages",
+            "datasource": "${DS_PROMETHEUS}",
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -206,12 +317,13 @@
                 "thresholdMarkers": true
             },
             "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 8,
-                "y": 0
+                "h": 4,
+                "w": 3,
+                "x": 9,
+                "y": 1
             },
-            "id": 11,
+            "hideTimeOverride": false,
+            "id": 8,
             "interval": null,
             "links": [],
             "mappingType": 1,
@@ -228,7 +340,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -244,44 +355,127 @@
                 "fillColor": "rgba(31, 118, 189, 0.18)",
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+                "show": false
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "metrics_master_workers_Number{group=\"spark\", instance=\"master\", job=\"spark-master\"} ",
-                    "legendFormat": "maxMem_MB",
+                    "expr": "sum(kafka_controller_kafkacontroller_preferredreplicaimbalancecount{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
                     "refId": "A"
                 }
             ],
-            "thresholds": "",
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "No Of Workers",
+            "thresholds": "2",
+            "title": "Preferred Replica Imbalance",
             "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
+            "valueFontSize": "200%",
+            "valueMaps": [],
+            "valueName": "current"
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "${DS_PROMETHEUS}",
+            "fill": 1,
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 1
+            },
+            "id": 13,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
                 {
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
+                    "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesin_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "Bytes in",
+                    "refId": "A"
+                },
+                {
+                    "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesout_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "Bytes out",
+                    "refId": "B"
                 }
             ],
-            "valueName": "current"
+            "thresholds": [],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Broker network throughput",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "Bps",
+                    "label": "Bytes/s",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
         },
         {
             "cacheTimeout": null,
             "colorBackground": false,
-            "colorValue": false,
+            "colorValue": true,
             "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
+                "#629e51",
+                "#f9934e",
+                "#bf1b00"
             ],
-            "datasource": null,
-            "description": "No of currently running stages",
+            "datasource": "${DS_PROMETHEUS}",
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -291,11 +485,89 @@
                 "thresholdMarkers": true
             },
             "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 12,
-                "y": 0
+                "h": 4,
+                "w": 3,
+                "x": 0,
+                "y": 5
             },
+            "hideTimeOverride": false,
+            "id": 7,
+            "interval": null,
+            "links": [],
+            "mappingType": 1,
+            "mappingTypes": [
+                {
+                    "name": "value to text",
+                    "value": 1
+                },
+                {
+                    "name": "range to text",
+                    "value": 2
+                }
+            ],
+            "maxDataPoints": 100,
+            "nullPointMode": "connected",
+            "nullText": null,
+            "postfix": "",
+            "postfixFontSize": "50%",
+            "prefix": "",
+            "prefixFontSize": "50%",
+            "rangeMaps": [
+                {
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }
+            ],
+            "sparkline": {
+                "fillColor": "rgba(31, 118, 189, 0.18)",
+                "full": false,
+                "lineColor": "rgb(31, 120, 193)",
+                "show": false
+            },
+            "tableColumn": "",
+            "targets": [
+                {
+                    "expr": "sum(kafka_controller_kafkacontroller_offlinepartitionscount{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": "1,1",
+            "title": "Offline Partitions",
+            "type": "singlestat",
+            "valueFontSize": "200%",
+            "valueMaps": [],
+            "valueName": "current"
+        },
+        {
+            "cacheTimeout": null,
+            "colorBackground": false,
+            "colorValue": true,
+            "colors": [
+                "#629e51",
+                "#f9934e",
+                "#bf1b00"
+            ],
+            "datasource": "${DS_PROMETHEUS}",
+            "format": "none",
+            "gauge": {
+                "maxValue": 100,
+                "minValue": 0,
+                "show": false,
+                "thresholdLabels": false,
+                "thresholdMarkers": true
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 3,
+                "y": 5
+            },
+            "hideTimeOverride": false,
             "id": 10,
             "interval": null,
             "links": [],
@@ -313,7 +585,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -329,222 +600,207 @@
                 "fillColor": "rgba(31, 118, 189, 0.18)",
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+                "show": false
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "metrics_master_workers_Number{group=\"spark\", instance=\"master\", job=\"spark-master\"}  ",
-                    "legendFormat": "maxMem_MB",
-                    "refId": "A"
-                }
-            ],
-            "thresholds": "",
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "No Of Alive Workers",
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-                {
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }
-            ],
-            "valueName": "current"
-        },
-        {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-            ],
-            "datasource": null,
-            "description": "No of currently running stages",
-            "format": "none",
-            "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
-            },
-            "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 16,
-                "y": 0
-            },
-            "id": 12,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-                {
-                    "name": "value to text",
-                    "value": 1
-                },
-                {
-                    "name": "range to text",
-                    "value": 2
-                }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "options": {},
-            "pluginVersion": "6.5.0",
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-                {
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }
-            ],
-            "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
-            },
-            "tableColumn": "",
-            "targets": [
-                {
-                    "expr": "metrics_worker_coresFree_Number{ group=\"spark\", instance=\"worker\", job=\"spark-worker\"}  ",
-                    "legendFormat": "maxMem_MB",
-                    "refId": "A"
-                }
-            ],
-            "thresholds": "",
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "No Of Cores Free By Worker",
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-                {
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }
-            ],
-            "valueName": "current"
-        },
-        {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-            ],
-            "datasource": null,
-            "description": "No of currently running stages",
-            "format": "none",
-            "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
-            },
-            "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 20,
-                "y": 0
-            },
-            "id": 13,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-                {
-                    "name": "value to text",
-                    "value": 1
-                },
-                {
-                    "name": "range to text",
-                    "value": 2
-                }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "options": {},
-            "pluginVersion": "6.5.0",
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-                {
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }
-            ],
-            "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
-            },
-            "tableColumn": "",
-            "targets": [
-                {
-                    "expr": "metrics_worker_coresUsed_Number{ group=\"spark\", instance=\"worker\", job=\"spark-worker\"}  ",
+                    "expr": "sum(kafka_server_replicamanager_underreplicatedpartitions{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
                     "legendFormat": "",
                     "refId": "A"
                 }
             ],
-            "thresholds": "",
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "No Of Cores Used By Worker",
+            "thresholds": "1,5",
+            "title": "Under Replicated Partitions",
             "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
+            "valueFontSize": "200%",
+            "valueMaps": [],
+            "valueName": "current"
+        },
+        {
+            "cacheTimeout": null,
+            "colorBackground": false,
+            "colorValue": true,
+            "colors": [
+                "#629e51",
+                "#f9934e",
+                "#bf1b00"
+            ],
+            "datasource": "${DS_PROMETHEUS}",
+            "format": "none",
+            "gauge": {
+                "maxValue": 100,
+                "minValue": 0,
+                "show": false,
+                "thresholdLabels": false,
+                "thresholdMarkers": true
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 6,
+                "y": 5
+            },
+            "hideTimeOverride": false,
+            "id": 11,
+            "interval": null,
+            "links": [],
+            "mappingType": 1,
+            "mappingTypes": [
                 {
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
+                    "name": "value to text",
+                    "value": 1
+                },
+                {
+                    "name": "range to text",
+                    "value": 2
                 }
             ],
+            "maxDataPoints": 100,
+            "nullPointMode": "connected",
+            "nullText": null,
+            "postfix": "",
+            "postfixFontSize": "50%",
+            "prefix": "",
+            "prefixFontSize": "50%",
+            "rangeMaps": [
+                {
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }
+            ],
+            "sparkline": {
+                "fillColor": "rgba(31, 118, 189, 0.18)",
+                "full": false,
+                "lineColor": "rgb(31, 120, 193)",
+                "show": false
+            },
+            "tableColumn": "",
+            "targets": [
+                {
+                    "expr": "sum(kafka_cluster_partition_underminisr{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": "1,5",
+            "title": "Under Min ISR Partitions",
+            "type": "singlestat",
+            "valueFontSize": "200%",
+            "valueMaps": [],
             "valueName": "current"
+        },
+        {
+            "cacheTimeout": null,
+            "colorBackground": false,
+            "colorValue": true,
+            "colors": [
+                "#bf1b00",
+                "#f9934e",
+                "#629e51"
+            ],
+            "datasource": "${DS_PROMETHEUS}",
+            "format": "none",
+            "gauge": {
+                "maxValue": 100,
+                "minValue": 0,
+                "show": false,
+                "thresholdLabels": false,
+                "thresholdMarkers": true
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 9,
+                "y": 5
+            },
+            "hideTimeOverride": false,
+            "id": 9,
+            "interval": null,
+            "links": [],
+            "mappingType": 1,
+            "mappingTypes": [
+                {
+                    "name": "value to text",
+                    "value": 1
+                },
+                {
+                    "name": "range to text",
+                    "value": 2
+                }
+            ],
+            "maxDataPoints": 100,
+            "nullPointMode": "connected",
+            "nullText": null,
+            "postfix": "",
+            "postfixFontSize": "50%",
+            "prefix": "",
+            "prefixFontSize": "50%",
+            "rangeMaps": [
+                {
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }
+            ],
+            "sparkline": {
+                "fillColor": "rgba(31, 118, 189, 0.18)",
+                "full": false,
+                "lineColor": "rgb(31, 120, 193)",
+                "show": false
+            },
+            "tableColumn": "",
+            "targets": [
+                {
+                    "expr": "sum(kafka_server_replicamanager_partitioncount{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": "0,0",
+            "title": "Online Partitions",
+            "type": "singlestat",
+            "valueFontSize": "100%",
+            "valueMaps": [],
+            "valueName": "current"
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 9
+            },
+            "id": 23,
+            "panels": [],
+            "title": "Throughput In/Out",
+            "type": "row"
         },
         {
             "aliasColors": {},
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": null,
-            "description": "No of currently running stages",
+            "datasource": "${DS_PROMETHEUS}",
             "fill": 1,
-            "fillGradient": 0,
             "gridPos": {
                 "h": 8,
                 "w": 8,
                 "x": 0,
-                "y": 5
+                "y": 10
             },
-            "hiddenSeries": false,
-            "id": 2,
+            "id": 27,
             "legend": {
                 "avg": false,
                 "current": false,
@@ -555,13 +811,11 @@
                 "values": false
             },
             "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-                "dataLinks": []
-            },
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
             "percentage": false,
-            "pointradius": 2,
+            "pointradius": 5,
             "points": false,
             "renderer": "flot",
             "seriesOverrides": [],
@@ -570,31 +824,23 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_stage_runningStages_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "Running Stages",
+                    "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
                     "refId": "A"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_stage_waitingStages_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "Waiting Stages",
-                    "refId": "B"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_stage_failedStages_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "Failed Stages",
-                    "refId": "C"
                 }
             ],
             "thresholds": [],
             "timeFrom": null,
-            "timeRegions": [],
             "timeShift": null,
-            "title": "Spark Driver Running Stages",
+            "title": "Messages In Per Broker",
             "tooltip": {
                 "shared": true,
                 "sort": 0,
                 "value_type": "individual"
             },
+            "transparent": false,
             "type": "graph",
             "xaxis": {
                 "buckets": null,
@@ -605,8 +851,9 @@
             },
             "yaxes": [
                 {
-                    "format": "short",
-                    "label": null,
+                    "decimals": null,
+                    "format": "iops",
+                    "label": "Messages/s",
                     "logBase": 1,
                     "max": null,
                     "min": null,
@@ -631,18 +878,15 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": null,
-            "description": "No of currently running stages",
+            "datasource": "${DS_PROMETHEUS}",
             "fill": 1,
-            "fillGradient": 0,
             "gridPos": {
                 "h": 8,
                 "w": 8,
                 "x": 8,
-                "y": 5
+                "y": 10
             },
-            "hiddenSeries": false,
-            "id": 8,
+            "id": 28,
             "legend": {
                 "avg": false,
                 "current": false,
@@ -653,13 +897,11 @@
                 "values": false
             },
             "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-                "dataLinks": []
-            },
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
             "percentage": false,
-            "pointradius": 2,
+            "pointradius": 5,
             "points": false,
             "renderer": "flot",
             "seriesOverrides": [],
@@ -668,36 +910,23 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Max{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "Max",
+                    "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesin_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
                     "refId": "A"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Min{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "Min",
-                    "refId": "B"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Mean{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "Mean",
-                    "refId": "C"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_StdDev{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "StdDev",
-                    "refId": "D"
                 }
             ],
             "thresholds": [],
             "timeFrom": null,
-            "timeRegions": [],
             "timeShift": null,
-            "title": "Message Processing Time",
+            "title": "Bytes In Per Broker",
             "tooltip": {
                 "shared": true,
                 "sort": 0,
                 "value_type": "individual"
             },
+            "transparent": false,
             "type": "graph",
             "xaxis": {
                 "buckets": null,
@@ -708,8 +937,9 @@
             },
             "yaxes": [
                 {
-                    "format": "short",
-                    "label": null,
+                    "decimals": null,
+                    "format": "iops",
+                    "label": "Messages/s",
                     "logBase": 1,
                     "max": null,
                     "min": null,
@@ -734,18 +964,15 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": null,
-            "description": "No of currently running stages",
+            "datasource": "${DS_PROMETHEUS}",
             "fill": 1,
-            "fillGradient": 0,
             "gridPos": {
                 "h": 8,
                 "w": 8,
                 "x": 16,
-                "y": 5
+                "y": 10
             },
-            "hiddenSeries": false,
-            "id": 9,
+            "id": 29,
             "legend": {
                 "avg": false,
                 "current": false,
@@ -756,13 +983,11 @@
                 "values": false
             },
             "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-                "dataLinks": []
-            },
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
             "percentage": false,
-            "pointradius": 2,
+            "pointradius": 5,
             "points": false,
             "renderer": "flot",
             "seriesOverrides": [],
@@ -771,36 +996,23 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "metrics_spark_app_driver_BlockManager_memory_maxMem_MB_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "maxMem_MB",
+                    "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesout_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
                     "refId": "A"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_BlockManager_disk_diskSpaceUsed_MB_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "diskSpaceUsed_MB",
-                    "refId": "D"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_BlockManager_memory_maxOnHeapMem_MB_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "maxOnHeapMem_MB",
-                    "refId": "B"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_BlockManager_memory_maxOffHeapMem_MB_Number{group=\"spark\", instance=\"driver\", job=\"spark-driver\"} ",
-                    "legendFormat": "maxOffHeapMem_MB",
-                    "refId": "C"
                 }
             ],
             "thresholds": [],
             "timeFrom": null,
-            "timeRegions": [],
             "timeShift": null,
-            "title": "BlockManager",
+            "title": "Bytes Out Per Broker",
             "tooltip": {
                 "shared": true,
                 "sort": 0,
                 "value_type": "individual"
             },
+            "transparent": false,
             "type": "graph",
             "xaxis": {
                 "buckets": null,
@@ -811,8 +1023,9 @@
             },
             "yaxes": [
                 {
-                    "format": "short",
-                    "label": null,
+                    "decimals": null,
+                    "format": "iops",
+                    "label": "Messages/s",
                     "logBase": 1,
                     "max": null,
                     "min": null,
@@ -833,23 +1046,32 @@
             }
         },
         {
-            "aliasColors": {},
-            "bars": false,
-            "cacheTimeout": null,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": null,
-            "description": "No of currently running stages",
-            "fill": 1,
-            "fillGradient": 0,
+            "collapsed": false,
             "gridPos": {
-                "h": 6,
-                "w": 12,
+                "h": 1,
+                "w": 24,
                 "x": 0,
-                "y": 13
+                "y": 18
             },
-            "hiddenSeries": false,
-            "id": 14,
+            "id": 21,
+            "panels": [],
+            "title": "System",
+            "type": "row"
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "${DS_PROMETHEUS}",
+            "fill": 1,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 19
+            },
+            "id": 30,
             "legend": {
                 "avg": false,
                 "current": false,
@@ -860,15 +1082,11 @@
                 "values": false
             },
             "lines": true,
-            "linewidth": 1,
+            "linewidth": 2,
             "links": [],
-            "nullPointMode": "null",
-            "options": {
-                "dataLinks": []
-            },
+            "nullPointMode": "connected",
             "percentage": false,
-            "pluginVersion": "6.5.0",
-            "pointradius": 2,
+            "pointradius": 5,
             "points": false,
             "renderer": "flot",
             "seriesOverrides": [],
@@ -877,26 +1095,23 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "metrics_worker_memFree_MB_Number{ group=\"spark\", instance=\"worker\", job=\"spark-worker\"}  ",
-                    "legendFormat": "memFree_MB",
+                    "expr": "sum(rate(process_cpu_seconds_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}[5m])) by (instance)",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
                     "refId": "A"
-                },
-                {
-                    "expr": "metrics_worker_memUsed_MB_Number{ group=\"spark\", instance=\"worker\", job=\"spark-worker\"}  ",
-                    "legendFormat": "memUsed_MB",
-                    "refId": "B"
                 }
             ],
             "thresholds": [],
             "timeFrom": null,
-            "timeRegions": [],
             "timeShift": null,
-            "title": "Memory Free/Used by Worker",
+            "title": "CPU Usage",
             "tooltip": {
                 "shared": true,
                 "sort": 0,
                 "value_type": "individual"
             },
+            "transparent": false,
             "type": "graph",
             "xaxis": {
                 "buckets": null,
@@ -907,8 +1122,9 @@
             },
             "yaxes": [
                 {
-                    "format": "short",
-                    "label": null,
+                    "decimals": null,
+                    "format": "percent",
+                    "label": "Cores",
                     "logBase": 1,
                     "max": null,
                     "min": null,
@@ -931,21 +1147,17 @@
         {
             "aliasColors": {},
             "bars": false,
-            "cacheTimeout": null,
             "dashLength": 10,
             "dashes": false,
-            "datasource": null,
-            "description": "No of currently running stages",
+            "datasource": "${DS_PROMETHEUS}",
             "fill": 1,
-            "fillGradient": 0,
             "gridPos": {
-                "h": 6,
-                "w": 12,
-                "x": 12,
-                "y": 13
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 19
             },
-            "hiddenSeries": false,
-            "id": 15,
+            "id": 31,
             "legend": {
                 "avg": false,
                 "current": false,
@@ -956,15 +1168,11 @@
                 "values": false
             },
             "lines": true,
-            "linewidth": 1,
+            "linewidth": 2,
             "links": [],
-            "nullPointMode": "null",
-            "options": {
-                "dataLinks": []
-            },
+            "nullPointMode": "connected",
             "percentage": false,
-            "pluginVersion": "6.5.0",
-            "pointradius": 2,
+            "pointradius": 5,
             "points": false,
             "renderer": "flot",
             "seriesOverrides": [],
@@ -973,36 +1181,23 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Count{type=\"timers\", group=\"spark\", instance=\"driver\", job=\"spark-driver\"}  ",
-                    "legendFormat": "Count",
+                    "expr": "sum without(area)(jvm_memory_bytes_used{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
                     "refId": "A"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Max{type=\"timers\", group=\"spark\", instance=\"driver\", job=\"spark-driver\"}  ",
-                    "legendFormat": "Max",
-                    "refId": "B"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Mean{type=\"timers\", group=\"spark\", instance=\"driver\", job=\"spark-driver\"}  ",
-                    "legendFormat": "Mean",
-                    "refId": "C"
-                },
-                {
-                    "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Min{type=\"timers\", group=\"spark\", instance=\"driver\", job=\"spark-driver\"}  ",
-                    "legendFormat": "Min",
-                    "refId": "D"
                 }
             ],
             "thresholds": [],
             "timeFrom": null,
-            "timeRegions": [],
             "timeShift": null,
-            "title": "LiveListenerBus listenerProcessingTime HeartbeatReceiver",
+            "title": "JVM Memory Used",
             "tooltip": {
                 "shared": true,
                 "sort": 0,
                 "value_type": "individual"
             },
+            "transparent": false,
             "type": "graph",
             "xaxis": {
                 "buckets": null,
@@ -1013,8 +1208,293 @@
             },
             "yaxes": [
                 {
+                    "decimals": null,
+                    "format": "decbytes",
+                    "label": "Memory",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
                     "format": "short",
                     "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "${DS_PROMETHEUS}",
+            "fill": 1,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 19
+            },
+            "id": 32,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}[5m]))",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Time spent in GC",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "transparent": false,
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "decimals": null,
+                    "format": "percentunit",
+                    "label": "% time in GC",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 27
+            },
+            "id": 19,
+            "panels": [],
+            "title": "Zookeeper",
+            "type": "row"
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "${DS_PROMETHEUS}",
+            "fill": 1,
+            "gridPos": {
+                "h": 8,
+                "w": 9,
+                "x": 0,
+                "y": 28
+            },
+            "id": 34,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "expr": "kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\",quantile=~\"$percentile\"}",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}} - {{quantile}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Zookeeper Request Latency",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "transparent": false,
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "decimals": null,
+                    "format": "ms",
+                    "label": "",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 36
+            },
+            "id": 17,
+            "panels": [],
+            "title": "Logs size",
+            "type": "row"
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "${DS_PROMETHEUS}",
+            "fill": 1,
+            "gridPos": {
+                "h": 8,
+                "w": 9,
+                "x": 0,
+                "y": 37
+            },
+            "id": 33,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "expr": "sum(kafka_log_log_size{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}) by (instance)",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Log size per Broker",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "transparent": false,
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "decimals": null,
+                    "format": "short",
+                    "label": "",
                     "logBase": 1,
                     "max": null,
                     "min": null,
@@ -1035,12 +1515,73 @@
             }
         }
     ],
-    "refresh": false,
-    "schemaVersion": 21,
+    "refresh": "1m",
+    "schemaVersion": 16,
     "style": "dark",
     "tags": [],
     "templating": {
-        "list": []
+        "list": [
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "${DS_PROMETHEUS}",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Environment",
+                "multi": false,
+                "name": "env",
+                "options": [],
+                "query": "label_values(env)",
+                "refresh": 1,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "${DS_PROMETHEUS}",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Broker ID",
+                "multi": true,
+                "name": "broker_id",
+                "options": [],
+                "query": "label_values(kafka_server_kafkaserver_brokerstate, instance)",
+                "refresh": 1,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "${DS_PROMETHEUS}",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Percentile",
+                "multi": true,
+                "name": "percentile",
+                "options": [],
+                "query": "label_values(quantile)",
+                "refresh": 1,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }
+        ]
     },
     "time": {
         "from": "now-15m",
@@ -1058,10 +1599,21 @@
             "1h",
             "2h",
             "1d"
+        ],
+        "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
         ]
     },
     "timezone": "",
-    "title": "Apache Spark Metrics",
-    "uid": "EWIYh-OMz",
-    "version": 10
+    "title": "Spark Cluster Overview",
+    "uid": "eYawvnj",
+    "version": 2
 }

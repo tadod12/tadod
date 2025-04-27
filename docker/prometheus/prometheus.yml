@@ -46,27 +46,33 @@ scrape_configs:
 
   - job_name: spark-master
     scrape_interval: 10s
-    metrics_path: /metrics/master/prometheus
+    metrics_path: /metrics
     static_configs:
-      - targets: ["spark-master:7071"]
+      - targets: ["spark-master:8084"]
         labels:
           group: "spark"
           instance: "master"
 
   - job_name: spark-worker
     scrape_interval: 10s
-    metrics_path: /metrics/prometheus
+    metrics_path: /metrics
     static_configs:
-      - targets: ["spark-worker-1:7072", "spark-worker-2:7073", "spark-worker-3:7074"]
+      - targets: ["spark-worker-1:7071", "spark-worker-2:7072"]
         labels:
           group: "spark"
-          instance: "worker"
 
-  - job_name: spark-application
+  - job_name: spark-driver
     scrape_interval: 10s
-    metrics_path: /metrics/applications/prometheus
+    metrics_path: /metrics
     static_configs:
-      - targets: ["spark-master:7071"]
+      - targets: ["spark-master:8085"]
         labels:
           group: "spark"
-          instance: "application"
+
+  - job_name: spark-executor
+    scrape_interval: 10s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["spark-worker-1:7074", "spark-worker-2:7075"]
+        labels:
+          group: "spark"

@@ -17,11 +17,11 @@
 
 ![Architecture](assets/draft-170425.png)
 
-| Service           | Port                                  |
-|-------------------|---------------------------------------|
-| PostgreSQL        | `5432:5432`                           |
-| MinIO             | `9000:9000` `9001:9001`               |
-| Hive-Metastore    | `9083:9083`                           |
+| Service           | Port                                  | BASE IMAGE            |
+|-------------------|---------------------------------------|-----------------------|
+| PostgreSQL        | `5432:5432`                           | `postgres:14`         |
+| MinIO             | `9000:9000` `9001:9001`               |                       |
+| Hive-Metastore    | `9083:9083`                           |                       |
 | Trino             | `8889:8889`                           |
 | Spark-Master      | `7077:7077` `8084:8084`               |
 | Superset          | `8088:8088`                           |
@@ -34,6 +34,14 @@
 | Schema-Registry   | `8081:8081`                           |
 | Kafka-Connect     | `8083:8083`                           |
 | Kafka-UI          | `8080:8080`                           |
+
+## Framework Configuration
+
+### Kafka
+
+Message Expire Time: `30s` (for running backfill)
+Bootstrap Servers: `kafka-1:29092`, `kafka-2:29093`, `kafka-3:29094`
+Topics: `yellow`, `green`, `fhv`
 
 ## License
 

@@ -1,7 +1,7 @@
 package com.tadod
 
 import com.tadod.jobs.compaction.IcebergCompactionJob
-import com.tadod.jobs.streaming.{GreenStreamingJob, YellowStreamingJob}
+import com.tadod.jobs.streaming.{FHVStreamingJob, GreenStreamingJob, YellowStreamingJob}
 import com.tadod.jobs.transformation.{GreenCleaningJob, GreenMartVendorJob, MartLocationJob, MartPaymentJob, MartRateCodeJob, YellowCleaningJob, YellowMartVendorJob}
 
 object App {
@@ -23,6 +23,10 @@ object App {
         ).execute()
 
         case "GreenStream" => new GreenStreamingJob(
+          configPath = configPath
+        ).execute()
+
+        case "FHVStream" => new FHVStreamingJob(
           configPath = configPath
         ).execute()
 
