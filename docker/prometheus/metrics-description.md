@@ -227,8 +227,6 @@ This document provides descriptions for all metrics available in the Prometheus 
     spark_driver_DAGScheduler_job_allJobs_type_gauges{app_id="app-20250427133927-0002", group="spark", instance="spark-master:8085", job="spark-driver"}
 - **spark_driver_DAGScheduler_stage_failedStages_type_gauges** - Number of failed stages.
     spark_driver_DAGScheduler_stage_failedStages_type_gauges{app_id="app-20250427125834-0000", group="spark", instance="spark-master:8085", job="spark-driver"}
-    spark_driver_DAGScheduler_stage_failedStages_type_gauges{app_id="app-20250427133322-0001", group="spark", instance="spark-master:8085", job="spark-driver"}
-    spark_driver_DAGScheduler_stage_failedStages_type_gauges{app_id="app-20250427133927-0002", group="spark", instance="spark-master:8085", job="spark-driver"}
 - **spark_driver_DAGScheduler_stage_runningStages_type_gauges** - Number of running stages.
     spark_driver_DAGScheduler_stage_runningStages_type_gauges{app_id="app-20250427125834-0000", group="spark", instance="spark-master:8085", job="spark-driver"}
     spark_driver_DAGScheduler_stage_runningStages_type_gauges{app_id="app-20250427133322-0001", group="spark", instance="spark-master:8085", job="spark-driver"}
@@ -243,13 +241,13 @@ This document provides descriptions for all metrics available in the Prometheus 
 
 ### Spark Master and Worker
 - **spark_master_aliveWorkers_type_gauges** - Number of alive workers.
-    spark_master_aliveWorkers_type_gauges{group="spark", instance="master", job="spark-master"}
+    spark_master_aliveWorkers_type_gauges{group="spark", instance="master", job="spark-master"} - done
 - **spark_master_apps_type_gauges** - Number of applications.
-    spark_master_apps_type_gauges{group="spark", instance="master", job="spark-master"}
+    spark_master_apps_type_gauges{group="spark", instance="master", job="spark-master"} - done
 - **spark_master_waitingApps_type_gauges** - Number of waiting applications.
     spark_master_waitingApps_type_gauges{group="spark", instance="master", job="spark-master"}
 - **spark_master_workers_type_gauges** - Total number of workers.
-    spark_master_workers_type_gauges{group="spark", instance="master", job="spark-master"}
+    spark_master_workers_type_gauges{group="spark", instance="master", job="spark-master"} - done
 - **spark_worker_coresFree_type_gauges** - Number of free cores on worker.
     spark_worker_coresFree_type_gauges{group="spark", instance="spark-worker-1:7071", job="spark-worker"}
     spark_worker_coresFree_type_gauges{group="spark", instance="spark-worker-2:7072", job="spark-worker"}

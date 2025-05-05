@@ -7,7 +7,7 @@ x-airflow-common: &airflow-common
   env_file:
     - airflow.env
   volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
+    - /var/run/docker.sock:/var/run/docker.sock # For Docker Operator
     - ./dags:/opt/airflow/dags
     - ./docker/airflow/config:/opt/airflow/config
     - ./docker/airflow/plugins:/opt/airflow/plugins
@@ -15,7 +15,7 @@ x-airflow-common: &airflow-common
     - ./pipeline/ingestion:/var/ingestion
     - ./pipeline/cleaning:/var/cleaning
     - ./pipeline/curation:/var/curation
-    - ./pipeline/ingestion/jars:/var/jars
+    # - ./pipeline/ingestion/jars:/var/jars
     - ./pipeline/jars:/var/submit/jars
     - ./assets/map:/var/map
     - ./assets/data:/var/data
@@ -37,11 +37,11 @@ services:
       - ./docker/prometheus:/etc/prometheus
 
   # Alert Manager
-  alertmanager:
-    image: prom/alertmanager:v0.26.0
-    container_name: alertmanager
-    ports:
-      - "19093:9093"
+  # alertmanager:
+  #   image: prom/alertmanager:v0.26.0
+  #   container_name: alertmanager
+  #   ports:
+  #     - "19093:9093"
 
   # Grafana
   grafana:
@@ -112,7 +112,7 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 30000
+      KAFKA_LOG_RETENTION_MS: 600000
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
@@ -138,7 +138,7 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 30000
+      KAFKA_LOG_RETENTION_MS: 600000
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
@@ -164,7 +164,7 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 30000
+      KAFKA_LOG_RETENTION_MS: 600000
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
@@ -322,29 +322,29 @@ services:
         condition: service_healthy
 
   ########## ENGINE ##########
-  trino:
-    image: "trinodb/trino:425"
-    container_name: trino
-    hostname: trino
-    restart: always
-    ports:
-      - "8889:8889"
-    volumes:
-      - ./docker/trino/etc-coordinator:/etc/trino
-      - ./docker/trino/catalog:/etc/trino/catalog
-    depends_on:
-      - hive-metastore
+  # trino:
+  #   image: "trinodb/trino:425"
+  #   container_name: trino
+  #   hostname: trino
+  #   restart: always
+  #   ports:
+  #     - "8889:8889"
+  #   volumes:
+  #     - ./docker/trino/etc-coordinator:/etc/trino
+  #     - ./docker/trino/catalog:/etc/trino/catalog
+  #   depends_on:
+  #     - hive-metastore
 
-  trino-worker:
-    image: "trinodb/trino:425"
-    container_name: trino-worker
-    hostname: trino-worker
-    restart: always
-    volumes:
-      - ./docker/trino/etc-worker:/etc/trino
-      - ./docker/trino/catalog:/etc/trino/catalog
-    depends_on:
-      - trino
+  # trino-worker:
+  #   image: "trinodb/trino:425"
+  #   container_name: trino-worker
+  #   hostname: trino-worker
+  #   restart: always
+  #   volumes:
+  #     - ./docker/trino/etc-worker:/etc/trino
+  #     - ./docker/trino/catalog:/etc/trino/catalog
+  #   depends_on:
+  #     - trino
 
   # Spark Cluster 
   spark-master:
@@ -463,24 +463,54 @@ services:
       - "7072:7072"
       - "7075:7070" # For application metrics
 
+  spark-worker-3:
+    image: tadod/lakehouse:spark
+    entrypoint: [ './entrypoint.sh', 'worker' ]
+    container_name: spark-worker-3
+    hostname: spark-worker-3
+    depends_on:
+      - spark-master
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio:9000
+      - S3_PATH_STYLE_ACCESS=true
+      - SPARK_NO_DAEMONIZE=true
+      - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7073:/opt/jmx-exporter/spark.yml
+    volumes:
+      - spark-logs:/opt/spark/spark-events # for history-server
+      # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
+      - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
+      - ./pipeline/ingestion:/var/ingestion
+      - ./pipeline/cleaning:/var/cleaning
+      - ./pipeline/curation:/var/curation
+      - ./pipeline/jars:/var/submit/jars
+      - ./assets/map:/var/map
+      - ./docker/jmx-exporter:/opt/jmx-exporter
+    ports:
+      - "7073:7073"
+      - "7076:7070" # For application metrics
+
   ########## VISUALIZATION ##########
   # Superset
-  superset:
-    build:
-      context: ./docker/superset
-      dockerfile: Dockerfile
-    container_name: superset
-    hostname: superset
-    depends_on:
-      # - redis
-      - postgres
-    environment:
-      - SUPERSET_DB_URI=postgresql+psycopg2://superset:superset@postgres:5432/superset
-      # - REDIS_URL=redis://redis:6379/0
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=admin
-    ports:
-      - "8088:8088"
+  # superset:
+  #   build:
+  #     context: ./docker/superset
+  #     dockerfile: Dockerfile
+  #   container_name: superset
+  #   hostname: superset
+  #   depends_on:
+  #     # - redis
+  #     - postgres
+  #   environment:
+  #     - SUPERSET_DB_URI=postgresql+psycopg2://superset:superset@postgres:5432/superset
+  #     # - REDIS_URL=redis://redis:6379/0
+  #     - ADMIN_USERNAME=admin
+  #     - ADMIN_PASSWORD=admin
+  #   ports:
+  #     - "8088:8088"
 
   ########## AIRLFOW ##########
   webserver:
