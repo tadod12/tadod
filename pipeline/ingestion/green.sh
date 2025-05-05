@@ -10,9 +10,9 @@ spark_submit() {
     $SPARK_HOME/bin/spark-submit \
         --master local \
         --deploy-mode client \
-        --driver-memory 2g \
-        --executor-memory 2g \
-        --executor-cores 2 \
+        --driver-memory 1g \
+        --executor-memory 1g \
+        --executor-cores 1 \
         --num-executors 2 \
         --conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions \
         --conf spark.sql.catalog.iceberg=org.apache.iceberg.spark.SparkCatalog \

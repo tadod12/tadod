@@ -555,21 +555,21 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "sum(spark_driver_DAGScheduler_stage_runningStages_type_gauges{group=\"spark\", instance=\"spark-master: 8085\", job=\"spark-driver\"}) without (app_id)",
+                    "expr": "sum(spark_driver_DAGScheduler_stage_runningStages_type_gauges) without (app_id)",
                     "format": "time_series",
                     "intervalFactor": 2,
                     "legendFormat": "Running Stages",
                     "refId": "A"
                 },
                 {
-                    "expr": "sum(spark_driver_DAGScheduler_stage_waitingStages_type_gauges{group=\"spark\", instance=\"spark-master: 8085\", job=\"spark-driver\"}) without (app_id)",
+                    "expr": "sum(spark_driver_DAGScheduler_stage_waitingStages_type_gauges) without (app_id)",
                     "format": "time_series",
                     "intervalFactor": 2,
                     "legendFormat": "Waiting Stages",
                     "refId": "B"
                 },
                 {
-                    "expr": "sum(spark_driver_DAGScheduler_stage_failedStages_type_gauges{group=\"spark\", instance=\"spark-master: 8085\", job=\"spark-driver\"}) without (app_id)",
+                    "expr": "sum(spark_driver_DAGScheduler_stage_failedStages_type_gauges) without (app_id)",
                     "format": "time_series",
                     "intervalFactor": 2,
                     "legendFormat": "Failed Stages",
@@ -656,28 +656,28 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "max_over_time(spark_driver_DAGScheduler_messageProcessingTime_type_timers_total{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}[1m])",
+                    "expr": "metrics_app_driver_DAGScheduler_messageProcessingTime_Max{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Max",
                     "refId": "A"
                 },
                 {
-                    "expr": "min_over_time(spark_driver_DAGScheduler_messageProcessingTime_type_timers_total{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}[1m])",
+                    "expr": "metrics_app_driver_DAGScheduler_messageProcessingTime_Min{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Min",
                     "refId": "B"
                 },
                 {
-                    "expr": "avg_over_time(spark_driver_DAGScheduler_messageProcessingTime_type_timers_total{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}[1m])",
+                    "expr": "metrics_app_driver_DAGScheduler_messageProcessingTime_Mean{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Mean",
                     "refId": "C"
                 },
                 {
-                    "expr": "stddev_over_time(spark_driver_DAGScheduler_messageProcessingTime_type_timers_total{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}[1m])",
+                    "expr": "metrics_app_driver_DAGScheduler_messageProcessingTime_StdDev{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "StdDev",
@@ -727,66 +727,13 @@
             }
         },
         {
-            "datasource": {
-                "uid": "${datasource}"
-            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "${DS_PROMETHEUS}",
             "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisBorderShow": false,
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "never",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "links": [],
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
+            "fill": 1,
             "gridPos": {
                 "h": 8,
                 "w": 8,
@@ -794,328 +741,292 @@
                 "y": 5
             },
             "id": 9,
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom",
-                    "showLegend": true
-                },
-                "tooltip": {
-                    "mode": "multi",
-                    "sort": "none"
-                }
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
             },
-            "pluginVersion": "10.2.0",
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
             "targets": [
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_spark_app_driver_BlockManager_memory_maxMem_MB_Number{instance_type=~\"driver\", job=~\"integrations/spark-driver\", spark_cluster=~\"$spark_cluster\"} ",
+                    "expr": "metrics_app_driver_BlockManager_memory_maxMem_MB_Number{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"gauges\"}",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "maxMem_MB",
                     "refId": "A"
                 },
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_spark_app_driver_BlockManager_disk_diskSpaceUsed_MB_Number{instance_type=~\"driver\", job=~\"integrations/spark-driver\", spark_cluster=~\"$spark_cluster\"} ",
+                    "expr": "metrics_app_driver_BlockManager_disk_diskSpaceUsed_MB_Number{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"gauges\"}",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "diskSpaceUsed_MB",
                     "refId": "D"
                 },
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_spark_app_driver_BlockManager_memory_maxOnHeapMem_MB_Number{instance_type=~\"driver\", job=~\"integrations/spark-driver\", spark_cluster=~\"$spark_cluster\"} ",
+                    "expr": "metrics_app_driver_BlockManager_memory_maxOnHeapMem_MB_Number{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"gauges\"}",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "maxOnHeapMem_MB",
                     "refId": "B"
                 },
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_spark_app_driver_BlockManager_memory_maxOffHeapMem_MB_Number{instance_type=~\"driver\", job=~\"integrations/spark-driver\", spark_cluster=~\"$spark_cluster\"} ",
+                    "expr": "metrics_app_driver_BlockManager_memory_maxOffHeapMem_MB_Number{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"gauges\"}",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "maxOffHeapMem_MB",
                     "refId": "C"
                 }
             ],
+            "threshold": [],
+            "timeFrom": null,
+            "timeShift": null,
             "title": "BlockManager",
-            "type": "timeseries"
+            "tooltip": {
+                "shared": true,
+                "value_type": "individual",
+                "sort": 0
+            },
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
         },
         {
-            "datasource": {
-                "uid": "${datasource}"
-            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "${DS_PROMETHEUS}",
+            "fill": 1,
             "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisBorderShow": false,
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "never",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "links": [],
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
             "gridPos": {
-                "h": 6,
+                "h": 12,
                 "w": 12,
                 "x": 0,
                 "y": 13
             },
             "id": 14,
-            "links": [],
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom",
-                    "showLegend": true
-                },
-                "tooltip": {
-                    "mode": "multi",
-                    "sort": "none"
-                }
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
             },
-            "pluginVersion": "10.2.0",
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
             "targets": [
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_worker_memFree_MB_Number{instance_type=~\"worker\", job=~\"integrations/spark-worker\", spark_cluster=~\"$spark_cluster\"}  ",
+                    "expr": "sum(spark_worker_memFree_MB_type_gauges{group=\"spark\", job=\"spark-worker\"}) without (instance)",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "memFree_MB",
                     "refId": "A"
                 },
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_worker_memUsed_MB_Number{instance_type=~\"worker\", job=~\"integrations/spark-worker\", spark_cluster=~\"$spark_cluster\"}  ",
+                    "expr": "sum(spark_worker_memUsed_MB_type_gauges{group=\"spark\", job=\"spark-worker\"}) without (instance)",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "memUsed_MB",
                     "refId": "B"
                 }
             ],
+            "threshold": [],
+            "timeFrom": null,
+            "timeShift": null,
             "title": "Memory Free/Used by Worker",
-            "type": "timeseries"
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
         },
         {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
             "datasource": "${DS_PROMETHEUS}",
+            "fill": 1,
             "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisBorderShow": false,
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "never",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "links": [],
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
             "gridPos": {
-                "h": 6,
+                "h": 12,
                 "w": 12,
                 "x": 12,
                 "y": 13
             },
             "id": 15,
-            "links": [],
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom",
-                    "showLegend": true
-                },
-                "tooltip": {
-                    "mode": "multi",
-                    "sort": "none"
-                }
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
             },
-            "pluginVersion": "10.2.0",
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
             "targets": [
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Count{type=\"timers\", instance_type=~\"driver\", job=~\"integrations/spark-driver\", spark_cluster=~\"$spark_cluster\"}  ",
+                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Count{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "Count",
                     "refId": "A"
                 },
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Max{type=\"timers\", instance_type=~\"driver\", job=~\"integrations/spark-driver\", spark_cluster=~\"$spark_cluster\"}  ",
+                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Max{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "Max",
                     "refId": "B"
                 },
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Mean{type=\"timers\", instance_type=~\"driver\", job=~\"integrations/spark-driver\", spark_cluster=~\"$spark_cluster\"}  ",
+                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Mean{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "Mean",
                     "refId": "C"
                 },
                 {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Min{type=\"timers\", instance_type=~\"driver\", job=~\"integrations/spark-driver\", spark_cluster=~\"$spark_cluster\"}  ",
+                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Min{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
+                    "format": "time_series",
+                    "intervalFactor": 1,
                     "legendFormat": "Min",
                     "refId": "D"
                 }
             ],
+            "threshold": [],
+            "timeFrom": null,
+            "timeShift": null,
             "title": "LiveListenerBus listenerProcessingTime HeartbeatReceiver",
-            "type": "timeseries"
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
         }
     ],
     "refresh": "30s",
     "schemaVersion": 16,
+    "style": "dark",
     "tags": [
         "spark-integration"
     ],
-    "style": "dark",
     "templating": {
-        "list": [
-            {
-                "current": {
-                    "selected": false,
-                    "text": "default",
-                    "value": "default"
-                },
-                "hide": 0,
-                "includeAll": false,
-                "label": "Data source",
-                "multi": false,
-                "name": "datasource",
-                "options": [],
-                "query": "prometheus",
-                "refresh": 1,
-                "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
-                "skipUrlSync": false,
-                "type": "datasource"
-            },
-            {
-                "current": {
-                    "selected": false,
-                    "text": "default",
-                    "value": "default"
-                },
-                "datasource": "${DS_PROMETHEUS}",
-                "definition": "label_values(metrics_spark_app_driver_DAGScheduler_job_allJobs_Number,spark_cluster)",
-                "hide": 0,
-                "includeAll": false,
-                "label": "Spark Cluster",
-                "multi": false,
-                "name": "spark_cluster",
-                "options": [],
-                "query": {
-                    "query": "label_values(metrics_spark_app_driver_DAGScheduler_job_allJobs_Number,spark_cluster)",
-                    "refId": "StandardVariableQuery"
-                },
-                "refresh": 2,
-                "regex": "",
-                "skipUrlSync": false,
-                "sort": 0,
-                "type": "query"
-            }
-        ]
+        "list": []
     },
     "time": {
         "from": "now-30m",
@@ -1149,6 +1060,5 @@
     "timezone": "",
     "title": "Spark Cluster Metrics",
     "uid": "EWIYh-OMz",
-    "version": 2,
-    "weekStart": ""
+    "version": 2
 }

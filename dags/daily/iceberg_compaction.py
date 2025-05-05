@@ -6,7 +6,7 @@ from docker.types import Mount
 from datetime import datetime, timedelta
 
 with DAG(
-    dag_id='iceberg_compaction_ver2',
+    dag_id='dag_iceberg_compaction_ver2',
     default_args={
         'owner': 'airflow',
         'depends_on_past': False,

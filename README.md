@@ -35,13 +35,53 @@
 | Kafka-Connect     | `8083:8083`                           |
 | Kafka-UI          | `8080:8080`                           |
 
-## Framework Configuration
+## Configuration
 
 ### Kafka
 
-Message Expire Time: `30s` (for running backfill)
-Bootstrap Servers: `kafka-1:29092`, `kafka-2:29093`, `kafka-3:29094`
-Topics: `yellow`, `green`, `fhv`
+- Message Expire Time: `30s` (for running backfill)
+- Bootstrap Servers: `kafka-1:29092`, `kafka-2:29093`, `kafka-3:29094`
+- Topics: `yellow`, `green`, `fhv`
+
+## Project Structure
+
+```
+📦assets
+ ┣ 📂data - (gitignore) Store example datasets
+ ┃ ┣ 📂fhv - For Hire Vehicle Trips Data
+ ┃ ┣ 📂fhvhv - High Volume For Hire Vehicle Trips Data
+ ┃ ┣ 📂green - Green trips Data
+ ┃ ┗ 📂yellow - Yellow Trips Data
+ ┣ 📂glossary
+ ┃ ┗ 📜info.xlsx - Logic for Data Marts
+ ┣ 📂map
+ ┃ ┗ 📜taxi_zone_lookup.csv - Zone Lookup for Location ID
+ ┣ 📂research - Note some stuff
+ ┣ 📜draft-*.png - (draft) System Architectures
+ 📦dags - Store Python scripts for Airflow
+ ┣ 📂daily - Daily Interval Jobs
+ ┃ ┣ 📜daily_vendor_stats.py
+ ┃ ┗ 📜iceberg_compaction.py
+ ┣ 📂monthly - Monthly Interval Jobs
+ ┃ ┣ 📜crawler.py
+ ┃ ┣ 📜dag_ingestion.py
+ ┃ ┗ 📜producer.py
+ ┣ 📂weekly - Weekly Interval Jobs
+ ┣ 📜test_*.py - Test scripts
+ 📦docker
+ ┣ 📂airflow
+ ┃ ┣ 📂config - Mounted
+ ┃ ┣ 📂plugins - Mounted
+ ┃ ┣ 🐋.dockerignore
+ ┃ ┣ 🐋Dockerfile - Build Airflow image
+ ┣ 📂debezium
+ ┃ ┣ 🐋Dockerfile - Build Debezium image
+ ┃ ┣ 
+ ┃ ┣ 
+ ┃ ┣ 
+ ┃ ┣ 
+ ┃ ┣ 💲maven-downloader.sh - Scripts for downloading packages
+```
 
 ## License
 

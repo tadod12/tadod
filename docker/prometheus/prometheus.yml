@@ -76,3 +76,17 @@ scrape_configs:
       - targets: ["spark-worker-1:7074", "spark-worker-2:7075"]
         labels:
           group: "spark"
+
+  - job_name: spark-application
+    scrape_interval: 10s
+    metrics_path: /metrics/prometheus
+    static_configs:
+      - targets: ["spark-master:4048"]
+        labels:
+          group: "spark"
+          instance: "application"
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: metrics_app_[^_]+_[^_]+_(.*)
+        target_label: __name__
+        replacement: metrics_app_${1}

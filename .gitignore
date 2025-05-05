@@ -2,6 +2,9 @@ env-test
 checkpoints
 *.jar
 !jmx_prometheus_javaagent-0.20.0.jar
+!commons-pool2-2.11.1.jar
+!simpleclient_httpserver-0.16.0.jar
+!simpleclient-0.16.0.jar
 env-test
 __pycache__
 *.pyc

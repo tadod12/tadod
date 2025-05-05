@@ -6,7 +6,7 @@ from airflow.providers.docker.operators.docker import DockerOperator
 from docker.types import Mount
 
 with DAG(
-    dag_id='test_docker',
+    dag_id='dag_test_docker',
     schedule_interval=None,
     default_args={
         'owner': 'airflow',

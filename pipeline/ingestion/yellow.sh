@@ -10,10 +10,10 @@ spark_submit() {
     $SPARK_HOME/bin/spark-submit \
         --master spark://spark-master:7077 \
         --deploy-mode client \
-        --driver-memory 2g \
-        --executor-memory 2g \
+        --driver-memory 1g \
+        --executor-memory 1g \
         --executor-cores 1 \
-        --num-executors 2 \
+        --num-executors 1 \
         --conf spark.ui.port=4048 \
         --conf spark.ui.prometheus.enabled=true \
         --conf "spark.driver.extraJavaOptions=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=8085:/opt/jmx-exporter/spark.yml -Drole=driver" \
@@ -28,3 +28,10 @@ spark_submit() {
 spark_submit "YellowStream" "/var/ingestion/yellow.properties" $CURRENT_DATE $CURRENT_DATE
 
 # http://localhost:4048/metrics/prometheus/
+
+# docker exec -it spark-worker-1 /bin/bash
+# rm /opt/spark/jars/commons-pool2-2.11.1.jar
+# cp /var/submit/jars/commons-pool2-2.11.1.jar /opt/spark/jars/commons-pool2-2.11.1.jar
+
+# docker exec -it spark-worker-2 /bin/bash
+# docker exec -it spark-worker-3 /bin/bash
