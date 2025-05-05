@@ -14,6 +14,8 @@ spark_submit() {
         --executor-memory 2g \
         --executor-cores 1 \
         --num-executors 2 \
+        --conf spark.ui.port=4048 \
+        --conf spark.ui.prometheus.enabled=true \
         --conf "spark.driver.extraJavaOptions=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=8085:/opt/jmx-exporter/spark.yml -Drole=driver" \
         --conf "spark.executor.extraJavaOptions=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7070:/opt/jmx-exporter/spark.yml -Drole=executor" \
         --class com.tadod.App \
@@ -24,3 +26,5 @@ spark_submit() {
 }
 
 spark_submit "YellowStream" "/var/ingestion/yellow.properties" $CURRENT_DATE $CURRENT_DATE
+
+# http://localhost:4048/metrics/prometheus/

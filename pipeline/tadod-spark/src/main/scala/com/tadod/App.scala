@@ -1,6 +1,7 @@
 package com.tadod
 
 import com.tadod.jobs.compaction.IcebergCompactionJob
+import com.tadod.jobs.metrics.{KafkaOffsetMonitor, SparkOffsetMonitor}
 import com.tadod.jobs.streaming.{FHVStreamingJob, GreenStreamingJob, YellowStreamingJob}
 import com.tadod.jobs.transformation.{GreenCleaningJob, GreenMartVendorJob, MartLocationJob, MartPaymentJob, MartRateCodeJob, YellowCleaningJob, YellowMartVendorJob}
 
@@ -68,6 +69,16 @@ object App {
           configPath = configPath,
           dateRun = dateRun
         ).execute()
+
+        case "SparkOffset" => new SparkOffsetMonitor(
+          port = args(1).toInt,
+          checkpointBasepath = args(2)
+        )
+
+        case "KafkaOffset" => new KafkaOffsetMonitor(
+          port = args(1).toInt,
+          bootstrapServers = args(2)
+        )
 
         case _ => println(s"Unknown command: $command")
       }
