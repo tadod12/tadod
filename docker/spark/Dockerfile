@@ -39,6 +39,8 @@ RUN curl https://repo1.maven.org/maven2/org/apache/spark/spark-streaming-kafka-0
 RUN curl https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.4.1/spark-token-provider-kafka-0-10_2.12-3.4.1.jar -o ${SPARK_HOME}/jars/spark-token-provider-kafka-0-10_2.12-3.4.1.jar
 
 RUN curl https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.8.0/commons-pool2-2.11.1.jar -o ${SPARK_HOME}/jars/commons-pool2-2.11.1.jar
+RUN curl https://repo1.maven.org/maven2/io/prometheus/simpleclient/0.16.0/simpleclient-0.16.0.jar -o ${SPARK_HOME}/jars/simpleclient-0.16.0.jar
+RUN curl https://repo1.maven.org/maven2/io/prometheus/simpleclient_common/0.16.0/simpleclient_common-0.16.0.jar -o ${SPARK_HOME}/jars/simpleclient_common-0.16.0.jar
 
 COPY ./spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 RUN chmod u+x /opt/spark/sbin/* && \
