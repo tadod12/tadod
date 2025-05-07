@@ -274,6 +274,7 @@ services:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio123
       MINIO_DOMAIN: minio
+      MINIO_PROMETHEUS_AUTH_TYPE: public  # allow public access
     command: server /data --console-address ":9001"
     volumes:
       - ./docker/volume/minio:/data
