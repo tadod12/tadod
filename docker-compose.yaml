@@ -29,23 +29,24 @@ services:
   ########## MONITORING ##########
   # Prometheus
   prometheus:
-    image: prom/prometheus:v2.47.2
+    image: prom/prometheus:v3.3.0
     container_name: prometheus
     ports:
       - "9090:9090"
     volumes:
+      # - ./docker/volume/prometheus:/prometheus
       - ./docker/prometheus:/etc/prometheus
 
   # Alert Manager
   alertmanager:
-    image: prom/alertmanager:v0.26.0
+    image: prom/alertmanager:v0.28.0
     container_name: alertmanager
     ports:
       - "19093:9093"
 
   # Grafana
   grafana:
-    image: grafana/grafana:5.2.1
+    image: grafana/grafana:12.0.0
     container_name: grafana
     ports:
       - "3000:3000"
@@ -260,7 +261,7 @@ services:
       interval: 10s
       retries: 5
       start_period: 5s
-
+  #    
   ########## LAKE ##########
   # S3 Storage
   minio1:
@@ -386,6 +387,7 @@ services:
       - ./docker/trino/catalog:/etc/trino/catalog
     depends_on:
       - trino
+  #
   # Spark Cluster 
   # spark-master:
   #   build:

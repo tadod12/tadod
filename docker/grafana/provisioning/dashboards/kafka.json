@@ -1,0 +1,2476 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "grafana"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "target": {
+                    "limit": 100,
+                    "matchAny": false,
+                    "tags": [],
+                    "type": "dashboard"
+                },
+                "type": "dashboard"
+            }
+        ]
+    },
+    "description": "Kafka resource usage and consumer lag overview",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 18276,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "align": "auto",
+                        "cellOptions": {
+                            "type": "auto"
+                        },
+                        "inspect": false
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Time"
+                        },
+                        "properties": [
+                            {
+                                "id": "displayName",
+                                "value": "Time"
+                            },
+                            {
+                                "id": "custom.align"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "instance"
+                        },
+                        "properties": [
+                            {
+                                "id": "displayName",
+                                "value": "Instance"
+                            },
+                            {
+                                "id": "unit",
+                                "value": "short"
+                            },
+                            {
+                                "id": "decimals",
+                                "value": 2
+                            },
+                            {
+                                "id": "custom.align"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Value"
+                        },
+                        "properties": [
+                            {
+                                "id": "displayName",
+                                "value": "Status"
+                            },
+                            {
+                                "id": "unit",
+                                "value": "short"
+                            },
+                            {
+                                "id": "decimals",
+                                "value": 0
+                            },
+                            {
+                                "id": "custom.cellOptions",
+                                "value": {
+                                    "type": "color-text"
+                                }
+                            },
+                            {
+                                "id": "custom.align"
+                            },
+                            {
+                                "id": "thresholds",
+                                "value": {
+                                    "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "#FA6400",
+                                            "value": null
+                                        },
+                                        {
+                                            "color": "#56A64B",
+                                            "value": 1
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "job"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "short"
+                            },
+                            {
+                                "id": "decimals",
+                                "value": 2
+                            },
+                            {
+                                "id": "custom.align"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "__name__"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "short"
+                            },
+                            {
+                                "id": "decimals",
+                                "value": 2
+                            },
+                            {
+                                "id": "custom.align"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Instance"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 128
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "partition"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 73
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "topic"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 732
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Status"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 60
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "appdesc"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 96
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "appname"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 80
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 12,
+                "w": 7,
+                "x": 0,
+                "y": 0
+            },
+            "id": 56,
+            "links": [],
+            "options": {
+                "footer": {
+                    "countRows": false,
+                    "fields": "",
+                    "reducer": [
+                        "sum"
+                    ],
+                    "show": false
+                },
+                "showHeader": true,
+                "sortBy": []
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "kafka_cluster_partition_replicascount{job=~\"$kafka_job_name\",topic=~\"$topic\"}",
+                    "format": "table",
+                    "instant": true,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Partitions Leader Per Broker",
+            "transformations": [
+                {
+                    "id": "seriesToColumns",
+                    "options": {}
+                },
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "Time": true,
+                            "__name__": true,
+                            "appdesc": false,
+                            "appname": false,
+                            "job": true
+                        },
+                        "indexByName": {
+                            "Time": 0,
+                            "Value": 8,
+                            "__name__": 1,
+                            "appdesc": 3,
+                            "appname": 4,
+                            "instance": 2,
+                            "job": 5,
+                            "partition": 6,
+                            "topic": 7
+                        },
+                        "renameByName": {}
+                    }
+                }
+            ],
+            "type": "table"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "#d44a3a",
+                                "value": null
+                            },
+                            {
+                                "color": "rgba(237, 129, 40, 0.89)",
+                                "value": 2
+                            },
+                            {
+                                "color": "#299c46",
+                                "value": 3
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 7,
+                "y": 0
+            },
+            "id": 26,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {},
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "count(kafka_server_replicamanager_leadercount{job=\"$kafka_job_name\"})",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Brokers Online",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "Active Controllers",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "#C4162A",
+                                "value": null
+                            },
+                            {
+                                "color": "#37872D",
+                                "value": 0
+                            },
+                            {
+                                "color": "#299c46",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 10,
+                "y": 0
+            },
+            "id": 28,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {},
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.4.3",
+            "repeatDirection": "h",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(kafka_controller_kafkacontroller_activecontrollercount{job=~\"$kafka_job_name\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Active Controllers",
+            "type": "stat"
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "links": []
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 12,
+                "w": 11,
+                "x": 13,
+                "y": 0
+            },
+            "hiddenSeries": false,
+            "id": 58,
+            "interval": "",
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": true,
+                "hideEmpty": false,
+                "hideZero": false,
+                "max": true,
+                "min": true,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [
+                {
+                    "$$hashKey": "object:411",
+                    "alias": "/.*Bytes In*./",
+                    "transform": "negative-Y"
+                }
+            ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum (rate(kafka_server_brokertopicmetrics_bytesout_total{job=\"$kafka_job_name\",instance=~\"$broker\",topic!=\"\"}[2m]))by(instance)",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "Bytes Out [{{instance}}]",
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum (rate(kafka_server_brokertopicmetrics_bytesin_total{job=\"$kafka_job_name\",instance=~\"$broker\",topic!=\"\"}[2m]))by(instance)",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "Bytes In [{{instance}}]",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Bytes In / Out Per Broker",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:424",
+                    "format": "Bps",
+                    "label": "In (-) / Out (+)",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:425",
+                    "format": "Bps",
+                    "label": "",
+                    "logBase": 1,
+                    "show": false
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 7,
+                "y": 4
+            },
+            "id": 30,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {},
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(kafka_controller_kafkacontroller_globaltopiccount{job=\"kafka\"})",
+                    "format": "time_series",
+                    "hide": false,
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Total of Topics",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "Under Replicated Partitions",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "#508642",
+                                "value": null
+                            },
+                            {
+                                "color": "rgba(237, 129, 40, 0.89)",
+                                "value": 1
+                            },
+                            {
+                                "color": "#bf1b00",
+                                "value": 5
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 10,
+                "y": 4
+            },
+            "id": 32,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {},
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(kafka_server_replicamanager_underreplicatedpartitions{job=~\"$kafka_job_name\"})",
+                    "format": "time_series",
+                    "hide": false,
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Under Replicated Partitions",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "#d44a3a",
+                                "value": null
+                            },
+                            {
+                                "color": "rgba(237, 129, 40, 0.89)",
+                                "value": 0
+                            },
+                            {
+                                "color": "#299c46",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 7,
+                "y": 8
+            },
+            "id": 34,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {},
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(kafka_server_replicamanager_partitioncount{job=~\"$kafka_job_name\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Online Partitions",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "Offline Partitions",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "#508642",
+                                "value": null
+                            },
+                            {
+                                "color": "rgba(237, 129, 40, 0.89)",
+                                "value": 1
+                            },
+                            {
+                                "color": "#bf1b00",
+                                "value": 5
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 10,
+                "y": 8
+            },
+            "id": 36,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {},
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(kafka_controller_kafkacontroller_offlinepartitionscount{job=~\"$kafka_job_name\"})",
+                    "format": "time_series",
+                    "hide": false,
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Offline Partitions",
+            "type": "stat"
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 12
+            },
+            "hiddenSeries": false,
+            "id": 40,
+            "isNew": true,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum without(topic)(increase(kafka_server_brokertopicmetrics_messagesin_total{job=\"$kafka_job_name\",topic=\"\"}[$__interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
+                    "metric": "kafka_server_brokertopicmetrics_messagesin_total",
+                    "refId": "A",
+                    "step": 4
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Messages In Per Broker",
+            "tooltip": {
+                "msResolution": false,
+                "shared": true,
+                "sort": 0,
+                "value_type": "cumulative"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1143",
+                    "format": "short",
+                    "label": "Messages/s",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1144",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 12
+            },
+            "hiddenSeries": false,
+            "id": 44,
+            "isNew": true,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum without(topic)(increase(kafka_server_brokertopicmetrics_bytesin_total{job=\"$kafka_job_name\",topic=\"\"}[$__interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
+                    "metric": "kafka_server_brokertopicmetrics_bytesin_total",
+                    "refId": "A",
+                    "step": 4
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Bytes In Per Broker",
+            "tooltip": {
+                "msResolution": false,
+                "shared": true,
+                "sort": 0,
+                "value_type": "cumulative"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1311",
+                    "format": "bytes",
+                    "label": "Bytes/s",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1312",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 12
+            },
+            "hiddenSeries": false,
+            "id": 48,
+            "isNew": true,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum without(topic)(increase(kafka_server_brokertopicmetrics_bytesout_total{job=\"$kafka_job_name\",topic=\"\"}[$__interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
+                    "metric": "kafka_server_brokertopicmetrics_bytesin_total",
+                    "refId": "A",
+                    "step": 4
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Bytes Out Per Broker",
+            "tooltip": {
+                "msResolution": false,
+                "shared": true,
+                "sort": 0,
+                "value_type": "cumulative"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:204",
+                    "format": "bytes",
+                    "label": "Bytes/s",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:205",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 20
+            },
+            "hiddenSeries": false,
+            "id": 38,
+            "isNew": true,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum without(instance)(increase(kafka_server_brokertopicmetrics_messagesin_total{job=\"$kafka_job_name\",topic!=\"\"}[$__interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{topic}}",
+                    "metric": "kafka_server_brokertopicmetrics_messagesin_total",
+                    "refId": "A",
+                    "step": 4
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Messages In Per Topic",
+            "tooltip": {
+                "msResolution": false,
+                "shared": true,
+                "sort": 0,
+                "value_type": "cumulative"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1046",
+                    "format": "short",
+                    "label": "Messages/s",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1047",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 20
+            },
+            "hiddenSeries": false,
+            "id": 42,
+            "isNew": true,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum without(instance)(increase(kafka_server_brokertopicmetrics_bytesin_total{job=\"$kafka_job_name\",topic!=\"\"}[$__interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{topic}}",
+                    "metric": "kafka_server_brokertopicmetrics_bytesin_total",
+                    "refId": "A",
+                    "step": 4
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Bytes In Per Topic",
+            "tooltip": {
+                "msResolution": false,
+                "shared": true,
+                "sort": 0,
+                "value_type": "cumulative"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:119",
+                    "format": "bytes",
+                    "label": "Bytes/s",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:120",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 20
+            },
+            "hiddenSeries": false,
+            "id": 46,
+            "isNew": true,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum without(instance)(increase(kafka_server_brokertopicmetrics_bytesout_total{job=\"$kafka_job_name\",topic!=\"\"}[$__interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{topic}}",
+                    "metric": "kafka_server_brokertopicmetrics_bytesin_total",
+                    "refId": "A",
+                    "step": 4
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Bytes Out Per Topic",
+            "tooltip": {
+                "msResolution": false,
+                "shared": true,
+                "sort": 0,
+                "value_type": "cumulative"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1400",
+                    "format": "bytes",
+                    "label": "Bytes/s",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1401",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 28
+            },
+            "hiddenSeries": false,
+            "id": 22,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": true,
+                "hideEmpty": false,
+                "hideZero": true,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "sort": "current",
+                "sortDesc": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [
+                {
+                    "$$hashKey": "object:1040"
+                }
+            ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum by(topic) (kafka_log_log_size{job=\"$kafka_job_name\",})",
+                    "format": "time_series",
+                    "hide": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{topic}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Kafka log size by topic",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1045",
+                    "format": "decbytes",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1046",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 28
+            },
+            "hiddenSeries": false,
+            "id": 20,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": true,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum by(instance) (kafka_log_log_size{job=\"$kafka_job_name\",})",
+                    "format": "time_series",
+                    "hide": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{pod}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Kafka log size by broker (disk space utilization)",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1221",
+                    "format": "decbytes",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1222",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "links": []
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 36
+            },
+            "hiddenSeries": false,
+            "id": 54,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": true,
+                "max": true,
+                "min": true,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms{job=\"$kafka_job_name\",instance=~\"$broker\"})by(instance)",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Broker: {{instance}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "ZooKeeper Request Latency Ms",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1806",
+                    "format": "ms",
+                    "label": "Time/ms",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1807",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "links": []
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 36
+            },
+            "hiddenSeries": false,
+            "id": 52,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": true,
+                "max": true,
+                "min": true,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum (irate(kafka_server_sessionexpirelistener_zookeeperexpires_total{job=\"$kafka_job_name\",instance=~\"$broker\"}[1m]))by(instance)",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Broker - {{instance}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "ZooKeeper Expires Per Sec",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1050",
+                    "format": "ms",
+                    "label": "Time/ms",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1051",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "links": []
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 36
+            },
+            "hiddenSeries": false,
+            "id": 50,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": true,
+                "max": true,
+                "min": true,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum (irate(kafka_server_sessionexpirelistener_zookeeperdisconnects_total{job=\"$kafka_job_name\",instance=~\"$broker\"}[1m]))by(instance)",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Broker - {{instance}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "ZooKeeper Disconnects Per Sec",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:1974",
+                    "format": "ms",
+                    "label": "Time/ms",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:1975",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 44
+            },
+            "hiddenSeries": false,
+            "id": 8,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": true,
+                "hideZero": true,
+                "max": true,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "sort": "max",
+                "sortDesc": false,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "kafka_consumergroup_lag_sum",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{consumergroup}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Consumer lag by group",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:614",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:615",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 44
+            },
+            "hiddenSeries": false,
+            "id": 12,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "expr": "sum by (pod)(rate(kafka_server_replicamanager_isrexpands_total[1m]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{pod}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "ISR expands by instance",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 44
+            },
+            "hiddenSeries": false,
+            "id": 14,
+            "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": true,
+                "max": true,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "sort": "max",
+                "sortDesc": true,
+                "total": true,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "expr": "sum by (pod)(kafka_server_replicamanager_underreplicatedpartitions)",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{pod}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Underreplicated partitions by topic",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "logBase": 1,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        }
+    ],
+    "refresh": "",
+    "revision": 1,
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+        "kafka"
+    ],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": false,
+                    "text": "default",
+                    "value": "default"
+                },
+                "hide": 0,
+                "includeAll": false,
+                "label": "Data source",
+                "multi": false,
+                "name": "datasource",
+                "options": [],
+                "query": "prometheus",
+                "refresh": 1,
+                "skipUrlSync": false,
+                "type": "datasource"
+            },
+            {
+                "current": {},
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${datasource}"
+                },
+                "definition": "label_values(kafka_controller_kafkacontroller_controllerstate, job)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "kafka_job_name",
+                "multi": false,
+                "name": "kafka_job_name",
+                "options": [],
+                "query": {
+                    "query": "label_values(kafka_controller_kafkacontroller_controllerstate, job)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "/kafka-.*/",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            },
+            {
+                "current": {},
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${datasource}"
+                },
+                "definition": "label_values(kafka_controller_kafkacontroller_controllerstate{job=\"$kafka_job_name\"}, instance)",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Broker",
+                "multi": false,
+                "name": "broker",
+                "options": [],
+                "query": {
+                    "query": "label_values(kafka_controller_kafkacontroller_controllerstate{job=\"$kafka_job_name\"}, instance)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            },
+            {
+                "current": {},
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${datasource}"
+                },
+                "definition": "label_values(kafka_cluster_partition_replicascount{job=\"$kafka_job_name\"}, topic)",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Topic",
+                "multi": false,
+                "name": "topic",
+                "options": [],
+                "query": {
+                    "query": "label_values(kafka_cluster_partition_replicascount{job=\"$kafka_job_name\"}, topic)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-12h",
+        "to": "now"
+    },
+    "timepicker": {
+        "refresh_intervals": [
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+        ],
+        "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+        ]
+    },
+    "timezone": "browser",
+    "title": "Kafka Dashboard",
+    "uid": "i8HLvrkiz",
+    "version": 3,
+    "weekStart": ""
+}

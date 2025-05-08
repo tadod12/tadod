@@ -1,0 +1,758 @@
+{
+    "minio": [
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green"
+                            }
+                        ]
+                    },
+                    "unit": "dtdurations",
+                    "unitScale": true
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 0,
+                "y": 54
+            },
+            "id": 89,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "mean"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "text": {},
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "minio_cluster_kms_uptime{job=~\"$scrape_jobs\"}",
+                    "format": "time_series",
+                    "instant": true,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{instance}}",
+                    "metric": "minio_cluster_kms_uptime",
+                    "refId": "A",
+                    "step": 60
+                }
+            ],
+            "title": "KMS Uptime",
+            "type": "stat"
+        },
+        {
+            "aliasColors": {
+                "S3 Errors": "light-red",
+                "S3 Requests": "light-green"
+            },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unitScale": true
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 4,
+                "y": 54
+            },
+            "hiddenSeries": false,
+            "id": 91,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "10.3.1",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum by (server) (increase(minio_cluster_kms_request_error{job=~\"$scrape_jobs\"}[$__rate_interval]))",
+                    "interval": "1m",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{server}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "KMS Request 4xx Error Rate",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:331",
+                    "format": "none",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:332",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": false
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "bool_on_off",
+                    "unitScale": true
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 8,
+                "y": 54
+            },
+            "hiddenSeries": false,
+            "id": 90,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "10.3.1",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum by (server) (minio_cluster_kms_online{job=~\"$scrape_jobs\"})",
+                    "interval": "1m",
+                    "legendFormat": "{{server}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "KMS Online(1)/Offline(0)",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:212",
+                    "format": "bool_on_off",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:213",
+                    "format": "none",
+                    "logBase": 1,
+                    "min": "0",
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {
+                "S3 Errors": "light-red",
+                "S3 Requests": "light-green"
+            },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unitScale": true
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 5,
+                "w": 6,
+                "x": 0,
+                "y": 58
+            },
+            "hiddenSeries": false,
+            "id": 92,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "10.3.1",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum by (server) (increase(minio_cluster_kms_request_failure{job=~\"$scrape_jobs\"}[$__rate_interval]))",
+                    "interval": "1m",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{server}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "KMS Request 5xx Error Rate",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:331",
+                    "format": "none",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:332",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": false
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        },
+        {
+            "aliasColors": {
+                "S3 Errors": "light-red",
+                "S3 Requests": "light-green"
+            },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unitScale": true
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 5,
+                "w": 6,
+                "x": 6,
+                "y": 58
+            },
+            "hiddenSeries": false,
+            "id": 93,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "10.3.1",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum by (server) (rate(minio_cluster_kms_request_success{job=~\"$scrape_jobs\"}[$__rate_interval]))",
+                    "interval": "1m",
+                    "intervalFactor": 2,
+                    "legendFormat": "KMS Request Success [{{server}}]",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "KMS Request Success Rate ",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "$$hashKey": "object:331",
+                    "format": "none",
+                    "logBase": 1,
+                    "show": true
+                },
+                {
+                    "$$hashKey": "object:332",
+                    "format": "short",
+                    "logBase": 1,
+                    "show": false
+                }
+            ],
+            "yaxis": {
+                "align": false
+            }
+        }
+    ],
+    "kafka": [
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 52
+            },
+            "hiddenSeries": false,
+            "id": 30,
+            "isNew": true,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "paceLength": 10,
+            "percentage": false,
+            "pluginVersion": "9.4.3",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(rate(process_cpu_seconds_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}[5m])) by (instance)",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "CPU Usage",
+            "tooltip": {
+                "msResolution": false,
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "mode": "time",
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "decimals": null,
+                    "format": "percent",
+                    "label": "Cores",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fill": 1,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 52
+            },
+            "id": 31,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "expr": "sum without(area)(jvm_memory_bytes_used{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"})",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "JVM Memory Used",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "transparent": false,
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "decimals": null,
+                    "format": "decbytes",
+                    "label": "Memory",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fill": 1,
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 52
+            },
+            "id": 32,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}[5m]))",
+                    "format": "time_series",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{instance}}",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Time spent in GC",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "transparent": false,
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "decimals": null,
+                    "format": "percentunit",
+                    "label": "% time in GC",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        }
+    ]
+}
