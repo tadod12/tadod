@@ -90,3 +90,38 @@ scrape_configs:
         regex: metrics_app_[^_]+_[^_]+_(.*)
         target_label: __name__
         replacement: metrics_app_${1}
+
+  - job_name: minio-cluster
+    metrics_path: /minio/v2/metrics/cluster
+    scheme: http
+    static_configs:
+      - targets: ["minio1:9000"]
+        labels:
+          group: "minio"
+          instance: "cluster"
+
+  - job_name: minio-bucket
+    metrics_path: /minio/v2/metrics/bucket
+    scheme: http
+    static_configs:
+      - targets: ["minio1:9000"]
+        labels:
+          group: "minio"
+          instance: "bucket"
+
+  - job_name: minio-node
+    metrics_path: /minio/v2/metrics/node
+    scheme: http
+    static_configs:
+      - targets: ["minio1:9000", "minio2:9000", "minio3:9000"]
+        labels:
+          group: "minio"
+
+  - job_name: minio-resource
+    metrics_path: /minio/v2/metrics/resource
+    scheme: http
+    static_configs:
+      - targets: ["minio1:9000"]
+        labels:
+          group: "minio"
+          instance: "resource"
