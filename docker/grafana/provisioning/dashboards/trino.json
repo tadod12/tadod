@@ -1,0 +1,1810 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "grafana"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "target": {
+                    "limit": 100,
+                    "matchAny": false,
+                    "tags": [],
+                    "type": "dashboard"
+                },
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "collapsed": true,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 16,
+            "panels": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [
+                                {
+                                    "options": {
+                                        "match": "null",
+                                        "result": {
+                                            "text": "N/A"
+                                        }
+                                    },
+                                    "type": "special"
+                                }
+                            ],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "red",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 0
+                                    },
+                                    {
+                                        "color": "green",
+                                        "value": 1
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 0,
+                        "y": 1
+                    },
+                    "id": 20,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "horizontal",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "text": {},
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "9.4.3",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "exemplar": true,
+                            "expr": "trino_failuredetector_name_HeartbeatFailureDetector_ActiveCount{job=\"trino\"}",
+                            "format": "time_series",
+                            "instant": false,
+                            "interval": "",
+                            "intervalFactor": 1,
+                            "legendFormat": "",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Active Workers",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [
+                                {
+                                    "options": {
+                                        "match": "null",
+                                        "result": {
+                                            "text": "N/A"
+                                        }
+                                    },
+                                    "type": "special"
+                                }
+                            ],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "rgba(237, 129, 40, 0.89)",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "green",
+                                        "value": 0
+                                    },
+                                    {
+                                        "color": "rgba(237, 129, 40, 0.89)",
+                                        "value": 1
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 2
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 8,
+                        "y": 1
+                    },
+                    "id": 25,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "horizontal",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "text": {},
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "9.4.3",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "exemplar": true,
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_BlockedNodes{job=\"trino\"}",
+                            "format": "time_series",
+                            "instant": false,
+                            "interval": "",
+                            "intervalFactor": 1,
+                            "legendFormat": "",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Block Workers",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [
+                                {
+                                    "options": {
+                                        "match": "null",
+                                        "result": {
+                                            "text": "N/A"
+                                        }
+                                    },
+                                    "type": "special"
+                                }
+                            ],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "red",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 0
+                                    },
+                                    {
+                                        "color": "green",
+                                        "value": 1
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 16,
+                        "y": 1
+                    },
+                    "id": 19,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "horizontal",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "text": {},
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "9.4.3",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "exemplar": true,
+                            "expr": "trino_memory_name_ClusterMemoryManager_TotalAvailableProcessors{job=\"trino\"}",
+                            "format": "time_series",
+                            "instant": false,
+                            "interval": "",
+                            "intervalFactor": 1,
+                            "legendFormat": "",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Available Processors",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "bytes"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 6,
+                        "x": 0,
+                        "y": 9
+                    },
+                    "id": 26,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_TotalDistributedBytes{job=\"trino\"}",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_TotalDistributedBytes{job=\"trino\"} offset 1d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_TotalDistributedBytes{job=\"trino\"} offset 7d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Total Distributed Bytes (cluster memory pool)",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "bytes"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 6,
+                        "x": 6,
+                        "y": 9
+                    },
+                    "id": 24,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_FreeDistributedBytes{job=\"trino\"}",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_FreeDistributedBytes{job=\"trino\"} offset 1d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_FreeDistributedBytes{job=\"trino\"} offset 7d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Free Distributed Bytes (cluster memory pool)",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "bytes"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 6,
+                        "x": 12,
+                        "y": 9
+                    },
+                    "id": 28,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_ReservedRevocableDistributedBytes{job=\"trino\"}",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_ReservedRevocableDistributedBytes{job=\"trino\"} offset 1d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_ReservedRevocableDistributedBytes{job=\"trino\"} offset 7d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Reserved Revocable Distributed Bytes (cluster memory pool)",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "bytes"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 6,
+                        "x": 18,
+                        "y": 9
+                    },
+                    "id": 27,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_ReservedDistributedBytes{job=\"trino\"}",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_ReservedDistributedBytes{job=\"trino\"} offset 1d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_type_ClusterMemoryPool_name_general_ReservedDistributedBytes{job=\"trino\"} offset 7d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Reserved Distributed Bytes (cluster memory pool)",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "bytes"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 0,
+                        "y": 17
+                    },
+                    "id": 22,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_name_ClusterMemoryManager_ClusterUserMemoryReservation{job=\"trino\"}",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_name_ClusterMemoryManager_ClusterUserMemoryReservation{job=\"trino\"} offset 1d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_name_ClusterMemoryManager_ClusterUserMemoryReservation{job=\"trino\"} offset 7d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Cluster User Memory Reservation (All Running Queries)",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "bytes"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 12,
+                        "y": 17
+                    },
+                    "id": 23,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_name_ClusterMemoryManager_ClusterTotalMemoryReservation{job=\"trino\"}",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_name_ClusterMemoryManager_ClusterTotalMemoryReservation{job=\"trino\"} offset 1d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "trino_memory_name_ClusterMemoryManager_ClusterTotalMemoryReservation{job=\"trino\"} offset 7d",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Cluster Total Memory Reservation (All Running Queries)",
+                    "type": "timeseries"
+                }
+            ],
+            "title": "Cluster Status Overview",
+            "type": "row"
+        },
+        {
+            "collapsed": true,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 1
+            },
+            "id": 2,
+            "panels": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [
+                                {
+                                    "options": {
+                                        "match": "null",
+                                        "result": {
+                                            "text": "N/A"
+                                        }
+                                    },
+                                    "type": "special"
+                                }
+                            ],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "red",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "green",
+                                        "value": 0
+                                    },
+                                    {
+                                        "color": "orange",
+                                        "value": 10
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 0,
+                        "y": 2
+                    },
+                    "id": 1,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "horizontal",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "text": {},
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "9.4.3",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "exemplar": true,
+                            "expr": "trino_execution_name_QueryManager_RunningQueries{job=\"trino\"}",
+                            "format": "time_series",
+                            "instant": false,
+                            "interval": "",
+                            "intervalFactor": 1,
+                            "legendFormat": "",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Running Queries",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [
+                                {
+                                    "options": {
+                                        "match": "null",
+                                        "result": {
+                                            "text": "N/A"
+                                        }
+                                    },
+                                    "type": "special"
+                                }
+                            ],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "red",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "green",
+                                        "value": 0
+                                    },
+                                    {
+                                        "color": "orange",
+                                        "value": 10
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 12,
+                        "y": 2
+                    },
+                    "id": 3,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "horizontal",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "text": {},
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "9.4.3",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "exemplar": true,
+                            "expr": "trino_execution_name_QueryManager_QueuedQueries{job=\"trino\"}",
+                            "format": "time_series",
+                            "instant": false,
+                            "interval": "",
+                            "intervalFactor": 1,
+                            "legendFormat": "",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Queued Queries",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            }
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 0,
+                        "y": 10
+                    },
+                    "id": 7,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_type_ClusterMemoryPool_name_general_AssignedQueries{job=\"trino\"}[1m])",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_type_ClusterMemoryPool_name_general_AssignedQueries{job=\"trino\"}[1m] offset 1d)  ",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_type_ClusterMemoryPool_name_general_AssignedQueries{job=\"trino\"}[1m] offset 7d) ",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Number of queries submitted per minute",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            }
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 8,
+                        "y": 10
+                    },
+                    "id": 4,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_type_ClusterMemoryPool_name_general_AssignedQueries{job=\"trino\"}[1m])",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_type_ClusterMemoryPool_name_general_AssignedQueries{job=\"trino\"}[1m] offset 1d)",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_type_ClusterMemoryPool_name_general_AssignedQueries{job=\"trino\"}[1m] offset 7d)",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Number of queries completed per minute",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            }
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 16,
+                        "y": 10
+                    },
+                    "id": 5,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_execution_name_SqlTaskManager_FailedTasks{job=\"trino\"}[1m])",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_execution_name_SqlTaskManager_FailedTasks{job=\"trino\"}[1m] offset 1d)",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_execution_name_SqlTaskManager_FailedTasks{job=\"trino\"}[1m] offset 7d)",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Number of failed queries per minute",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            }
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 0,
+                        "y": 18
+                    },
+                    "id": 18,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_name_ClusterMemoryManager_NumberOfLeakedQueries{job=\"trino\"}[1m])",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_name_ClusterMemoryManager_NumberOfLeakedQueries{job=\"trino\"}[1m] offset 1d)",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_name_ClusterMemoryManager_NumberOfLeakedQueries{job=\"trino\"}[1m] offset 7d)",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "Total number of queries with memory leaks per minute",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 1,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green"
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            }
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 12,
+                        "y": 18
+                    },
+                    "id": 17,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_name_ClusterMemoryManager_QueriesKilledDueToOutOfMemory{job=\"trino\"}[1m])",
+                            "instant": false,
+                            "legendFormat": "current",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_name_ClusterMemoryManager_QueriesKilledDueToOutOfMemory{job=\"trino\"}[1m] offset 1d)",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 day ago",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "increase(trino_memory_name_ClusterMemoryManager_QueriesKilledDueToOutOfMemory{job=\"trino\"}[1m] offset 7d)",
+                            "hide": false,
+                            "instant": false,
+                            "legendFormat": "1 week ago",
+                            "range": true,
+                            "refId": "C"
+                        }
+                    ],
+                    "title": "The total number of queries killed by OOM per minute",
+                    "type": "timeseries"
+                }
+            ],
+            "title": "Query Execution Overview",
+            "type": "row"
+        }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+        "trino"
+    ],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": false,
+                    "text": "default",
+                    "value": "default"
+                },
+                "hide": 0,
+                "includeAll": false,
+                "label": "Data source",
+                "multi": false,
+                "name": "datasource",
+                "options": [],
+                "query": "prometheus",
+                "skipUrlSync": false,
+                "type": "datasource"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-6h",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Trino Dashboard",
+    "uid": "c32c1a80-ffad-412e-a5c2-8fbede5a8194",
+    "version": 34,
+    "weekStart": "",
+    "gnetId": 20208,
+    "description": "Trino deploy on k8s, collect jmx to monitor cluster"
+}

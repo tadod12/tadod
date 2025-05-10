@@ -1,0 +1,12 @@
+groups:
+  - name: TrinoAlerts
+    interval: 15s
+    rules:
+      - alert: NoActiveTrinoWorker
+        expr: trino_failuredetector_name_HeartbeatFailureDetector_ActiveCount{job="trino"} == 0
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "No Active Trino Worker"
+          description: "Trino Cluster has 0 worker for 30 seconds"

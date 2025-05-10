@@ -1,0 +1,120 @@
+global:
+  resolve_timeout: 1m
+  # slack_api_url: '<api>'
+
+route:
+  # group_wait: 10s
+  # group_interval: 5m
+  # repeat_interval: 30m
+  receiver: 'gmail-notifications'
+  # routes:
+  #   - receiver: 'gmail-notifications'
+  #     group_wait: 10s
+
+  #   - receiver: 'slack-notifications'
+  #     group_wait: 10s
+
+
+receivers:
+# - name: 'slack-notifications'
+#   slack_configs:
+#   - channel: '#infras-alert'
+#     send_resolved: true
+#     icon_url: https://avatars3.githubusercontent.com/u/3380462
+#     title: |-
+#      [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }} for {{ .CommonLabels.job }}
+#      {{- if gt (len .CommonLabels) (len .GroupLabels) -}}
+#        {{" "}}(
+#        {{- with .CommonLabels.Remove .GroupLabels.Names }}
+#          {{- range $index, $label := .SortedPairs -}}
+#            {{ if $index }}, {{ end }}
+#            {{- $label.Name }}="{{ $label.Value -}}"
+#          {{- end }}
+#        {{- end -}}
+#        )
+#      {{- end }}
+#     text: >-
+#      {{ range .Alerts -}}
+#      *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+
+#      *Description:* {{ .Annotations.description }}
+
+#      *Details:*
+#        {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+#        {{ end }}
+#      {{ end }}
+- name: 'gmail-notifications'
+  email_configs:
+  - to: 'tadod.de@gmail.com'
+    from: 'tadod.de@gmail.com'
+    smarthost: 'smtp.gmail.com:587'
+    auth_username: 'tadod.de@gmail.com'
+    auth_identity: tadod.de@gmail.com
+    auth_password: '<app password>'
+    send_resolved: true
+    headers:
+      subject: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}'
+    html: |-
+      <html>
+      <head>
+        <style>
+          body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px; }
+          .title-container { background-color: {{ if eq .Status "firing" }}#ffe5e5{{ else }}#e6f4ea{{ end }}; border-radius: 6px; padding: 15px; text-align: center; margin-bottom: 15px; }
+          h2 { color: {{ if eq .Status "firing" }}#e63946{{ else }}#2ecc71{{ end }}; font-size: 24px; margin: 0; }
+          p { font-size: 16px; color: #333; margin: 5px 0; }
+          .label { color: #555; }
+          hr { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+          .alert { border-left: 4px solid {{ if eq .Status "firing" }}#e63946{{ else }}#2ecc71{{ end }}; padding-left: 15px; margin-bottom: 20px; }
+          .alert h3 { color: #1d3557; font-size: 20px; margin: 0 0 10px; }
+          .severity { font-size: 14px; padding: 4px 8px; border-radius: 4px; display: inline-block; color: #fff; }
+          .severity-critical { background-color: #e63946; }
+          .severity-warning { background-color: #f4a261; }
+          .severity-resolved { background-color: #2ecc71; }
+          ul { list-style: none; padding: 0; }
+          li { font-size: 14px; color: #333; margin: 5px 0; }
+          .button { display: inline-block; padding: 10px 20px; background-color: #0284c7; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; margin-top: 10px; }
+          .button:hover { background-color: #0ea5e9; }
+          .footer { text-align: center; font-size: 12px; color: #777; margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="title-container">
+            <h2>[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}</h2>
+          </div>
+          <p><strong>Job:</strong> {{ .CommonLabels.job }}</p>
+          {{- if gt (len .CommonLabels) (len .GroupLabels) }}
+          <p><strong>Labels:</strong>
+            <span class="label">
+              {{- with .CommonLabels.Remove .GroupLabels.Names }}
+                {{- range $index, $label := .SortedPairs }}
+                  {{ if $index }}, {{ end }}{{ $label.Name }}={{ $label.Value }}
+                {{- end }}
+              {{- end }}
+            </span>
+          </p>
+          {{- end }}
+          <hr>
+          {{- range .Alerts }}
+          <div class="alert">
+            <h3>Alert: {{ .Annotations.title }}</h3>
+            {{- if .Labels.severity }}
+            <p><strong>Severity:</strong> <span class="severity severity-{{ .Labels.severity | toLower }}">{{ .Labels.severity }}</span></p>
+            {{- end }}
+            <p><strong>Description:</strong> {{ .Annotations.description }}</p>
+            <p><strong>Details:</strong></p>
+            <ul>
+              {{- range .Labels.SortedPairs }}
+              <li><strong>{{ .Name }}:</strong> {{ .Value }}</li>
+              {{- end }}
+            </ul>
+            <a href="{{ .GeneratorURL }}" class="button">View in Prometheus</a>
+          </div>
+          {{- end }}
+          <div class="footer">
+            <p>Sent by Prometheus Alertmanager</p>
+          </div>
+        </div>
+      </body>
+      </html>

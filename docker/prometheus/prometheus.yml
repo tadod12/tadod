@@ -126,10 +126,10 @@ scrape_configs:
           group: "minio"
           instance: "resource"
 
-  - job_name: "trino-jmx"
-    metrics_path: "/metrics"
-    scrape_interval: 5s
-    static_configs: 
-      - targets: ["trino:12345"]
-        labels:
-          group: "trino"
+  - job_name: trino
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["trino:8889"]
+    basic_auth:
+      username: admin
+      password:
