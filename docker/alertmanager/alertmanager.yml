@@ -50,7 +50,7 @@ receivers:
     smarthost: 'smtp.gmail.com:587'
     auth_username: 'tadod.de@gmail.com'
     auth_identity: tadod.de@gmail.com
-    auth_password: '<app password>'
+    auth_password: 'uvfb fbpz faff wdqr'
     send_resolved: true
     headers:
       subject: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}'

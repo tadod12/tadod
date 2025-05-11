@@ -18,6 +18,8 @@ spark_submit() {
         --conf spark.ui.prometheus.enabled=true \
         --conf "spark.driver.extraJavaOptions=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=8085:/opt/jmx-exporter/spark.yml -Drole=driver" \
         --conf "spark.executor.extraJavaOptions=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7070:/opt/jmx-exporter/spark.yml -Drole=executor" \
+        --conf spark.sql.catalog.iceberg.s3.endpoint=http://minio1:9000 \
+        --conf spark.hadoop.fs.s3a.endpoint=http://minio1:9000 \
         --class com.tadod.App \
         /var/submit/jars/tadod-spark-1.0-jar-with-dependencies.jar \
         "$1" "$2" "$3" "$4"

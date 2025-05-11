@@ -1053,6 +1053,192 @@
             ],
             "title": "LiveListenerBus listenerProcessingTime HeartbeatReceiver",
             "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 19
+            },
+            "id": 16,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "sum(kafka_topic_offset{group=\"spark\", offset_type=\"current\", topic=\"yellow\"})",
+                    "legendFormat": "Spark Current Offset",
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "sum(kafka_topic_offset{group=\"kafka\", offset_type=\"end\", topic=\"yellow\"})",
+                    "legendFormat": "Kafka End Offset",
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "sum(kafka_topic_offset{group=\"kafka\", offset_type=\"begin\", topic=\"yellow\"})",
+                    "legendFormat": "Kafka Begin Offset",
+                    "refId": "C"
+                }
+            ],
+            "title": "Kafka vs Spark Offsets",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 19
+            },
+            "id": 17,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "max(kafka_topic_offset{group=\"kafka\", offset_type=\"end\", topic=\"yellow\"}) - max(kafka_topic_offset{group=\"spark\", offset_type=\"current\", topic=\"yellow\"})",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Offset Lag (Kafka - Spark)",
+            "type": "timeseries"
         }
     ],
     "refresh": "30s",

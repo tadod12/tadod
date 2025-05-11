@@ -73,12 +73,12 @@ object App {
         case "SparkOffset" => new SparkOffsetMonitor(
           port = args(1).toInt,
           checkpointBasepath = args(2)
-        )
+        ).run()
 
         case "KafkaOffset" => new KafkaOffsetMonitor(
           port = args(1).toInt,
           bootstrapServers = args(2)
-        )
+        ).run()
 
         case _ => println(s"Unknown command: $command")
       }

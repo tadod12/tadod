@@ -2,11 +2,35 @@ groups:
   - name: TrinoAlerts
     interval: 15s
     rules:
-      - alert: NoActiveTrinoWorker
+      - alert: ZeroActiveTrinoWorker
         expr: trino_failuredetector_name_HeartbeatFailureDetector_ActiveCount{job="trino"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "No Active Trino Worker"
+          description: "Trino Cluster has 0 worker for 30 seconds"
+      - alert: TrinoWorkerGotBlocked
+        expr: trino_memory_type_ClusterMemoryPool_name_general_BlockedNodes{job="trino"} > 0
         for: 30s
         labels:
           severity: warning
         annotations:
-          summary: "No Active Trino Worker"
-          description: "Trino Cluster has 0 worker for 30 seconds"
+          summary: "Trino Worker Got Blocked"
+          description: "Trino Worker got blocked for some reasons"
+      - alert: AllTrinoWorkersGotBlocked
+        expr: trino_memory_type_ClusterMemoryPool_name_general_BlockedNodes{job="trino"} == 2
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "All Trino Workers Got Blocked"
+          description: "All Trino Workers in cluster are blocked"
+      - alert: TrinoResourceExhaustion
+        expr: trino_memory_name_ClusterMemoryManager_TotalAvailableProcessors{job="trino"} < 1
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Trino is running out of processing resources (CPU)"
+          description: "Instance {{ $labels.instance }} has no available processors. Trino may become unresponsive"

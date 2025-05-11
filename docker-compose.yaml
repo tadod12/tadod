@@ -35,7 +35,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      # - ./docker/volume/prometheus:/prometheus
+      - prometheus-data:/prometheus
       - ./docker/prometheus:/etc/prometheus
 
   # Alert Manager
@@ -54,7 +54,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      # - grafana-data:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
       - ./docker/grafana/provisioning:/etc/grafana/provisioning
 
   ########## INGESTION ##########
@@ -116,7 +116,7 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 600000
+      KAFKA_LOG_RETENTION_MS: 300000
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
@@ -142,7 +142,7 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 600000
+      KAFKA_LOG_RETENTION_MS: 300000
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
@@ -168,7 +168,7 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 600000
+      KAFKA_LOG_RETENTION_MS: 300000
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
@@ -540,22 +540,22 @@ services:
 
   ########## VISUALIZATION ##########
   # Superset
-  superset:
-    build:
-      context: ./docker/superset
-      dockerfile: Dockerfile
-    container_name: superset
-    hostname: superset
-    depends_on:
-      # - redis
-      - postgres
-    environment:
-      - SUPERSET_DB_URI=postgresql+psycopg2://superset:superset@postgres:5432/superset
-      # - REDIS_URL=redis://redis:6379/0
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=admin
-    ports:
-      - "8088:8088"
+  # superset:
+  #   build:
+  #     context: ./docker/superset
+  #     dockerfile: Dockerfile
+  #   container_name: superset
+  #   hostname: superset
+  #   depends_on:
+  #     # - redis
+  #     - postgres
+  #   environment:
+  #     - SUPERSET_DB_URI=postgresql+psycopg2://superset:superset@postgres:5432/superset
+  #     # - REDIS_URL=redis://redis:6379/0
+  #     - ADMIN_USERNAME=admin
+  #     - ADMIN_PASSWORD=admin
+  #   ports:
+  #     - "8088:8088"
 
   ########## AIRLFOW ##########
   webserver:
@@ -595,5 +595,6 @@ networks:
     name: lakehouse
 
 volumes:
-  spark-logs:
   grafana-data:
+  spark-logs:
+  prometheus-data:

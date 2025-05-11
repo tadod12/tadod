@@ -1,0 +1,20 @@
+groups:
+  - name: SparkAlerts
+    interval: 15s
+    rules:
+      - alert: ZeroActiveWorker
+        expr: sum(spark_master_aliveWorkers_type_gauges{group="spark", instance="master", job="spark-master"}) == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "No Active Spark Worker"
+          description: "Spark Cluster has 0 worker for 30 seconds"
+      - alert: SparkResourceExhaustion
+        expr: sum(spark_worker_coresFree_type_gauges{group="spark", job="spark-worker"}) without (instance) == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Spark is running out of processing resources"
+          description: "Spark Cluster has no available processors. Spark Jobs may be aborted"

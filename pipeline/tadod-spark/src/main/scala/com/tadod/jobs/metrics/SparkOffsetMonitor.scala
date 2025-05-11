@@ -34,7 +34,7 @@ class SparkOffsetMonitor(port: Int, checkpointBasepath: String) {
         case e: Exception =>
           e.printStackTrace()
       }
-      Thread.sleep(5000)
+      Thread.sleep(10000)
     }
   }
 

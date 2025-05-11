@@ -1,0 +1,33 @@
+groups:
+  - name: KafkaAlerts
+    interval: 15s
+    rules:
+      # Under Replicated Partitions
+      - alert: KafkaUnderReplicatedPartitions
+        expr: kafka_server_replicamanager_underreplicatedpartitions{job="$kafka_job_name"} > 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Kafka has under replicated partitions"
+          description: "Broker {{ $labels.instance }} has {{ $value }} under-replicated partition(s). Possible replica failure or network issue."
+
+      # Broker Down
+      - alert: KafkaBrokerDown
+        expr: count(kafka_server_replicamanager_leadercount{job="$kafka_job_name"}) < 3
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Kafka broker is down"
+          description: "One or more Kafka brokers are down"
+
+      # Multiple Active Controllers (should only be 1)
+      - alert: KafkaMultipleControllers
+        expr: sum(kafka_controller_kafkacontroller_activecontrollercount{job="$kafka_job_name"}) > 1
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Unexpected number of Kafka controllers"
+          description: "There should be only one active controller, found {{ $value }}"
