@@ -1,28 +1,28 @@
 # Common
-x-airflow-common: &airflow-common
-  build:
-    context: .
-    dockerfile: ./docker/airflow/Dockerfile
-  image: tadod/lakehouse:airflow
-  env_file:
-    - airflow.env
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock # For Docker Operator
-    - ./dags:/opt/airflow/dags
-    - ./docker/airflow/config:/opt/airflow/config
-    - ./docker/airflow/plugins:/opt/airflow/plugins
-    - ./docker/volume/airflow/logs:/opt/airflow/logs
-    - ./pipeline/ingestion:/var/ingestion
-    - ./pipeline/cleaning:/var/cleaning
-    - ./pipeline/curation:/var/curation
-    # - ./pipeline/ingestion/jars:/var/jars
-    - ./pipeline/jars:/var/submit/jars
-    - ./assets/map:/var/map
-    - ./assets/data:/var/data
-  user: airflow # need to grant permission to airflow user
-  depends_on:
-    postgres:
-      condition: service_healthy # for airflow db
+# x-airflow-common: &airflow-common
+#   build:
+#     context: .
+#     dockerfile: ./docker/airflow/Dockerfile
+#   image: tadod/lakehouse:airflow
+#   env_file:
+#     - airflow.env
+#   volumes:
+#     - /var/run/docker.sock:/var/run/docker.sock # For Docker Operator
+#     - ./dags:/opt/airflow/dags
+#     - ./docker/airflow/config:/opt/airflow/config
+#     - ./docker/airflow/plugins:/opt/airflow/plugins
+#     - ./docker/volume/airflow/logs:/opt/airflow/logs
+#     - ./pipeline/ingestion:/var/ingestion
+#     - ./pipeline/cleaning:/var/cleaning
+#     - ./pipeline/curation:/var/curation
+#     # - ./pipeline/ingestion/jars:/var/jars
+#     - ./pipeline/jars:/var/submit/jars
+#     - ./assets/map:/var/map
+#     - ./assets/data:/var/data
+#   user: airflow # need to grant permission to airflow user
+#   depends_on:
+#     postgres:
+#       condition: service_healthy # for airflow db
 
 # Configure services
 services:
@@ -59,189 +59,189 @@ services:
 
   ########## INGESTION ##########
   # Zookeeper Cluster
-  zookeeper-1:
-    image: confluentinc/cp-zookeeper:7.5.1
-    container_name: zookeeper-1
-    environment:
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 32181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
-      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
-    volumes:
-      - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+  # zookeeper-1:
+  #   image: confluentinc/cp-zookeeper:7.5.1
+  #   container_name: zookeeper-1
+  #   environment:
+  #     ZOOKEEPER_SERVER_ID: 1
+  #     ZOOKEEPER_CLIENT_PORT: 32181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #     ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+  #     EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
+  #   volumes:
+  #     - ./docker/jmx-exporter:/usr/share/jmx_exporter/
 
-  zookeeper-2:
-    image: confluentinc/cp-zookeeper:7.5.1
-    container_name: zookeeper-2
-    environment:
-      ZOOKEEPER_SERVER_ID: 2
-      ZOOKEEPER_CLIENT_PORT: 42181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
-      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
-    volumes:
-      - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+  # zookeeper-2:
+  #   image: confluentinc/cp-zookeeper:7.5.1
+  #   container_name: zookeeper-2
+  #   environment:
+  #     ZOOKEEPER_SERVER_ID: 2
+  #     ZOOKEEPER_CLIENT_PORT: 42181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #     ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+  #     EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
+  #   volumes:
+  #     - ./docker/jmx-exporter:/usr/share/jmx_exporter/
 
-  zookeeper-3:
-    image: confluentinc/cp-zookeeper:7.5.1
-    container_name: zookeeper-3
-    environment:
-      ZOOKEEPER_SERVER_ID: 3
-      ZOOKEEPER_CLIENT_PORT: 52181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
-      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
-    volumes:
-      - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+  # zookeeper-3:
+  #   image: confluentinc/cp-zookeeper:7.5.1
+  #   container_name: zookeeper-3
+  #   environment:
+  #     ZOOKEEPER_SERVER_ID: 3
+  #     ZOOKEEPER_CLIENT_PORT: 52181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #     ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+  #     EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
+  #   volumes:
+  #     - ./docker/jmx-exporter:/usr/share/jmx_exporter/
 
   # Kafka Cluster - 3 Broker
-  kafka-1:
-    image: confluentinc/cp-kafka:7.5.1
-    container_name: kafka-1
-    ports:
-      - "9092:9092"
-    depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181,zookeeper-2:42181,zookeeper-3:52181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://localhost:9092
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
-      KAFKA_NUM_PARTITIONS: 3
-      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
-      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 300000
-      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
-      ALLOW_PLAINTEXT_LISTENER: 'yes'
-    volumes:
-      - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+  # kafka-1:
+  #   image: confluentinc/cp-kafka:7.5.1
+  #   container_name: kafka-1
+  #   ports:
+  #     - "9092:9092"
+  #   depends_on:
+  #     - zookeeper-1
+  #     - zookeeper-2
+  #     - zookeeper-3
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181,zookeeper-2:42181,zookeeper-3:52181
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #     KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://localhost:9092
+  #     KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+  #     KAFKA_NUM_PARTITIONS: 3
+  #     KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
+  #     KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
+  #     KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #     KAFKA_LOG_RETENTION_MS: 300000
+  #     KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
+  #     ALLOW_PLAINTEXT_LISTENER: 'yes'
+  #   volumes:
+  #     - ./docker/jmx-exporter:/usr/share/jmx_exporter/
 
-  kafka-2:
-    image: confluentinc/cp-kafka:7.5.1
-    container_name: kafka-2
-    ports:
-      - "9093:9093"
-    depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
-    environment:
-      KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181,zookeeper-2:42181,zookeeper-3:52181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29093,EXTERNAL://localhost:9093
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
-      KAFKA_NUM_PARTITIONS: 3
-      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
-      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 300000
-      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
-      ALLOW_PLAINTEXT_LISTENER: 'yes'
-    volumes:
-      - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+  # kafka-2:
+  #   image: confluentinc/cp-kafka:7.5.1
+  #   container_name: kafka-2
+  #   ports:
+  #     - "9093:9093"
+  #   depends_on:
+  #     - zookeeper-1
+  #     - zookeeper-2
+  #     - zookeeper-3
+  #   environment:
+  #     KAFKA_BROKER_ID: 2
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181,zookeeper-2:42181,zookeeper-3:52181
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #     KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29093,EXTERNAL://localhost:9093
+  #     KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+  #     KAFKA_NUM_PARTITIONS: 3
+  #     KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
+  #     KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
+  #     KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #     KAFKA_LOG_RETENTION_MS: 300000
+  #     KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
+  #     ALLOW_PLAINTEXT_LISTENER: 'yes'
+  #   volumes:
+  #     - ./docker/jmx-exporter:/usr/share/jmx_exporter/
 
-  kafka-3:
-    image: confluentinc/cp-kafka:7.5.1
-    container_name: kafka-3
-    ports:
-      - "9094:9094"
-    depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
-    environment:
-      KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181,zookeeper-2:42181,zookeeper-3:52181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:29094,EXTERNAL://localhost:9094
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
-      KAFKA_NUM_PARTITIONS: 3
-      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
-      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LOG_RETENTION_MS: 300000
-      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
-      ALLOW_PLAINTEXT_LISTENER: 'yes'
-    volumes:
-      - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+  # kafka-3:
+  #   image: confluentinc/cp-kafka:7.5.1
+  #   container_name: kafka-3
+  #   ports:
+  #     - "9094:9094"
+  #   depends_on:
+  #     - zookeeper-1
+  #     - zookeeper-2
+  #     - zookeeper-3
+  #   environment:
+  #     KAFKA_BROKER_ID: 3
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181,zookeeper-2:42181,zookeeper-3:52181
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #     KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:29094,EXTERNAL://localhost:9094
+  #     KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+  #     KAFKA_NUM_PARTITIONS: 3
+  #     KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
+  #     KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
+  #     KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #     KAFKA_LOG_RETENTION_MS: 300000
+  #     KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
+  #     ALLOW_PLAINTEXT_LISTENER: 'yes'
+  #   volumes:
+  #     - ./docker/jmx-exporter:/usr/share/jmx_exporter/
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:7.5.1
-    hostname: schema-registry
-    depends_on:
-      - kafka-1
-      - kafka-2
-      - kafka-3
-    ports:
-      - "8081:8081"
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka-1:29092,kafka-2:29093,kafka-3:29094"
-      SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-      SCHEMA_REGISTRY_JMX_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/confluent_schemaregistry.yml
-    volumes:
-      - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+  # schema-registry:
+  #   image: confluentinc/cp-schema-registry:7.5.1
+  #   hostname: schema-registry
+  #   depends_on:
+  #     - kafka-1
+  #     - kafka-2
+  #     - kafka-3
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
+  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka-1:29092,kafka-2:29093,kafka-3:29094"
+  #     SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
+  #     SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+  #     SCHEMA_REGISTRY_JMX_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/confluent_schemaregistry.yml
+  #   volumes:
+  #     - ./docker/jmx-exporter:/usr/share/jmx_exporter/
 
-  connect:
-    image: cnfldemos/cp-server-connect-datagen:0.6.2-7.5.0
-    hostname: connect
-    depends_on:
-      - kafka-1
-      - kafka-2
-      - kafka-3
-      - schema-registry
-    ports:
-      - "8083:8083"
-    environment:
-      CONNECT_BOOTSTRAP_SERVERS: "kafka-1:29092,kafka-2:29093,kafka-3:29094"
-      CONNECT_REST_ADVERTISED_HOST_NAME: connect
-      CONNECT_GROUP_ID: compose-connect-group
-      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
-      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 2
-      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
-      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
-      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 2
-      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
-      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 2
-      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-7.3.1.jar
-      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
-      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
-      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
-      CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
-      KAFKA_JMX_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-connect.yml
-    volumes:
-      - "./docker/schemas:/app/schemas"
-      - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+  # connect:
+  #   image: cnfldemos/cp-server-connect-datagen:0.6.2-7.5.0
+  #   hostname: connect
+  #   depends_on:
+  #     - kafka-1
+  #     - kafka-2
+  #     - kafka-3
+  #     - schema-registry
+  #   ports:
+  #     - "8083:8083"
+  #   environment:
+  #     CONNECT_BOOTSTRAP_SERVERS: "kafka-1:29092,kafka-2:29093,kafka-3:29094"
+  #     CONNECT_REST_ADVERTISED_HOST_NAME: connect
+  #     CONNECT_GROUP_ID: compose-connect-group
+  #     CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+  #     CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 2
+  #     CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+  #     CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+  #     CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 2
+  #     CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+  #     CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 2
+  #     CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+  #     CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+  #     CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+  #     CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-7.3.1.jar
+  #     CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+  #     CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+  #     CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+  #     CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
+  #     KAFKA_JMX_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-connect.yml
+  #   volumes:
+  #     - "./docker/schemas:/app/schemas"
+  #     - ./docker/jmx-exporter:/usr/share/jmx_exporter/
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    hostname: kafka-ui
-    container_name: kafka-ui
-    depends_on:
-      - kafka-1
-      - kafka-2
-      - kafka-3
-      - schema-registry
-      - connect
-    ports:
-      - "8080:8080"
-    environment:
-      DYNAMIC_CONFIG_ENABLED: "true"
-      KAFKA_CLUSTERS_0_NAME: kafkacluster
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka-1:29092,kafka-2:29093,kafka-3:29094"
+  # kafka-ui:
+  #   image: provectuslabs/kafka-ui:latest
+  #   hostname: kafka-ui
+  #   container_name: kafka-ui
+  #   depends_on:
+  #     - kafka-1
+  #     - kafka-2
+  #     - kafka-3
+  #     - schema-registry
+  #     - connect
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     DYNAMIC_CONFIG_ENABLED: "true"
+  #     KAFKA_CLUSTERS_0_NAME: kafkacluster
+  #     KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka-1:29092,kafka-2:29093,kafka-3:29094"
 
   ########## BACKEND ##########
   # Postgres
@@ -367,29 +367,29 @@ services:
         condition: service_started
 
   ########## ENGINE ##########
-  trino:
-    image: "trinodb/trino:425"
-    container_name: trino
-    hostname: trino
-    restart: always
-    ports:
-      - "8889:8889"
-    volumes:
-      - ./docker/trino/etc-coordinator:/etc/trino
-      - ./docker/trino/catalog:/etc/trino/catalog
-    depends_on:
-      - hive-metastore
+  # trino:
+  #   image: "trinodb/trino:425"
+  #   container_name: trino
+  #   hostname: trino
+  #   restart: always
+  #   ports:
+  #     - "8889:8889"
+  #   volumes:
+  #     - ./docker/trino/etc-coordinator:/etc/trino
+  #     - ./docker/trino/catalog:/etc/trino/catalog
+  #   depends_on:
+  #     - hive-metastore
 
-  trino-worker:
-    image: "trinodb/trino:425"
-    container_name: trino-worker
-    hostname: trino-worker
-    restart: always
-    volumes:
-      - ./docker/trino/etc-worker:/etc/trino
-      - ./docker/trino/catalog:/etc/trino/catalog
-    depends_on:
-      - trino
+  # trino-worker:
+  #   image: "trinodb/trino:425"
+  #   container_name: trino-worker
+  #   hostname: trino-worker
+  #   restart: always
+  #   volumes:
+  #     - ./docker/trino/etc-worker:/etc/trino
+  #     - ./docker/trino/catalog:/etc/trino/catalog
+  #   depends_on:
+  #     - trino
 
   # Spark Cluster 
   spark-master:
@@ -537,7 +537,6 @@ services:
     ports:
       - "7073:7073"
       - "7076:7070" # For application metrics
-
   ########## VISUALIZATION ##########
   # Superset
   # superset:
@@ -558,37 +557,37 @@ services:
   #     - "8088:8088"
 
   ########## AIRLFOW ##########
-  webserver:
-    <<: *airflow-common
-    container_name: webserver
-    command: webserver
-    ports:
-      - "8082:8080"
-    healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://localhost:8082/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-    restart: always
-    depends_on:
-      scheduler:
-        condition: service_healthy
+  # webserver:
+  #   <<: *airflow-common
+  #   container_name: webserver
+  #   command: webserver
+  #   ports:
+  #     - "8082:8080"
+  #   healthcheck:
+  #     test: [ "CMD", "curl", "--fail", "http://localhost:8082/health" ]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 30s
+  #   restart: always
+  #   depends_on:
+  #     scheduler:
+  #       condition: service_healthy
 
-  scheduler:
-    <<: *airflow-common
-    container_name: scheduler
-    command: bash -c "airflow db migrate && airflow users create --username airflow --firstname do --lastname dat --role Admin --email tadod.de@gmail.com --password airflow && airflow scheduler"
-    healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://localhost:8974/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-    restart: always
-    depends_on:
-      postgres:
-        condition: service_healthy
+  # scheduler:
+  #   <<: *airflow-common
+  #   container_name: scheduler
+  #   command: bash -c "airflow db migrate && airflow users create --username airflow --firstname do --lastname dat --role Admin --email tadod.de@gmail.com --password airflow && airflow scheduler"
+  #   healthcheck:
+  #     test: [ "CMD", "curl", "--fail", "http://localhost:8974/health" ]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 30s
+  #   restart: always
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
 
 networks:
   default:

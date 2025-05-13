@@ -27,7 +27,7 @@ spark_submit() {
         sleep 1s
 }
 
-spark_submit "YellowStream" "/var/ingestion/yellow.properties" $CURRENT_DATE $CURRENT_DATE
+spark_submit "YellowStream" "/var/ingestion/properties/yellow.properties" $CURRENT_DATE $CURRENT_DATE
 
 # http://localhost:4048/metrics/prometheus/
 
