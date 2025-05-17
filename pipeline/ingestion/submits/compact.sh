@@ -39,5 +39,4 @@ spark_submit() {
 spark_submit "IcebergCompaction" "/var/ingestion/properties/yellow.properties" $CURRENT_DATE $CURRENT_DATE
 
 # spark_submit "IcebergCompaction" "/var/ingestion/green.properties" $CURRENT_DATE $CURRENT_DATE
-
 # spark_submit "IcebergCompaction" "/var/ingestion/fhv.properties" $CURRENT_DATE $CURRENT_DATE

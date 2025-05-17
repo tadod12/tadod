@@ -8,7 +8,7 @@ from monthly.crawler import download_files
 from monthly.producer import produce_yellow, produce_green, produce_fhv, produce_fhvhv
 
 with DAG(
-    dag_id="dag_monthly_crawler_yellow_ver1",
+    dag_id="dag_monthly_crawler_yellow",
     default_args={
         'owner': 'airflow',
         'depends_on_past': False,
@@ -18,7 +18,7 @@ with DAG(
     description="Monthly crawling for latest data",
     schedule_interval="@monthly",
     start_date=datetime(2020, 1, 1),
-    end_date=datetime(2021, 1, 1),
+    end_date=datetime(2022, 1, 1),
     max_active_runs=1,
     catchup=True,
     tags=["monthly", "crawler"]

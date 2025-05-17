@@ -30,6 +30,351 @@
     "panels": [
         {
             "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unitScale": true
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 0
+            },
+            "id": 78,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto"
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "spark_master_aliveWorkers_type_gauges{group=\"spark\", instance=\"master\", job=\"spark-master\"}",
+                    "format": "time_series",
+                    "hide": false,
+                    "instant": true,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Online Workers",
+                    "metric": "Workers",
+                    "range": false,
+                    "refId": "A",
+                    "step": 60
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "sum(spark_master_workers_type_gauges{group=\"spark\", instance=\"master\", job=\"spark-master\"}) - sum(spark_master_aliveWorkers_type_gauges{group=\"spark\", instance=\"master\", job=\"spark-master\"})",
+                    "format": "time_series",
+                    "hide": false,
+                    "instant": true,
+                    "legendFormat": "Offline Workers",
+                    "range": false,
+                    "refId": "B"
+                }
+            ],
+            "title": "Total Online/Offline Workers",
+            "type": "gauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "dark-red",
+                                "value": null
+                            },
+                            {
+                                "color": "dark-yellow",
+                                "value": 1
+                            },
+                            {
+                                "color": "green",
+                                "value": 3
+                            }
+                        ]
+                    },
+                    "unit": "short",
+                    "unitScale": true,
+                    "custom": {
+                        "fontSize": "200%"
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 8,
+                "y": 0
+            },
+            "id": 66,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "text": {
+                    "valueSize": 60
+                },
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": true,
+                    "expr": "sum(spark_worker_coresFree_type_gauges{group=\"spark\", job=\"spark-worker\"}) without (instance)",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "1m",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Cores Free By Worker",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "dark-red",
+                                "value": null
+                            },
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "dark-yellow",
+                                "value": 2
+                            }
+                        ]
+                    },
+                    "unit": "short",
+                    "unitScale": true,
+                    "custom": {
+                        "fontSize": "200%"
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 8,
+                "y": 4
+            },
+            "id": 61,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "text": {
+                    "valueSize": 60
+                },
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": true,
+                    "expr": "sum(spark_worker_coresUsed_type_gauges{group=\"spark\", job=\"spark-worker\"}) without (instance)",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "1m",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Cores Used By Worker",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "continuous-GrYlRd"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 750
+                            },
+                            {
+                                "color": "red",
+                                "value": 1000
+                            }
+                        ]
+                    },
+                    "max": 1500,
+                    "unit": "bytes",
+                    "unitScale": true
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 0
+            },
+            "id": 76,
+            "options": {
+                "displayMode": "lcd",
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "spark_worker_memUsed_MB_type_gauges{group=\"spark\", job=\"spark-worker\"}",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "",
+                    "legendFormat": "{{instance}}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Worker Memory Usage",
+            "type": "bargauge"
+        },
+        {
+            "datasource": {
                 "uid": "${datasource}"
             },
             "fieldConfig": {
@@ -66,10 +411,166 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 5,
-                "w": 4,
+                "h": 4,
+                "w": 5,
                 "x": 0,
-                "y": 0
+                "y": 8
+            },
+            "id": 80,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {},
+                "textMode": "auto"
+            },
+            "pluginVersion": "10.2.0",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "spark_master_apps_type_gauges{group=\"spark\", instance=\"master\", job=\"spark-master\"}",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Running Apps",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 5,
+                "x": 5,
+                "y": 8
+            },
+            "id": 81,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {},
+                "textMode": "auto"
+            },
+            "pluginVersion": "10.2.0",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "exemplar": true,
+                    "expr": "spark_master_waitingApps_type_gauges{group=\"spark\", instance=\"master\", job=\"spark-master\"}",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Waiting Apps",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "text": "N/A"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 5,
+                "x": 0,
+                "y": 12
             },
             "id": 7,
             "links": [],
@@ -144,10 +645,10 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 4,
-                "y": 0
+                "h": 4,
+                "w": 5,
+                "x": 5,
+                "y": 12
             },
             "id": 6,
             "links": [],
@@ -178,310 +679,6 @@
                 }
             ],
             "title": "Active Jobs",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "uid": "${datasource}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [
-                        {
-                            "options": {
-                                "match": "null",
-                                "result": {
-                                    "text": "N/A"
-                                }
-                            },
-                            "type": "special"
-                        }
-                    ],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 8,
-                "y": 0
-            },
-            "id": 11,
-            "links": [],
-            "maxDataPoints": 100,
-            "options": {
-                "colorMode": "none",
-                "graphMode": "none",
-                "justifyMode": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "text": {},
-                "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0",
-            "targets": [
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "sum(spark_master_workers_type_gauges{group=\"spark\", instance=\"master\", job=\"spark-master\"})",
-                    "legendFormat": "maxMem_MB",
-                    "refId": "A"
-                }
-            ],
-            "title": "No Of Workers",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "uid": "${datasource}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [
-                        {
-                            "options": {
-                                "match": "null",
-                                "result": {
-                                    "text": "N/A"
-                                }
-                            },
-                            "type": "special"
-                        }
-                    ],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 12,
-                "y": 0
-            },
-            "id": 10,
-            "links": [],
-            "maxDataPoints": 100,
-            "options": {
-                "colorMode": "none",
-                "graphMode": "none",
-                "justifyMode": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "text": {},
-                "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0",
-            "targets": [
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "sum(spark_master_aliveWorkers_type_gauges{group=\"spark\", instance=\"master\", job=\"spark-master\"})",
-                    "legendFormat": "maxMem_MB",
-                    "refId": "A"
-                }
-            ],
-            "title": "No Of Alive Workers",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "uid": "${datasource}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [
-                        {
-                            "options": {
-                                "match": "null",
-                                "result": {
-                                    "text": "N/A"
-                                }
-                            },
-                            "type": "special"
-                        }
-                    ],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 16,
-                "y": 0
-            },
-            "id": 12,
-            "links": [],
-            "maxDataPoints": 100,
-            "options": {
-                "colorMode": "none",
-                "graphMode": "none",
-                "justifyMode": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "text": {},
-                "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0",
-            "targets": [
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "sum(spark_worker_coresFree_type_gauges{group=\"spark\", job=\"spark-worker\"}) without (instance)",
-                    "legendFormat": "maxMem_MB",
-                    "refId": "A"
-                }
-            ],
-            "title": "No Of Cores Free By Worker",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "uid": "${datasource}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [
-                        {
-                            "options": {
-                                "match": "null",
-                                "result": {
-                                    "text": "N/A"
-                                }
-                            },
-                            "type": "special"
-                        }
-                    ],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 5,
-                "w": 4,
-                "x": 20,
-                "y": 0
-            },
-            "id": 13,
-            "links": [],
-            "maxDataPoints": 100,
-            "options": {
-                "colorMode": "none",
-                "graphMode": "none",
-                "justifyMode": "auto",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "text": {},
-                "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0",
-            "targets": [
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "sum(spark_worker_coresUsed_type_gauges{group=\"spark\", job=\"spark-worker\"}) without (instance)",
-                    "legendFormat": "",
-                    "refId": "A"
-                }
-            ],
-            "title": "No Of Cores Used By Worker",
             "type": "stat"
         },
         {
@@ -547,9 +744,9 @@
             },
             "gridPos": {
                 "h": 8,
-                "w": 8,
-                "x": 0,
-                "y": 5
+                "w": 14,
+                "x": 10,
+                "y": 8
             },
             "id": 2,
             "options": {
@@ -657,9 +854,9 @@
             },
             "gridPos": {
                 "h": 8,
-                "w": 8,
-                "x": 8,
-                "y": 5
+                "w": 12,
+                "x": 0,
+                "y": 16
             },
             "id": 8,
             "options": {
@@ -777,9 +974,9 @@
             },
             "gridPos": {
                 "h": 8,
-                "w": 8,
-                "x": 16,
-                "y": 5
+                "w": 12,
+                "x": 12,
+                "y": 16
             },
             "id": 9,
             "options": {
@@ -800,258 +997,28 @@
                     "datasource": {
                         "uid": "${datasource}"
                     },
-                    "expr": "metrics_app_driver_BlockManager_memory_maxMem_MB_Number{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"gauges\"}",
-                    "legendFormat": "maxMem_MB",
+                    "expr": "sum(spark_driver_BlockManager_memory_memUsed_MB_type_gauges{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}) without (app_id)",
+                    "legendFormat": "Memory Used",
                     "refId": "A"
                 },
                 {
                     "datasource": {
                         "uid": "${datasource}"
                     },
-                    "expr": "metrics_app_driver_BlockManager_disk_diskSpaceUsed_MB_Number{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"gauges\"}",
-                    "legendFormat": "diskSpaceUsed_MB",
-                    "refId": "D"
-                },
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_app_driver_BlockManager_memory_maxOnHeapMem_MB_Number{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"gauges\"}",
-                    "legendFormat": "maxOnHeapMem_MB",
+                    "expr": "sum(spark_driver_BlockManager_disk_diskSpaceUsed_MB_type_gauges{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}) without (app_id)",
+                    "legendFormat": "Disk Space Used",
                     "refId": "B"
                 },
                 {
                     "datasource": {
                         "uid": "${datasource}"
                     },
-                    "expr": "metrics_app_driver_BlockManager_memory_maxOffHeapMem_MB_Number{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"gauges\"}",
-                    "legendFormat": "maxOffHeapMem_MB",
+                    "expr": "sum(spark_driver_BlockManager_memory_remainingMem_MB_type_gauges{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}) without (app_id)",
+                    "legendFormat": "Memory Free",
                     "refId": "C"
                 }
             ],
-            "title": "BlockManager",
-            "type": "timeseries"
-        },
-        {
-            "datasource": {
-                "uid": "${datasource}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisBorderShow": false,
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "never",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "links": [],
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 6,
-                "w": 12,
-                "x": 0,
-                "y": 13
-            },
-            "id": 14,
-            "links": [],
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom",
-                    "showLegend": true
-                },
-                "tooltip": {
-                    "mode": "multi",
-                    "sort": "none"
-                }
-            },
-            "pluginVersion": "10.2.0",
-            "targets": [
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "sum(spark_worker_memFree_MB_type_gauges{group=\"spark\", job=\"spark-worker\"}) without (instance)",
-                    "legendFormat": "memFree_MB",
-                    "refId": "A"
-                },
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "sum(spark_worker_memUsed_MB_type_gauges{group=\"spark\", job=\"spark-worker\"}) without (instance)",
-                    "legendFormat": "memUsed_MB",
-                    "refId": "B"
-                }
-            ],
-            "title": "Memory Free/Used by Worker",
-            "type": "timeseries"
-        },
-        {
-            "datasource": {
-                "uid": "${datasource}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisBorderShow": false,
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "never",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "links": [],
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 6,
-                "w": 12,
-                "x": 12,
-                "y": 13
-            },
-            "id": 15,
-            "links": [],
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom",
-                    "showLegend": true
-                },
-                "tooltip": {
-                    "mode": "multi",
-                    "sort": "none"
-                }
-            },
-            "pluginVersion": "10.2.0",
-            "targets": [
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Count{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
-                    "legendFormat": "Count",
-                    "refId": "A"
-                },
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Max{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
-                    "legendFormat": "Max",
-                    "refId": "B"
-                },
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Mean{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
-                    "legendFormat": "Mean",
-                    "refId": "C"
-                },
-                {
-                    "datasource": {
-                        "uid": "${datasource}"
-                    },
-                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Min{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
-                    "legendFormat": "Min",
-                    "refId": "D"
-                }
-            ],
-            "title": "LiveListenerBus listenerProcessingTime HeartbeatReceiver",
+            "title": "Block Manager",
             "type": "timeseries"
         },
         {
@@ -1111,7 +1078,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 19
+                "y": 24
             },
             "id": 16,
             "options": {
@@ -1131,7 +1098,7 @@
                     "datasource": {
                         "uid": "${datasource}"
                     },
-                    "expr": "sum(kafka_topic_offset{group=\"spark\", offset_type=\"current\", topic=\"yellow\"})",
+                    "expr": "sum(kafka_topic_offset{group=\"offset\", offset_type=\"current\", topic=\"yellow\"})",
                     "legendFormat": "Spark Current Offset",
                     "refId": "A"
                 },
@@ -1139,7 +1106,7 @@
                     "datasource": {
                         "uid": "${datasource}"
                     },
-                    "expr": "sum(kafka_topic_offset{group=\"kafka\", offset_type=\"end\", topic=\"yellow\"})",
+                    "expr": "sum(kafka_topic_offset{group=\"offset\", offset_type=\"end\", topic=\"yellow\"})",
                     "legendFormat": "Kafka End Offset",
                     "refId": "B"
                 },
@@ -1147,7 +1114,7 @@
                     "datasource": {
                         "uid": "${datasource}"
                     },
-                    "expr": "sum(kafka_topic_offset{group=\"kafka\", offset_type=\"begin\", topic=\"yellow\"})",
+                    "expr": "sum(kafka_topic_offset{group=\"offset\", offset_type=\"begin\", topic=\"yellow\"})",
                     "legendFormat": "Kafka Begin Offset",
                     "refId": "C"
                 }
@@ -1212,7 +1179,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 19
+                "y": 24
             },
             "id": 17,
             "options": {
@@ -1232,12 +1199,310 @@
                     "datasource": {
                         "uid": "${datasource}"
                     },
-                    "expr": "max(kafka_topic_offset{group=\"kafka\", offset_type=\"end\", topic=\"yellow\"}) - max(kafka_topic_offset{group=\"spark\", offset_type=\"current\", topic=\"yellow\"})",
-                    "legendFormat": "",
+                    "expr": "max(kafka_topic_offset{group=\"offset\", offset_type=\"end\"}) by (topic) - max(kafka_topic_offset{group=\"offset\", offset_type=\"current\"}) by (topic)",
+                    "legendFormat": "Offset Lag - Topic: {{topic}}",
                     "refId": "A"
                 }
             ],
             "title": "Offset Lag (Kafka - Spark)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 32
+            },
+            "id": 89,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "10.2.0",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "sum(spark_driver_jvm_heap_usage_type_gauges{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}) without (app_id)",
+                    "legendFormat": "JVM Heap Usage",
+                    "refId": "A"
+                }
+            ],
+            "title": "Total JVM Heap Usage",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 32
+            },
+            "id": 2,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "10.2.0",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "metrics_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Count{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"timers\"}",
+                    "legendFormat": "Total Heartbeat Events",
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "metrics_app_driver_LiveListenerBus_queue_appStatus_numDroppedEvents_Count{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"counters\"}",
+                    "legendFormat": "Total Skipped AppStatus-Events",
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "metrics_app_driver_LiveListenerBus_queue_eventLog_numDroppedEvents_Count{group=\"spark\", instance=\"application\", job=\"spark-application\", type=\"counters\"}",
+                    "legendFormat": "Total Skipped EventLog-Events",
+                    "refId": "C"
+                }
+            ],
+            "title": "Live Listener Bus",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 32
+            },
+            "id": 85,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "10.2.0",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "expr": "spark_driver_jvm_G1_Old_Generation_count_type_gauges{group=\"spark\", instance=\"spark-master:8085\", job=\"spark-driver\"}",
+                    "legendFormat": "{{app_id}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Number of GCs per Application",
             "type": "timeseries"
         }
     ],

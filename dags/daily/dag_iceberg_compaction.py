@@ -6,7 +6,7 @@ from docker.types import Mount
 from datetime import datetime, timedelta
 
 with DAG(
-    dag_id='dag_iceberg_compaction_ver2',
+    dag_id='dag_iceberg_compaction',
     default_args={
         'owner': 'airflow',
         'depends_on_past': False,
@@ -26,7 +26,7 @@ with DAG(
     compaction = DockerOperator(
         task_id='iceberg_compaction',
         image='docker:latest',  # minimal image with Docker CLI
-        command='docker exec spark-master sh /var/ingestion/compact.sh \\{\\{ something \\}\\}',
+        command='docker exec spark-master sh /var/ingestion/submits/compact.sh \\{\\{ something \\}\\}',
         api_version='auto',
         auto_remove='success',
         docker_url='unix://var/run/docker.sock',

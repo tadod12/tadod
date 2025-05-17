@@ -2,6 +2,7 @@ groups:
   - name: TrinoAlerts
     interval: 15s
     rules:
+      # Node Health Alerts
       - alert: ZeroActiveTrinoWorker
         expr: trino_failuredetector_name_HeartbeatFailureDetector_ActiveCount{job="trino"} == 0
         for: 30s
@@ -10,6 +11,7 @@ groups:
         annotations:
           summary: "No Active Trino Worker"
           description: "Trino Cluster has 0 worker for 30 seconds"
+
       - alert: TrinoWorkerGotBlocked
         expr: trino_memory_type_ClusterMemoryPool_name_general_BlockedNodes{job="trino"} > 0
         for: 30s
@@ -18,6 +20,7 @@ groups:
         annotations:
           summary: "Trino Worker Got Blocked"
           description: "Trino Worker got blocked for some reasons"
+
       - alert: AllTrinoWorkersGotBlocked
         expr: trino_memory_type_ClusterMemoryPool_name_general_BlockedNodes{job="trino"} == 2
         for: 30s
@@ -26,6 +29,82 @@ groups:
         annotations:
           summary: "All Trino Workers Got Blocked"
           description: "All Trino Workers in cluster are blocked"
+
+      # Query Performance Alerts
+      - alert: HighQueuedQueries
+        expr: trino_execution_name_querymanager_queuedqueries{job="trino"} > 10
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of queued queries"
+          description: "Trino has {{ $value }} queries in queue. Consider scaling cluster or optimizing queries."
+
+      - alert: HighRunningQueries
+        expr: trino_execution_name_querymanager_runningqueries{job="trino"} > 20
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of running queries"
+          description: "Trino has {{ $value }} running queries. System may be overloaded."
+
+      - alert: FailedTasks
+        expr: trino_execution_name_sqltaskmanager_failedtasks{job="trino"} > 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Failed Trino tasks detected"
+          description: "Trino has {{ $value }} failed tasks. Check task logs and configuration."
+
+      # Memory Usage Alerts
+      - alert: HighMemoryUsage
+        expr: trino_memory_name_clustermemorymanager_clustermemorybytes{job="trino"} / trino_memory_name_clustermemorymanager_clustermemorybytes{job="trino"} > 0.8
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage in Trino cluster"
+          description: "Trino cluster memory usage is above 80%. Consider optimizing queries or scaling memory."
+
+      - alert: HighMemoryReservation
+        expr: trino_memory_name_clustermemorymanager_clustertotalmemoryreservation{job="trino"} / trino_memory_name_clustermemorymanager_clustermemorybytes{job="trino"} > 0.8
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory reservation in Trino cluster"
+          description: "Trino cluster memory reservation is above 80%. Consider optimizing queries or scaling memory."
+
+      - alert: QueriesKilledDueToMemory
+        expr: trino_memory_name_clustermemorymanager_querieskilledduetooutofmemory{job="trino"} > 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Queries killed due to out of memory"
+          description: "{{ $value }} queries were killed due to insufficient memory. Consider optimizing queries or scaling memory."
+
+      # Memory Pool Alerts
+      - alert: LowFreeMemory
+        expr: trino_memory_type_memorypool_name_general_freebytes{job="trino"} / trino_memory_type_memorypool_name_general_maxbytes{job="trino"} < 0.2
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low free memory in Trino"
+          description: "Trino has less than 20% free memory. Consider optimizing queries or scaling memory."
+
+      - alert: HighReservedMemory
+        expr: trino_memory_type_memorypool_name_general_reservedbytes{job="trino"} / trino_memory_type_memorypool_name_general_maxbytes{job="trino"} > 0.8
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High reserved memory in Trino"
+          description: "Trino has more than 80% reserved memory. Consider optimizing queries or scaling memory."
+
       - alert: TrinoResourceExhaustion
         expr: trino_memory_name_ClusterMemoryManager_TotalAvailableProcessors{job="trino"} < 1
         for: 30s

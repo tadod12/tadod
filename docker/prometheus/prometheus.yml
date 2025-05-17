@@ -91,23 +91,14 @@ scrape_configs:
         target_label: __name__
         replacement: metrics_app_${1}
 
-  - job_name: spark-offset
-    scrape_interval: 10s
-    metrics_path: /metrics
-    scheme: http
-    static_configs:
-      - targets: ["spark-master:8087"]
-        labels:
-          group: "spark"
-
-  - job_name: kafka-offset
+  - job_name: full-offset
     scrape_interval: 10s
     metrics_path: /metrics
     scheme: http
     static_configs: 
       - targets: ["spark-master:8086"]
         labels:
-          group: "kafka"
+          group: "offset"
 
   - job_name: minio-cluster
     metrics_path: /minio/v2/metrics/cluster
