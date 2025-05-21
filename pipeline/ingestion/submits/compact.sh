@@ -8,7 +8,7 @@ CURRENT_DATE=$(date +"%Y-%m-%d")
 
 spark_submit() {
     $SPARK_HOME/bin/spark-submit \
-        --master local \
+        --master spark://spark-master:7077 \
         --deploy-mode client \
         --driver-memory 1g \
         --executor-memory 1g \

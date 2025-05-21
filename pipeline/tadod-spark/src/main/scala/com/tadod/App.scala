@@ -3,7 +3,8 @@ package com.tadod
 import com.tadod.jobs.compaction.IcebergCompactionJob
 import com.tadod.jobs.metrics.{KafkaOffsetMonitor, OffsetMonitor, SparkOffsetMonitor}
 import com.tadod.jobs.streaming.{FHVStreamingJob, GreenStreamingJob, YellowStreamingJob}
-import com.tadod.jobs.transformation.{GreenCleaningJob, GreenMartVendorJob, MartLocationJob, MartPaymentJob, MartRateCodeJob, YellowCleaningJob, YellowMartVendorJob}
+import com.tadod.jobs.transformation.yellow.{YellowCleaningJob, YellowGeneralMartJob, YellowMartLocationJob, YellowMartPaymentJob, YellowMartRateCodeJob, YellowMartVendorJob}
+import com.tadod.jobs.transformation.green.{GreenCleaningJob, GreenMartVendorJob}
 
 object App {
   def main(args: Array[String]): Unit = {
@@ -55,17 +56,22 @@ object App {
           dateRun = dateRun
         ).execute()
 
-        case "MartRateCode" => new MartRateCodeJob(
+        case "YellowMartRateCode" => new YellowMartRateCodeJob(
           configPath = configPath,
           dateRun = dateRun
         ).execute()
 
-        case "MartLocation" => new MartLocationJob(
+        case "YellowMartLocation" => new YellowMartLocationJob(
           configPath = configPath,
           dateRun = dateRun
         ).execute()
 
-        case "MartPayment" => new MartPaymentJob(
+        case "YellowMartPayment" => new YellowMartPaymentJob(
+          configPath = configPath,
+          dateRun = dateRun
+        ).execute()
+
+        case "YellowGeneral" => new YellowGeneralMartJob(
           configPath = configPath,
           dateRun = dateRun
         ).execute()

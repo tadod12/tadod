@@ -1,9 +1,10 @@
-package com.tadod.jobs.transformation
+package com.tadod.jobs.transformation.yellow
 
-import org.apache.spark.sql.{DataFrame, SaveMode}
+import com.tadod.jobs.transformation.BaseMartJob
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{DataFrame, SaveMode}
 
-class MartLocationJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
+class YellowMartLocationJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
 
   import spark.implicits._
 

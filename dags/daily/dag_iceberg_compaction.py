@@ -18,7 +18,7 @@ with DAG(
     start_date=days_ago(0),
     max_active_runs=1,
     description='Iceberg compaction DAG',
-    schedule_interval="*/15 * * * *",  # every 15 minutes
+    schedule_interval="*/30 * * * *",  # every 15 minutes
     tags=['iceberg', 'compaction'],
 ) as dag:
     start = DummyOperator(task_id="start_dag")

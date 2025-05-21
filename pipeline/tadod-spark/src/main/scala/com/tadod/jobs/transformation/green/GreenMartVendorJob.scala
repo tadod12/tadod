@@ -1,28 +1,29 @@
-package com.tadod.jobs.transformation
+package com.tadod.jobs.transformation.green
 
-import org.apache.spark.sql.{DataFrame, SaveMode}
+import com.tadod.jobs.transformation.BaseMartJob
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{DataFrame, SaveMode}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
+class GreenMartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
 
   import spark.implicits._
 
-  override protected def getJobName: String = "YellowMartVendorJob"
+  override protected def getJobName: String = "GreenMartVendorJob"
 
   override protected def createMart(sourceDf: DataFrame): DataFrame = {
-    val yellowRawDf = spark.read
+    val greenRawDf = spark.read
       .format("iceberg")
-      .load("iceberg.raw.yellow")
+      .load("iceberg.raw.green")
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val currentDate = LocalDate.parse(dateRun, formatter)
     val previousDate = currentDate.minusDays(1).format(formatter)
 
-    val invalidDf = yellowRawDf
-      .withColumn("record_date", to_date($"tpep_pickup_datetime"))
+    val invalidDf = greenRawDf
+      .withColumn("record_date", to_date($"lpep_pickup_datetime"))
       .where(
         $"record_date" === to_date(lit(previousDate)) &&
           col("vendor_id").isNotNull && (
@@ -34,15 +35,15 @@ class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJ
             col("pu_location_id").isNull ||
             col("do_location_id").isNull ||
             col("fare_amount").isNull ||
-            col("total_amount").isNull
+            col("total_amount").isNull ||
+            col("trip_type").isNull
           )
       )
       .groupBy("record_date", "vendor_id")
       .agg(count("*").as("total_invalid_records"))
 
-
     val tmpDf = sourceDf
-      .withColumn("record_date", to_date($"tpep_pickup_datetime"))
+      .withColumn("record_date", to_date($"lpep_pickup_datetime"))
       .where($"record_date" === to_date(lit(previousDate)))
       .groupBy("record_date", "vendor_id")
       .agg(
@@ -58,8 +59,7 @@ class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJ
       .withColumn("vendor_name",
         when($"vendor_id" === 1, "Creative Mobile Technologies, LLC")
           .when($"vendor_id" === 2, "Curb Mobility, LLC")
-          .when($"vendor_id" === 6, "Myle Technologies Inc")
-          .when($"vendor_id" === 7, "Helix"))
+          .when($"vendor_id" === 6, "Myle Technologies Inc"))
       .select(
         "record_date",            // DATE
         "record_week",            // INT
@@ -71,7 +71,7 @@ class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJ
         "total_invalid_records",  // BIGINT
         "total_delay_records",    // BIGINT
         "total_ontime_records")
-      .withColumn("record_type", lit("yellow"))
+      .withColumn("record_type", lit("green"))
   }
 
   override protected def writeToIceberg(targetDf: DataFrame): Unit = {

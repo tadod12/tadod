@@ -21,7 +21,7 @@ groups:
           description: "Too many RDD/DataFrame cached, `spark.memory.fraction` or `spark.memory.storageFraction` configuration is not reasonable"
 
       - alert: TooManyJobRunAtTheSameTime
-        expr: spark_driver_DAGScheduler_job_activeJobs_type_gauges{group="spark", instance="spark-master:8085", job="spark-driver"} > 5
+        expr: spark_driver_DAGScheduler_job_activeJobs_type_gauges{group="spark", instance="spark-master:8085", job="spark-driver"} > 1
         for: 10s
         labels:
           severity: warning
@@ -57,8 +57,8 @@ groups:
           description: "Spark Cluster has 0 worker for 30 seconds"
 
       - alert: TooManyApplications
-        expr: spark_master_apps_type_gauges > 5
-        for: 10s
+        expr: spark_master_apps_type_gauges > 1
+        for: 5s
         labels:
           severity: warning
         annotations:
@@ -66,7 +66,7 @@ groups:
           description: "Too many applications are submitted to the cluster, inefficient scheduling, can cause waiting and resource shortage"
 
       - alert: ApplicationWaitingTimeOut
-        expr: spark_master_waitingapps_type_gauges > 0
+        expr: spark_master_waitingApps_type_gauges > 0
         for: 60s
         labels:
           severity: warning

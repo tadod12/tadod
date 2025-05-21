@@ -323,7 +323,7 @@
                         ]
                     },
                     "max": 1500,
-                    "unit": "bytes",
+                    "unit": "MiB",
                     "unitScale": true
                 },
                 "overrides": []

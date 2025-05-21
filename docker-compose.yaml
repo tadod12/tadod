@@ -1,28 +1,28 @@
 # Common
-# x-airflow-common: &airflow-common
-#   build:
-#     context: .
-#     dockerfile: ./docker/airflow/Dockerfile
-#   image: tadod/lakehouse:airflow
-#   env_file:
-#     - airflow.env
-#   volumes:
-#     - /var/run/docker.sock:/var/run/docker.sock # For Docker Operator
-#     - ./dags:/opt/airflow/dags
-#     - ./docker/airflow/config:/opt/airflow/config
-#     - ./docker/airflow/plugins:/opt/airflow/plugins
-#     - ./docker/volume/airflow/logs:/opt/airflow/logs
-#     - ./pipeline/ingestion:/var/ingestion
-#     - ./pipeline/cleaning:/var/cleaning
-#     - ./pipeline/curation:/var/curation
-#     # - ./pipeline/ingestion/jars:/var/jars
-#     - ./pipeline/jars:/var/submit/jars
-#     - ./assets/map:/var/map
-#     - ./assets/data:/var/data
-#   user: airflow # need to grant permission to airflow user
-#   depends_on:
-#     postgres:
-#       condition: service_healthy # for airflow db
+x-airflow-common: &airflow-common
+  build:
+    context: .
+    dockerfile: ./docker/airflow/Dockerfile
+  image: tadod/lakehouse:airflow
+  env_file:
+    - airflow.env
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock # For Docker Operator
+    - ./dags:/opt/airflow/dags
+    - ./docker/airflow/config:/opt/airflow/config
+    - ./docker/airflow/plugins:/opt/airflow/plugins
+    - ./docker/volume/airflow/logs:/opt/airflow/logs
+    - ./pipeline/ingestion:/var/ingestion
+    - ./pipeline/cleaning:/var/cleaning
+    - ./pipeline/curation:/var/curation
+    # - ./pipeline/ingestion/jars:/var/jars
+    - ./pipeline/jars:/var/submit/jars
+    - ./assets/map:/var/map
+    - ./assets/data:/var/data
+  user: airflow # need to grant permission to airflow user
+  depends_on:
+    postgres:
+      condition: service_healthy # for airflow db
 
 # Configure services
 services:
@@ -70,6 +70,7 @@ services:
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
     volumes:
       - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+      - zookeeper-data-1:/var/lib/zookeeper/data
 
   zookeeper-2:
     image: confluentinc/cp-zookeeper:7.5.1
@@ -82,6 +83,7 @@ services:
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
     volumes:
       - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+      - zookeeper-data-2:/var/lib/zookeeper/data
 
   zookeeper-3:
     image: confluentinc/cp-zookeeper:7.5.1
@@ -94,6 +96,7 @@ services:
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/zookeeper.yml
     volumes:
       - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+      - zookeeper-data-3:/var/lib/zookeeper/data
 
   # Kafka Cluster - 3 Broker
   kafka-1:
@@ -121,6 +124,7 @@ services:
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
       - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+      - kafka-data-1:/var/lib/kafka/data
 
   kafka-2:
     image: confluentinc/cp-kafka:7.5.1
@@ -147,6 +151,7 @@ services:
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
       - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+      - kafka-data-2:/var/lib/kafka/data
 
   kafka-3:
     image: confluentinc/cp-kafka:7.5.1
@@ -173,6 +178,7 @@ services:
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     volumes:
       - ./docker/jmx-exporter:/usr/share/jmx_exporter/
+      - kafka-data-3:/var/lib/kafka/data
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.5.1
@@ -390,152 +396,153 @@ services:
       - ./docker/trino/catalog:/etc/trino/catalog
     depends_on:
       - trino
+
   # Spark Cluster 
-  # spark-master:
-  #   build:
-  #     context: ./docker/spark
-  #     dockerfile: Dockerfile
-  #   image: tadod/lakehouse:spark
-  #   container_name: spark-master
-  #   hostname: spark-master
-  #   entrypoint: [ './entrypoint.sh', 'master' ]
-  #   healthcheck:
-  #     test: [ "CMD", "curl", "-f", "http:localhost:8084" ]
-  #     interval: 5s
-  #     timeout: 3s
-  #     retries: 3
-  #   environment:
-  #     - AWS_ACCESS_KEY_ID=minio
-  #     - AWS_SECRET_ACCESS_KEY=minio123
-  #     - AWS_REGION=us-east-1
-  #     - AWS_DEFAULT_REGION=us-east-1
-  #     - S3_ENDPOINT=http://minio1:9000
-  #     - S3_PATH_STYLE_ACCESS=true
-  #     - SPARK_NO_DAEMONIZE=true\
-  #     - SPARK_MASTER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=8084:/opt/jmx-exporter/spark.yml
-  #   volumes:
-  #     - spark-logs:/opt/spark/spark-events # for history-server
-  #     # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
-  #     - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
-  #     - ./pipeline/ingestion:/var/ingestion
-  #     - ./pipeline/cleaning:/var/cleaning
-  #     - ./pipeline/curation:/var/curation
-  #     - ./pipeline/jars:/var/submit/jars
-  #     - ./assets/map:/var/map
-  #     - ./docker/jmx-exporter:/opt/jmx-exporter
-  #   ports:
-  #     - "7077:7077"
-  #     - "8084:8084"
-  #     - "8085:8085"
+  spark-master:
+    build:
+      context: ./docker/spark
+      dockerfile: Dockerfile
+    image: tadod/lakehouse:spark
+    container_name: spark-master
+    hostname: spark-master
+    entrypoint: [ './entrypoint.sh', 'master' ]
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http:localhost:8084" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio1:9000
+      - S3_PATH_STYLE_ACCESS=true
+      - SPARK_NO_DAEMONIZE=true\
+      - SPARK_MASTER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=8084:/opt/jmx-exporter/spark.yml
+    volumes:
+      - spark-logs:/opt/spark/spark-events # for history-server
+      # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
+      - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
+      - ./pipeline/ingestion:/var/ingestion
+      - ./pipeline/cleaning:/var/cleaning
+      - ./pipeline/curation:/var/curation
+      - ./pipeline/jars:/var/submit/jars
+      - ./assets/map:/var/map
+      - ./docker/jmx-exporter:/opt/jmx-exporter
+    ports:
+      - "7077:7077"
+      - "8084:8084"
+      - "8085:8085"
 
-  # spark-history-server:
-  #   image: tadod/lakehouse:spark
-  #   container_name: spark-history-server
-  #   entrypoint: [ './entrypoint.sh', 'history' ]
-  #   depends_on:
-  #     - spark-master
-  #   environment:
-  #     - AWS_ACCESS_KEY_ID=minio
-  #     - AWS_SECRET_ACCESS_KEY=minio123
-  #     - AWS_REGION=us-east-1
-  #     - AWS_DEFAULT_REGION=us-east-1
-  #     - S3_ENDPOINT=http://minio1:9000
-  #     - S3_PATH_STYLE_ACCESS=true
-  #     - SPARK_NO_DAEMONIZE=true
-  #   volumes:
-  #     - spark-logs:/opt/spark/spark-events
-  #   ports:
-  #     - '18080:18080'
+  spark-history-server:
+    image: tadod/lakehouse:spark
+    container_name: spark-history-server
+    entrypoint: [ './entrypoint.sh', 'history' ]
+    depends_on:
+      - spark-master
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio1:9000
+      - S3_PATH_STYLE_ACCESS=true
+      - SPARK_NO_DAEMONIZE=true
+    volumes:
+      - spark-logs:/opt/spark/spark-events
+    ports:
+      - '18080:18080'
 
-  # spark-worker-1:
-  #   image: tadod/lakehouse:spark
-  #   entrypoint: [ './entrypoint.sh', 'worker' ]
-  #   container_name: spark-worker-1
-  #   hostname: spark-worker-1
-  #   depends_on:
-  #     - spark-master
-  #   environment:
-  #     - AWS_ACCESS_KEY_ID=minio
-  #     - AWS_SECRET_ACCESS_KEY=minio123
-  #     - AWS_REGION=us-east-1
-  #     - AWS_DEFAULT_REGION=us-east-1
-  #     - S3_ENDPOINT=http://minio1:9000
-  #     - S3_PATH_STYLE_ACCESS=true
-  #     - SPARK_NO_DAEMONIZE=true
-  #     - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7071:/opt/jmx-exporter/spark.yml
-  #   volumes:
-  #     - spark-logs:/opt/spark/spark-events # for history-server
-  #     # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
-  #     - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
-  #     - ./pipeline/ingestion:/var/ingestion
-  #     - ./pipeline/cleaning:/var/cleaning
-  #     - ./pipeline/curation:/var/curation
-  #     - ./pipeline/jars:/var/submit/jars
-  #     - ./assets/map:/var/map
-  #     - ./docker/jmx-exporter:/opt/jmx-exporter
-  #   ports:
-  #     - "7071:7071"
-  #     - "7074:7070" # For application metrics
+  spark-worker-1:
+    image: tadod/lakehouse:spark
+    entrypoint: [ './entrypoint.sh', 'worker' ]
+    container_name: spark-worker-1
+    hostname: spark-worker-1
+    depends_on:
+      - spark-master
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio1:9000
+      - S3_PATH_STYLE_ACCESS=true
+      - SPARK_NO_DAEMONIZE=true
+      - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7071:/opt/jmx-exporter/spark.yml
+    volumes:
+      - spark-logs:/opt/spark/spark-events # for history-server
+      # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
+      - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
+      - ./pipeline/ingestion:/var/ingestion
+      - ./pipeline/cleaning:/var/cleaning
+      - ./pipeline/curation:/var/curation
+      - ./pipeline/jars:/var/submit/jars
+      - ./assets/map:/var/map
+      - ./docker/jmx-exporter:/opt/jmx-exporter
+    ports:
+      - "7071:7071"
+      - "7074:7070" # For application metrics
 
-  # spark-worker-2:
-  #   image: tadod/lakehouse:spark
-  #   entrypoint: [ './entrypoint.sh', 'worker' ]
-  #   container_name: spark-worker-2
-  #   hostname: spark-worker-2
-  #   depends_on:
-  #     - spark-master
-  #   environment:
-  #     - AWS_ACCESS_KEY_ID=minio
-  #     - AWS_SECRET_ACCESS_KEY=minio123
-  #     - AWS_REGION=us-east-1
-  #     - AWS_DEFAULT_REGION=us-east-1
-  #     - S3_ENDPOINT=http://minio:9000
-  #     - S3_PATH_STYLE_ACCESS=true
-  #     - SPARK_NO_DAEMONIZE=true
-  #     - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7072:/opt/jmx-exporter/spark.yml
-  #   volumes:
-  #     - spark-logs:/opt/spark/spark-events # for history-server
-  #     # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
-  #     - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
-  #     - ./pipeline/ingestion:/var/ingestion
-  #     - ./pipeline/cleaning:/var/cleaning
-  #     - ./pipeline/curation:/var/curation
-  #     - ./pipeline/jars:/var/submit/jars
-  #     - ./assets/map:/var/map
-  #     - ./docker/jmx-exporter:/opt/jmx-exporter
-  #   ports:
-  #     - "7072:7072"
-  #     - "7075:7070" # For application metrics
+  spark-worker-2:
+    image: tadod/lakehouse:spark
+    entrypoint: [ './entrypoint.sh', 'worker' ]
+    container_name: spark-worker-2
+    hostname: spark-worker-2
+    depends_on:
+      - spark-master
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio:9000
+      - S3_PATH_STYLE_ACCESS=true
+      - SPARK_NO_DAEMONIZE=true
+      - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7072:/opt/jmx-exporter/spark.yml
+    volumes:
+      - spark-logs:/opt/spark/spark-events # for history-server
+      # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
+      - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
+      - ./pipeline/ingestion:/var/ingestion
+      - ./pipeline/cleaning:/var/cleaning
+      - ./pipeline/curation:/var/curation
+      - ./pipeline/jars:/var/submit/jars
+      - ./assets/map:/var/map
+      - ./docker/jmx-exporter:/opt/jmx-exporter
+    ports:
+      - "7072:7072"
+      - "7075:7070" # For application metrics
 
-  # spark-worker-3:
-  #   image: tadod/lakehouse:spark
-  #   entrypoint: [ './entrypoint.sh', 'worker' ]
-  #   container_name: spark-worker-3
-  #   hostname: spark-worker-3
-  #   depends_on:
-  #     - spark-master
-  #   environment:
-  #     - AWS_ACCESS_KEY_ID=minio
-  #     - AWS_SECRET_ACCESS_KEY=minio123
-  #     - AWS_REGION=us-east-1
-  #     - AWS_DEFAULT_REGION=us-east-1
-  #     - S3_ENDPOINT=http://minio1:9000
-  #     - S3_PATH_STYLE_ACCESS=true
-  #     - SPARK_NO_DAEMONIZE=true
-  #     - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7073:/opt/jmx-exporter/spark.yml
-  #   volumes:
-  #     - spark-logs:/opt/spark/spark-events # for history-server
-  #     # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
-  #     - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
-  #     - ./pipeline/ingestion:/var/ingestion
-  #     - ./pipeline/cleaning:/var/cleaning
-  #     - ./pipeline/curation:/var/curation
-  #     - ./pipeline/jars:/var/submit/jars
-  #     - ./assets/map:/var/map
-  #     - ./docker/jmx-exporter:/opt/jmx-exporter
-  #   ports:
-  #     - "7073:7073"
-  #     - "7076:7070" # For application metrics
+  spark-worker-3:
+    image: tadod/lakehouse:spark
+    entrypoint: [ './entrypoint.sh', 'worker' ]
+    container_name: spark-worker-3
+    hostname: spark-worker-3
+    depends_on:
+      - spark-master
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_ENDPOINT=http://minio1:9000
+      - S3_PATH_STYLE_ACCESS=true
+      - SPARK_NO_DAEMONIZE=true
+      - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7073:/opt/jmx-exporter/spark.yml
+    volumes:
+      - spark-logs:/opt/spark/spark-events # for history-server
+      # - ./docker/spark/spark-defaults-iceberg.conf:/opt/spark/conf/spark-defaults.conf - already added in Dockerfile
+      - ./docker/spark/metrics.properties:/opt/spark/conf/metrics.properties
+      - ./pipeline/ingestion:/var/ingestion
+      - ./pipeline/cleaning:/var/cleaning
+      - ./pipeline/curation:/var/curation
+      - ./pipeline/jars:/var/submit/jars
+      - ./assets/map:/var/map
+      - ./docker/jmx-exporter:/opt/jmx-exporter
+    ports:
+      - "7073:7073"
+      - "7076:7070" # For application metrics
 
   ########## VISUALIZATION ##########
   # Superset
@@ -557,37 +564,37 @@ services:
   #     - "8088:8088"
 
   ########## AIRLFOW ##########
-  # webserver:
-  #   <<: *airflow-common
-  #   container_name: webserver
-  #   command: webserver
-  #   ports:
-  #     - "8082:8080"
-  #   healthcheck:
-  #     test: [ "CMD", "curl", "--fail", "http://localhost:8082/health" ]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
-  #     start_period: 30s
-  #   restart: always
-  #   depends_on:
-  #     scheduler:
-  #       condition: service_healthy
+  webserver:
+    <<: *airflow-common
+    container_name: webserver
+    command: webserver
+    ports:
+      - "8082:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8082/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    depends_on:
+      scheduler:
+        condition: service_healthy
 
-  # scheduler:
-  #   <<: *airflow-common
-  #   container_name: scheduler
-  #   command: bash -c "airflow db migrate && airflow users create --username airflow --firstname do --lastname dat --role Admin --email tadod.de@gmail.com --password airflow && airflow scheduler"
-  #   healthcheck:
-  #     test: [ "CMD", "curl", "--fail", "http://localhost:8974/health" ]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
-  #     start_period: 30s
-  #   restart: always
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+  scheduler:
+    <<: *airflow-common
+    container_name: scheduler
+    command: bash -c "airflow db migrate && airflow users create --username airflow --firstname do --lastname dat --role Admin --email tadod.de@gmail.com --password airflow && airflow scheduler"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8974/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 networks:
   default:
@@ -597,3 +604,9 @@ volumes:
   grafana-data:
   spark-logs:
   prometheus-data:
+  zookeeper-data-1:
+  zookeeper-data-2:
+  zookeeper-data-3:
+  kafka-data-1:
+  kafka-data-2:
+  kafka-data-3:

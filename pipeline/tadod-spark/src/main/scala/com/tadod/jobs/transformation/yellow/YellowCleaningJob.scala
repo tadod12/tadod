@@ -1,21 +1,21 @@
-package com.tadod.jobs.transformation
+package com.tadod.jobs.transformation.yellow
 
 import com.tadod.config.Config
 import com.tadod.jobs.base.BaseJob
 import com.tadod.models.database.IcebergWriterConfig
 import org.apache.log4j.{Level, LogManager, Logger}
 import org.apache.spark.sql.SaveMode
-import org.apache.spark.sql.functions.{col, when}
+import org.apache.spark.sql.functions._
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class GreenCleaningJob(configPath: String, dateRun: String) extends BaseJob {
+class YellowCleaningJob(configPath: String, dateRun: String) extends BaseJob {
 
   @transient lazy val LOGGER: Logger = LogManager.getLogger(getClass.getName)
   LOGGER.setLevel(Level.DEBUG)
 
-  val jobName = "GreenCleaning"
+  val jobName = "YellowCleaning"
   loadConfig(configPath, jobName)
 
   def execute(): Unit = {
@@ -29,7 +29,7 @@ class GreenCleaningJob(configPath: String, dateRun: String) extends BaseJob {
       val rawDf = spark.read
         .format("iceberg")
         .load(s"${icebergConfig.catalog}.${icebergConfig.schema}.${icebergConfig.table}")
-        .filter(col("lpep_pickup_datetime").equalTo(previousDate))
+        .filter(col("tpep_pickup_datetime").equalTo(previousDate))
 
       LOGGER.debug(s"Number of raw records on $previousDate: ${rawDf.count()}\n")
 
@@ -37,16 +37,15 @@ class GreenCleaningJob(configPath: String, dateRun: String) extends BaseJob {
       val cleanDf = rawDf
         .na.drop(Seq(
           "vendor_id",
-          "lpep_pickup_datetime",
-          "lpep_dropoff_datetime",
+          "tpep_pickup_datetime",
+          "tpep_dropoff_datetime",
+          "passenger_count",
+          "trip_distance",
           "store_and_fwd_flag",
           "pu_location_id",
           "do_location_id",
-          "passenger_count",
-          "trip_distance",
           "fare_amount",
-          "total_amount",
-          "trip_type"))
+          "total_amount"))
         .na.fill(Map(
           "rate_code_id" -> 99,
           "payment_type" -> 5,
@@ -55,17 +54,15 @@ class GreenCleaningJob(configPath: String, dateRun: String) extends BaseJob {
           "tip_amount" -> 0,
           "tolls_amount" -> 0,
           "improvement_surcharge" -> 0,
-          "improvement_surcharge" -> 0,
           "congestion_surcharge" -> 0,
-          "ehail_fee" -> 0))
+          "airport_fee" -> 0))
         .where(
-          col("vendor_id").isin(1, 2, 6) &&
+          col("vendor_id").isin(1, 2, 6, 7) &&
             col("passenger_count") > 0 &&
             col("trip_distance") > 0 &&
             col("rate_code_id").isin(1, 2, 3, 4, 5, 6, 99) &&
             col("store_and_fwd_flag").isin("Y", "N") &&
-            col("payment_type").isin(0, 1, 2, 3, 4, 5, 6) &&
-            col("trip_type").isin(1, 2))
+            col("payment_type").isin(0, 1, 2, 3, 4, 5, 6))
         .withColumn("fare_amount", when(col("fare_amount") < 0, 0).otherwise(col("fare_amount")))
         .withColumn("extra", when(col("extra") < 0, 0).otherwise(col("extra")))
         .withColumn("mta_tax", when(col("mta_tax") < 0, 0).otherwise(col("mta_tax")))
@@ -74,7 +71,7 @@ class GreenCleaningJob(configPath: String, dateRun: String) extends BaseJob {
         .withColumn("improvement_surcharge", when(col("improvement_surcharge") < 0, 0).otherwise(col("improvement_surcharge")))
         .withColumn("total_amount", when(col("total_amount") < 0, 0).otherwise(col("total_amount")))
         .withColumn("congestion_surcharge", when(col("congestion_surcharge") < 0, 0).otherwise(col("congestion_surcharge")))
-        .withColumn("ehail_fee", when(col("ehail_fee") < 0, 0).otherwise(col("ehail_fee")))
+        .withColumn("airport_fee", when(col("airport_fee") < 0, 0).otherwise(col("airport_fee")))
 
       LOGGER.debug(s"After cleaning job, number of records on $previousDate: ${cleanDf.count()}\n")
       cleanDf.show(5, truncate = false)
@@ -82,8 +79,13 @@ class GreenCleaningJob(configPath: String, dateRun: String) extends BaseJob {
       cleanDf.write
         .format("iceberg")
         .mode(SaveMode.Append)
-        .save("iceberg.clean.green")
-    }
+        .save("iceberg.clean.yellow")
+
+    } catch {
+      case e: Exception =>
+        LOGGER.debug(s"Spark app shutdown: $e")
+        e.printStackTrace()
+    } finally spark.stop()
   }
 
   private def loadIcebergConfig(): IcebergWriterConfig = {
