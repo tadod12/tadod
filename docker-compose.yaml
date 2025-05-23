@@ -56,6 +56,7 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - ./docker/grafana/provisioning:/etc/grafana/provisioning
+      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini
 
   ########## INGESTION ##########
   # Zookeeper Cluster
@@ -270,7 +271,7 @@ services:
       interval: 10s
       retries: 5
       start_period: 5s
-  #    
+
   ########## LAKE ##########
   # S3 Storage
   minio1:
@@ -543,7 +544,6 @@ services:
     ports:
       - "7073:7073"
       - "7076:7070" # For application metrics
-
   ########## VISUALIZATION ##########
   # Superset
   # superset:
