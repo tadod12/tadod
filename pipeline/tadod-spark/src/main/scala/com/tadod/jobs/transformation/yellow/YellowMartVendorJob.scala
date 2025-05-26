@@ -7,7 +7,7 @@ import org.apache.spark.sql.{DataFrame, SaveMode}
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
+class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(configPath, dateRun) {
 
   import spark.implicits._
 
@@ -44,7 +44,7 @@ class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJ
 
     val tmpDf = sourceDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
-      .where($"record_date" === to_date(lit(previousDate)))
+      //      .where($"record_date" === to_date(lit(previousDate)))
       .groupBy("record_date", "vendor_id")
       .agg(
         count("*").as("total_valid_records"),
@@ -62,20 +62,21 @@ class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJ
           .when($"vendor_id" === 6, "Myle Technologies Inc")
           .when($"vendor_id" === 7, "Helix"))
       .select(
-        "record_date",            // DATE
-        "record_week",            // INT
-        "record_month",           // INT
-        "record_year",            // INT
-        "vendor_id",              // INT
-        "vendor_name",            // VARCHAR
-        "total_valid_records",    // BIGINT
-        "total_invalid_records",  // BIGINT
-        "total_delay_records",    // BIGINT
+        "record_date", // DATE
+        "record_week", // INT
+        "record_month", // INT
+        "record_year", // INT
+        "vendor_id", // INT
+        "vendor_name", // VARCHAR
+        "total_valid_records", // BIGINT
+        "total_invalid_records", // BIGINT
+        "total_delay_records", // BIGINT
         "total_ontime_records")
       .withColumn("record_type", lit("yellow"))
   }
 
   override protected def writeToIceberg(targetDf: DataFrame): Unit = {
+    //    targetDf.show(truncate = false)
     targetDf.write
       .format("iceberg")
       .mode(SaveMode.Append)

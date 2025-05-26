@@ -5,8 +5,12 @@ import com.tadod.jobs.base.BaseJob
 import com.tadod.models.database.IcebergWriterConfig
 import org.apache.log4j.{Level, LogManager, Logger}
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.functions.{col, to_date}
 
-abstract class BaseMartJob(configPath: String) extends BaseJob {
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+abstract class BaseMartJob(configPath: String, dateRun: String) extends BaseJob {
   protected val LOGGER: Logger = LogManager.getLogger(getClass.getName)
   Logger.getLogger("org").setLevel(Level.ERROR)
 
@@ -21,9 +25,14 @@ abstract class BaseMartJob(configPath: String) extends BaseJob {
     try {
       LOGGER.info(s"Starting $getJobName transformation job")
 
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+      val currentDate = LocalDate.parse(dateRun, formatter)
+      val previousDate = currentDate.minusDays(1).format(formatter)
+
       val sourceDf = spark.read
         .format("iceberg")
         .load(s"${icebergConfig.catalog}.${icebergConfig.schema}.${icebergConfig.table}")
+        .filter(to_date(col("tpep_pickup_datetime")).equalTo(previousDate))
 
       val targetDf = createMart(sourceDf)
 

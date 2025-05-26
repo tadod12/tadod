@@ -21,7 +21,7 @@ groups:
           description: "Broker {{ $labels.instance }} has {{ $value }} under-replicated partition(s). Possible replica failure or network issue."
 
       - alert: ExistReplicaOffline
-        expr: kafka_server_replicamanager_offlinereplicacount > 0
+        expr: kafka_server_replicamanager_offlinereplicacount > 2
         for: 10s
         labels:
           severity: warning
@@ -30,7 +30,7 @@ groups:
           description: "Broker {{ $labels.instance }} has {{ $value }} offline replica, please check broker's health"
 
       - alert: MinimumInSyncReplica
-        expr: kafka_server_replicamanager_atminisrpartitioncount > 0
+        expr: kafka_server_replicamanager_atminisrpartitioncount > 2
         for: 10s
         labels:
           severity: critical
@@ -54,7 +54,7 @@ groups:
             Check broker logs, monitor system resources (CPU, memory, disk, network), and investigate client-side errors to identify root causes.
 
       - alert: OfflinePartition
-        expr: kafka_controller_kafkacontroller_offlinepartitionscount > 0
+        expr: kafka_controller_kafkacontroller_offlinepartitionscount > 2
         for: 10s
         labels:
           severity: critical

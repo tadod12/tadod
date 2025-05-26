@@ -406,7 +406,7 @@
                             "refId": "C"
                         }
                     ],
-                    "title": "Total Distributed Bytes (cluster memory pool)",
+                    "title": "Total Distributed Bytes",
                     "type": "timeseries"
                 },
                 {
@@ -524,7 +524,7 @@
                             "refId": "C"
                         }
                     ],
-                    "title": "Free Distributed Bytes (cluster memory pool)",
+                    "title": "Free Distributed Bytes",
                     "type": "timeseries"
                 },
                 {
@@ -642,7 +642,7 @@
                             "refId": "C"
                         }
                     ],
-                    "title": "Reserved Revocable Distributed Bytes (cluster memory pool)",
+                    "title": "Reserved Revocable Distributed Bytes",
                     "type": "timeseries"
                 },
                 {
@@ -760,7 +760,7 @@
                             "refId": "C"
                         }
                     ],
-                    "title": "Reserved Distributed Bytes (cluster memory pool)",
+                    "title": "Reserved Distributed Bytes",
                     "type": "timeseries"
                 },
                 {

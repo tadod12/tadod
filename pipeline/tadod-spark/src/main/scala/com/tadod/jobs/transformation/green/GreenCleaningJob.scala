@@ -83,6 +83,12 @@ class GreenCleaningJob(configPath: String, dateRun: String) extends BaseJob {
         .format("iceberg")
         .mode(SaveMode.Append)
         .save("iceberg.clean.green")
+    } catch {
+      case e: Exception =>
+        LOGGER.error(s"Spark app failed: $e")
+        e.printStackTrace()
+    } finally {
+      spark.stop()
     }
   }
 

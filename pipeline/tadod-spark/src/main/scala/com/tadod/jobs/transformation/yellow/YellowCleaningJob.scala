@@ -29,7 +29,7 @@ class YellowCleaningJob(configPath: String, dateRun: String) extends BaseJob {
       val rawDf = spark.read
         .format("iceberg")
         .load(s"${icebergConfig.catalog}.${icebergConfig.schema}.${icebergConfig.table}")
-        .filter(col("tpep_pickup_datetime").equalTo(previousDate))
+        .filter(to_date(col("tpep_pickup_datetime")).equalTo(previousDate))
 
       LOGGER.debug(s"Number of raw records on $previousDate: ${rawDf.count()}\n")
 

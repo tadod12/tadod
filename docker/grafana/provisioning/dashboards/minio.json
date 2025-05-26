@@ -305,7 +305,7 @@
                         "uid": "${datasource}"
                     },
                     "exemplar": true,
-                    "expr": "topk(1, sum(minio_cluster_capacity_usable_total_bytes{job=~\"$scrape_jobs\"}) by (instance)) - topk(1, sum(minio_cluster_capacity_usable_free_bytes{job=~\"$scrape_jobs\"}) by (instance))",
+                    "expr": "topk(1, sum(minio_cluster_capacity_usable_total_bytes{job=\"minio-cluster\"}) by (instance)) / 8 - topk(1, sum(minio_cluster_capacity_usable_free_bytes{job=\"minio-cluster\"}) by (instance)) / 8",
                     "format": "time_series",
                     "instant": false,
                     "interval": "1m",
@@ -319,7 +319,7 @@
                         "uid": "${datasource}"
                     },
                     "exemplar": true,
-                    "expr": "topk(1, sum(minio_cluster_capacity_usable_free_bytes{job=~\"$scrape_jobs\"}) by (instance)) ",
+                    "expr": "topk(1, sum(minio_cluster_capacity_usable_free_bytes{job=\"minio-cluster\"}) by (instance)) / 8 - 200000000000",
                     "hide": false,
                     "interval": "1m",
                     "legendFormat": "Free",

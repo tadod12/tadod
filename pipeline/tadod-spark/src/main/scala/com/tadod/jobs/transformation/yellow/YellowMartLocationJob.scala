@@ -4,7 +4,7 @@ import com.tadod.jobs.transformation.BaseMartJob
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SaveMode}
 
-class YellowMartLocationJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
+class YellowMartLocationJob(configPath: String, dateRun: String) extends BaseMartJob(configPath, dateRun) {
 
   import spark.implicits._
 
@@ -24,7 +24,7 @@ class YellowMartLocationJob(configPath: String, dateRun: String) extends BaseMar
 
     val tempDf = sourceDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
-      .where($"record_date" === to_date(lit(dateRun)))
+      //      .where($"record_date" === to_date(lit(dateRun)))
       .groupBy("record_date", "pu_location_id", "do_location_id")
       .agg(count("*").as("total_records"))
       .join(lookupDf, lookupDf("LocationID") === $"pu_location_id", "inner")
@@ -58,11 +58,21 @@ class YellowMartLocationJob(configPath: String, dateRun: String) extends BaseMar
         "record_date",
         "record_week",
         "record_month",
-        "record_year"
+        "record_year",
+        "pu_location_id",
+        "pu_location_borough",
+        "pu_location_zone",
+        "pu_location_service_zone",
+        "do_location_id",
+        "do_location_borough",
+        "do_location_zone",
+        "do_location_service_zone",
+        "total_records"
       )
   }
 
   override protected def writeToIceberg(targetDf: DataFrame): Unit = {
+    //    targetDf.show(truncate = false)
     targetDf.write
       .format("iceberg")
       .mode(SaveMode.Append)

@@ -4,7 +4,7 @@ import com.tadod.jobs.transformation.BaseMartJob
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SaveMode}
 
-class YellowMartRateCodeJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
+class YellowMartRateCodeJob(configPath: String, dateRun: String) extends BaseMartJob(configPath, dateRun) {
 
   import spark.implicits._
 
@@ -13,7 +13,7 @@ class YellowMartRateCodeJob(configPath: String, dateRun: String) extends BaseMar
   override protected def createMart(sourceDf: DataFrame): DataFrame = {
     val targetDf = sourceDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
-      .where($"record_date" === dateRun)
+      //      .where($"record_date" === dateRun)
       .groupBy("record_date", "rate_code_id")
       .agg(count("*").as("total_records"))
       .withColumn("record_week", weekofyear($"record_date"))
@@ -30,20 +30,21 @@ class YellowMartRateCodeJob(configPath: String, dateRun: String) extends BaseMar
       )
 
     targetDf.select(
-      "record_date",    // DATE
-      "record_week",    // INT
-      "record_month",   // INT
-      "record_year",    // INT
-      "rate_code_id",   // INT
+      "record_date", // DATE
+      "record_week", // INT
+      "record_month", // INT
+      "record_year", // INT
+      "rate_code_id", // INT
       "rate_code_name", // VARCHAR
-      "total_records"   // BIGINT
+      "total_records" // BIGINT
     )
   }
 
   override protected def writeToIceberg(targetDf: DataFrame): Unit = {
+    //    targetDf.show(truncate = false)
     targetDf.write
       .format("iceberg")
       .mode(SaveMode.Append)
-      .save("iceberg.curated.mart_rate_code")
+      .save("iceberg.curated.mart_ratecode")
   }
 }

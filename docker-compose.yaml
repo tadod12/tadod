@@ -38,14 +38,14 @@ services:
       - prometheus-data:/prometheus
       - ./docker/prometheus:/etc/prometheus
 
-  # Alert Manager
-  alertmanager:
-    image: prom/alertmanager:v0.28.0
-    container_name: alertmanager
-    ports:
-      - "19093:9093"
-    volumes:
-      - ./docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+  # Alert Manager - DESPERATED
+  # alertmanager:
+  #   image: prom/alertmanager:v0.28.0
+  #   container_name: alertmanager
+  #   ports:
+  #     - "19093:9093"
+  #   volumes:
+  #     - ./docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
 
   # Grafana
   grafana:
@@ -56,7 +56,7 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - ./docker/grafana/provisioning:/etc/grafana/provisioning
-      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini # Setup SMTP
 
   ########## INGESTION ##########
   # Zookeeper Cluster
@@ -116,6 +116,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://localhost:9092
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_CFG_MIN_INSYNC_REPLICAS: 3
       KAFKA_NUM_PARTITIONS: 3
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
@@ -143,6 +144,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29093,EXTERNAL://localhost:9093
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_CFG_MIN_INSYNC_REPLICAS: 3
       KAFKA_NUM_PARTITIONS: 3
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
@@ -170,6 +172,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:29094,EXTERNAL://localhost:9094
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_CFG_MIN_INSYNC_REPLICAS: 3
       KAFKA_NUM_PARTITIONS: 3
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.20.0.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
@@ -544,6 +547,7 @@ services:
     ports:
       - "7073:7073"
       - "7076:7070" # For application metrics
+
   ########## VISUALIZATION ##########
   # Superset
   # superset:

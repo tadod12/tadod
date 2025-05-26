@@ -7,7 +7,7 @@ import org.apache.spark.sql.{DataFrame, SaveMode}
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class GreenMartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(configPath) {
+class GreenMartVendorJob(configPath: String, dateRun: String) extends BaseMartJob(configPath, dateRun) {
 
   import spark.implicits._
 
