@@ -434,6 +434,7 @@ services:
       - ./pipeline/jars:/var/submit/jars
       - ./assets/map:/var/map
       - ./docker/jmx-exporter:/opt/jmx-exporter
+      - ./docker/spark/entrypoint.sh:/opt/spark/entrypoint.sh # change worker resources
     ports:
       - "7077:7077"
       - "8084:8084"
@@ -484,6 +485,7 @@ services:
       - ./pipeline/jars:/var/submit/jars
       - ./assets/map:/var/map
       - ./docker/jmx-exporter:/opt/jmx-exporter
+      - ./docker/spark/entrypoint.sh:/opt/spark/entrypoint.sh # change worker resources
     ports:
       - "7071:7071"
       - "7074:7070" # For application metrics
@@ -514,6 +516,7 @@ services:
       - ./pipeline/jars:/var/submit/jars
       - ./assets/map:/var/map
       - ./docker/jmx-exporter:/opt/jmx-exporter
+      - ./docker/spark/entrypoint.sh:/opt/spark/entrypoint.sh # change worker resources
     ports:
       - "7072:7072"
       - "7075:7070" # For application metrics
@@ -544,6 +547,7 @@ services:
       - ./pipeline/jars:/var/submit/jars
       - ./assets/map:/var/map
       - ./docker/jmx-exporter:/opt/jmx-exporter
+      - ./docker/spark/entrypoint.sh:/opt/spark/entrypoint.sh # change worker resources
     ports:
       - "7073:7073"
       - "7076:7070" # For application metrics

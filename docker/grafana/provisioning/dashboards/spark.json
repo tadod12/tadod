@@ -21,7 +21,7 @@
             }
         ]
     },
-    "editable": false,
+    "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
     "id": 21,
@@ -322,7 +322,7 @@
                             }
                         ]
                     },
-                    "max": 1500,
+                    "max": 2000,
                     "unit": "MiB",
                     "unitScale": true
                 },
