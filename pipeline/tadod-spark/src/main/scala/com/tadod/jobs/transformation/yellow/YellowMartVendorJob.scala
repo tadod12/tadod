@@ -20,12 +20,15 @@ class YellowMartVendorJob(configPath: String, dateRun: String) extends BaseMartJ
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val currentDate = LocalDate.parse(dateRun, formatter)
-    val previousDate = currentDate.minusDays(1).format(formatter)
+    // val previousDate = currentDate.minusDays(1).format(formatter)
+    val nextMonth = currentDate.plusMonths(1).withDayOfMonth(1).format(formatter)
+
 
     val invalidDf = yellowRawDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
       .where(
-        $"record_date" === to_date(lit(previousDate)) &&
+        $"record_date" >= to_date(lit(currentDate)) &&
+          $"record_date" < to_date(lit(nextMonth)) &&
           col("vendor_id").isNotNull && (
           col("passenger_count").isNull ||
             col("passenger_count") <= 0 ||

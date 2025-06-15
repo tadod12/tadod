@@ -39,13 +39,13 @@ services:
       - ./docker/prometheus:/etc/prometheus
 
   # Alert Manager - DESPERATED
-  # alertmanager:
-  #   image: prom/alertmanager:v0.28.0
-  #   container_name: alertmanager
-  #   ports:
-  #     - "19093:9093"
-  #   volumes:
-  #     - ./docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+  alertmanager:
+    image: prom/alertmanager:v0.28.0
+    container_name: alertmanager
+    ports:
+      - "19093:9093"
+    volumes:
+      - ./docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
 
   # Grafana
   grafana:
@@ -99,7 +99,7 @@ services:
       - ./docker/jmx-exporter:/usr/share/jmx_exporter/
       - zookeeper-data-3:/var/lib/zookeeper/data
 
-  # Kafka Cluster - 3 Broker
+  # # Kafka Cluster - 3 Broker
   kafka-1:
     image: confluentinc/cp-kafka:7.5.1
     container_name: kafka-1
@@ -268,14 +268,14 @@ services:
       # For persistent storage
       - ./docker/volume/postgres:/var/lib/postgresql/data
       - ./docker/postgres/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
-      # command: [ "postgres", "-c", "wal_level=logical" ] - for CDC
+    # command: [ "postgres", "-c", "wal_level=logical" ] - for CDC
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
       retries: 5
       start_period: 5s
 
-  ########## LAKE ##########
+  # ########## LAKE ##########
   # S3 Storage
   minio1:
     image: 'minio/minio'
@@ -390,13 +390,34 @@ services:
     depends_on:
       - hive-metastore
 
-  trino-worker:
+  trino-worker-1:
     image: "trinodb/trino:425"
-    container_name: trino-worker
-    hostname: trino-worker
+    container_name: trino-worker-1
+    hostname: trino-worker-1
     restart: always
+    ports:
+      - "8891:8889"
     volumes:
-      - ./docker/trino/etc-worker:/etc/trino
+      - ./docker/trino/etc-worker/jvm.config:/etc/trino/jvm.config
+      - ./docker/trino/etc-worker/config.properties:/etc/trino/config.properties
+      - ./docker/trino/etc-worker/log.properties:/etc/trino/log.properties
+      - ./docker/trino/etc-worker/node-1.properties:/etc/trino/node.properties
+      - ./docker/trino/catalog:/etc/trino/catalog
+    depends_on:
+      - trino
+
+  trino-worker-2:
+    image: "trinodb/trino:425"
+    container_name: trino-worker-2
+    hostname: trino-worker-2
+    restart: always
+    ports:
+      - "8892:8889"
+    volumes:
+      - ./docker/trino/etc-worker/jvm.config:/etc/trino/jvm.config
+      - ./docker/trino/etc-worker/config.properties:/etc/trino/config.properties
+      - ./docker/trino/etc-worker/log.properties:/etc/trino/log.properties
+      - ./docker/trino/etc-worker/node-2.properties:/etc/trino/node.properties
       - ./docker/trino/catalog:/etc/trino/catalog
     depends_on:
       - trino
@@ -435,6 +456,7 @@ services:
       - ./assets/map:/var/map
       - ./docker/jmx-exporter:/opt/jmx-exporter
       - ./docker/spark/entrypoint.sh:/opt/spark/entrypoint.sh # change worker resources
+      - ./assets/data/yellow:/var/data/yellow
     ports:
       - "7077:7077"
       - "8084:8084"
@@ -502,7 +524,7 @@ services:
       - AWS_SECRET_ACCESS_KEY=minio123
       - AWS_REGION=us-east-1
       - AWS_DEFAULT_REGION=us-east-1
-      - S3_ENDPOINT=http://minio:9000
+      - S3_ENDPOINT=http://minio1:9000
       - S3_PATH_STYLE_ACCESS=true
       - SPARK_NO_DAEMONIZE=true
       - SPARK_WORKER_OPTS=-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.20.0.jar=7072:/opt/jmx-exporter/spark.yml
@@ -554,22 +576,24 @@ services:
 
   ########## VISUALIZATION ##########
   # Superset
-  # superset:
-  #   build:
-  #     context: ./docker/superset
-  #     dockerfile: Dockerfile
-  #   container_name: superset
-  #   hostname: superset
-  #   depends_on:
-  #     # - redis
-  #     - postgres
-  #   environment:
-  #     - SUPERSET_DB_URI=postgresql+psycopg2://superset:superset@postgres:5432/superset
-  #     # - REDIS_URL=redis://redis:6379/0
-  #     - ADMIN_USERNAME=admin
-  #     - ADMIN_PASSWORD=admin
-  #   ports:
-  #     - "8088:8088"
+  superset:
+    build:
+      context: ./docker/superset
+      dockerfile: Dockerfile
+    container_name: superset
+    hostname: superset
+    depends_on:
+      # - redis
+      - postgres
+    environment:
+      - SUPERSET_DB_URI=postgresql+psycopg2://superset:superset@postgres:5432/superset
+      # - REDIS_URL=redis://redis:6379/0
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+    volumes:
+      - ./docker/superset/superset_config.py:/app/superset_config.py
+    ports:
+      - "8088:8088"
 
   ########## AIRLFOW ##########
   webserver:

@@ -73,7 +73,7 @@ scrape_configs:
     scrape_interval: 10s
     metrics_path: /metrics
     static_configs:
-      - targets: ["spark-worker-1:7074", "spark-worker-2:7075", "spark-worker-3:7076"]
+      - targets: ["spark-worker-1:7070", "spark-worker-2:7070", "spark-worker-3:7070"]
         labels:
           group: "spark"
 
@@ -104,7 +104,7 @@ scrape_configs:
     metrics_path: /minio/v2/metrics/cluster
     scheme: http
     static_configs:
-      - targets: ["minio1:9000"]
+      - targets: ["minio1:9000", "minio2:9000", "minio3:9000"]
         labels:
           group: "minio"
           instance: "cluster"
@@ -113,7 +113,7 @@ scrape_configs:
     metrics_path: /minio/v2/metrics/bucket
     scheme: http
     static_configs:
-      - targets: ["minio1:9000"]
+      - targets: ["minio1:9000", "minio2:9000", "minio3:9000"]
         labels:
           group: "minio"
           instance: "bucket"
@@ -130,7 +130,7 @@ scrape_configs:
     metrics_path: /minio/v2/metrics/resource
     scheme: http
     static_configs:
-      - targets: ["minio1:9000"]
+      - targets: ["minio1:9000", "minio2:9000", "minio3:9000"]
         labels:
           group: "minio"
           instance: "resource"
@@ -139,6 +139,14 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets: ["trino:8889"]
+    basic_auth:
+      username: admin
+      password:
+
+  - job_name: trino-worker
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["trino-worker-1:8889", "trino-worker-2:8889"]
     basic_auth:
       username: admin
       password:

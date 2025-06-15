@@ -2,42 +2,6 @@ groups:
   - name: SparkAlerts
     interval: 15s
     rules:
-      - alert: BlockManagerDiskSpaceLimitation
-        expr: sum(spark_driver_BlockManager_disk_diskSpaceUsed_MB_type_gauges{group="spark", instance="spark-master:8085", job="spark-driver"}) without (app_id) > 1000
-        for: 30s
-        labels: 
-          severity: critical
-        annotations:
-          summary: "BlockManager uses too much Disk Space"
-          description: "The amount of shuffle or RDD data stored on disk is too large, the `spark.shuffle.spill.disk` configuration is not optimal, or the disk is not cleaned up"
-
-      - alert: BlockManagerMemUsageLimitation
-        expr: sum(spark_driver_BlockManager_memory_memUsed_MB_type_gauges{group="spark", instance="spark-master:8085", job="spark-driver"}) without (app_id) > 1500 or sum(spark_driver_BlockManager_memory_remainingMem_MB_type_gauges{group="spark", instance="spark-master:8085", job="spark-driver"}) without (app_id) < 200
-        for: 30s
-        labels:
-          severity: critical
-        annotations:
-          summary: "BlockManager uses too much Memory"
-          description: "Too many RDD/DataFrame cached, `spark.memory.fraction` or `spark.memory.storageFraction` configuration is not reasonable"
-
-      - alert: TooManyJobRunAtTheSameTime
-        expr: spark_driver_DAGScheduler_job_activeJobs_type_gauges{group="spark", instance="spark-master:8085", job="spark-driver"} > 1
-        for: 10s
-        labels:
-          severity: warning
-        annotations:
-          summary: "{{ $labels.app_id }} submits too many jobs"
-          description: "The application {{ $labels.app_id }} submits too many jobs at once, has poor scheduling"
-
-      - alert: StageFailure
-        expr: spark_driver_DAGScheduler_stage_failedStages_type_gauges > 0
-        for: 10s
-        labels:
-          severity: warning
-        annotations:
-          summary: "{{ $labels.app_id }} has failed stage"
-          description: "Input data error, executor configuration with insufficient resources, network error, or application code bug."
-
       - alert: JVMHeapResourceExhaustion
         expr: sum(spark_driver_jvm_heap_usage_type_gauges{group="spark", instance="spark-master:8085", job="spark-driver"}) without (app_id) > 0.85
         for: 20s
@@ -56,33 +20,6 @@ groups:
           summary: "No Active Spark Worker"
           description: "Spark Cluster has 0 worker for 30 seconds"
 
-      - alert: TooManyApplications
-        expr: spark_master_apps_type_gauges > 1
-        for: 5s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Too many applications running at the same time"
-          description: "Too many applications are submitted to the cluster, inefficient scheduling, can cause waiting and resource shortage"
-
-      - alert: ApplicationWaitingTimeOut
-        expr: spark_master_waitingApps_type_gauges > 0
-        for: 60s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Application waiting timeout"
-          description: "Application timeout exceeded, consider running later or stopping running applications"
-
-      - alert: SparkResourceExhaustion
-        expr: sum(spark_worker_coresFree_type_gauges{group="spark", job="spark-worker"}) without (instance) == 0
-        for: 30s
-        labels:
-          severity: critical
-        annotations:
-          summary: "Spark is running out of processing resources"
-          description: "Spark Cluster has no available processors. Spark Jobs may be aborted"
-
       - alert: LiveListenerBusEventGotDropped
         expr: metrics_app_driver_livelistenerbus_queue_appstatus_numdroppedevents_type_counters_total > 0 or metrics_app_driver_livelistenerbus_queue_eventlog_numdroppedevents_type_counters_total > 0
         for: 1s
@@ -91,12 +28,3 @@ groups:
         annotations:
           summary: "Event got dropped"
           description: "Driver overloaded due to handling too many events, some events were missing"
-
-      - alert: KafkaMessageConsumer
-        expr: max(kafka_topic_offset{group="offset", offset_type="end"}) by (topic) - max(kafka_topic_offset{group="offset", offset_type="current"}) by (topic) > 1000
-        for: 120s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Kafka messages in topic {{ $labels.topic }} leave spark streaming far behind"
-          description: "Kafka message production speed is much faster than spark consum speed, recheck application or increase resources"

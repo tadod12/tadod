@@ -3,7 +3,7 @@ package com.tadod
 import com.tadod.jobs.compaction.IcebergCompactionJob
 import com.tadod.jobs.metrics.{KafkaOffsetMonitor, OffsetMonitor, SparkOffsetMonitor}
 import com.tadod.jobs.streaming.{FHVStreamingJob, GreenStreamingJob, YellowStreamingJob}
-import com.tadod.jobs.transformation.yellow.{YellowCleaningJob, YellowGeneralMartJob, YellowMartLocationJob, YellowMartPaymentJob, YellowMartRateCodeJob, YellowMartVendorJob}
+import com.tadod.jobs.transformation.yellow.{YellowCleaningJob, YellowDumpJob, YellowGeneralMartJob, YellowLocationExpand, YellowMartLocationJob, YellowMartPaymentJob, YellowMartRateCodeJob, YellowMartVendorJob}
 import com.tadod.jobs.transformation.green.{GreenCleaningJob, GreenMartVendorJob}
 
 object App {
@@ -20,6 +20,11 @@ object App {
       println(s"dateRun = $dateRun")
 
       command match {
+        case "YellowDump" => new YellowDumpJob(
+          configPath = configPath,
+          dateRun = dateRun
+        ).execute()
+
         case "YellowStream" => new YellowStreamingJob(
           configPath = configPath
         ).execute()
@@ -91,6 +96,11 @@ object App {
           checkpointBasepath = args(2),
           bootstrapServers = args(3)
         ).run()
+
+        case "LocationExpand" => new YellowLocationExpand(
+          configPath = configPath,
+          dateRun = dateRun
+        ).execute()
 
         case _ => println(s"Unknown command: $command")
       }

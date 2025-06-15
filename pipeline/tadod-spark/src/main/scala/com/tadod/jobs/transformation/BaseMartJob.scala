@@ -5,7 +5,7 @@ import com.tadod.jobs.base.BaseJob
 import com.tadod.models.database.IcebergWriterConfig
 import org.apache.log4j.{Level, LogManager, Logger}
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{col, to_date}
+import org.apache.spark.sql.functions.{col, lit, to_date}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -27,12 +27,17 @@ abstract class BaseMartJob(configPath: String, dateRun: String) extends BaseJob 
 
       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val currentDate = LocalDate.parse(dateRun, formatter)
-      val previousDate = currentDate.minusDays(1).format(formatter)
+      // val previousDate = currentDate.minusDays(1).format(formatter)
+      val nextMonth = currentDate.plusMonths(1).withDayOfMonth(1).format(formatter)
 
       val sourceDf = spark.read
         .format("iceberg")
         .load(s"${icebergConfig.catalog}.${icebergConfig.schema}.${icebergConfig.table}")
-        .filter(to_date(col("tpep_pickup_datetime")).equalTo(previousDate))
+        .filter(
+          to_date(col("tpep_pickup_datetime")).geq(lit(currentDate))
+            && to_date(col("tpep_pickup_datetime")).lt(lit(nextMonth))
+        )
+        // .filter(to_date(col("tpep_pickup_datetime")).equalTo(previousDate))
 
       val targetDf = createMart(sourceDf)
 

@@ -8,7 +8,7 @@ CURRENT_DATE=$(date +"%Y-%m-%d")
 
 spark_submit() {
     $SPARK_HOME/bin/spark-submit \
-        --master local \
+        --master spark://spark-master:7077 \
         --deploy-mode client \
         --driver-memory 1g \
         --executor-memory 1g \
@@ -38,5 +38,18 @@ spark_submit() {
 
 spark_submit "IcebergCompaction" "/var/ingestion/properties/yellow.properties" $CURRENT_DATE $CURRENT_DATE
 
+spark_submit "IcebergCompaction" "/var/ingestion/properties/yellow.properties" $CURRENT_DATE $CURRENT_DATE
+
+spark_submit "IcebergCompaction" "/var/ingestion/properties/yellow.properties" $CURRENT_DATE $CURRENT_DATE
+
+spark_submit "IcebergCompaction" "/var/ingestion/properties/yellow.properties" $CURRENT_DATE $CURRENT_DATE
+
+spark_submit "IcebergCompaction" "/var/ingestion/properties/yellow.properties" $CURRENT_DATE $CURRENT_DATE
+
 # spark_submit "IcebergCompaction" "/var/ingestion/green.properties" $CURRENT_DATE $CURRENT_DATE
 # spark_submit "IcebergCompaction" "/var/ingestion/fhv.properties" $CURRENT_DATE $CURRENT_DATE
+
+        # --conf spark.dynamicAllocation.enabled=false \
+        # --conf spark.dynamicAllocation.minExecutors=1 \
+        # --conf spark.dynamicAllocation.maxExecutors=1 \
+        # --conf spark.executor.instances=1 \

@@ -30,34 +30,6 @@ groups:
           summary: "MinIO drives are offline"
           description: "{{ $value }} drive(s) are offline. Check drive connections and health."
 
-      # Resource Usage Alerts
-      - alert: MinIOLowStorage
-        expr: minio_cluster_capacity_raw_free_bytes{job="minio-cluster"} / minio_cluster_capacity_raw_total_bytes{job="minio-cluster"} < 0.2
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Low storage capacity"
-          description: "MinIO cluster has less than 20% free storage. Consider expanding storage capacity."
-
-      - alert: MinIOHighMemoryUsage
-        expr: minio_node_mem_used_perc{job="minio-resource"} > 80
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "High memory usage"
-          description: "MinIO node {{ $labels.server }} memory usage is above 80%. Consider adding more RAM or optimizing memory usage."
-
-      - alert: MinIOHighCPULoad
-        expr: minio_node_cpu_avg_load15{job="minio-resource"} > 20
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "High CPU load"
-          description: "MinIO node {{ $labels.server }} CPU load is above 80%. Consider adding more CPU resources or optimizing load."
-
       # Drive Health Alerts
       - alert: MinIODriveErrors
         expr: minio_node_drive_errors_ioerror{job="minio-node"} > 0 or minio_node_drive_errors_timeout{job="minio-node"} > 0
@@ -67,15 +39,6 @@ groups:
         annotations:
           summary: "Drive errors detected"
           description: "MinIO node {{ $labels.server }} has drive errors. Check drive health and connections."
-
-      - alert: MinIOHighDriveLatency
-        expr: minio_node_drive_latency_us{job="minio-node"} > 500000
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "High drive latency"
-          description: "MinIO node {{ $labels.instance }} has high drive latency at {{ $labels.api }}. Check drive performance."
 
       # Network Alerts
       - alert: MinIONetworkErrors
@@ -105,12 +68,3 @@ groups:
         annotations:
           summary: "Replication errors detected"
           description: "MinIO has replication errors. Check replication configuration and network."
-
-      - alert: MinIOHighReplicationBacklog
-        expr: minio_node_replication_recent_backlog_count{job="minio-node"} > 1000
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "High replication backlog"
-          description: "MinIO has high replication backlog. Check replication performance and configuration."

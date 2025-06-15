@@ -24,14 +24,18 @@ class YellowCleaningJob(configPath: String, dateRun: String) extends BaseJob {
 
       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val currentDate = LocalDate.parse(dateRun, formatter)
-      val previousDate = currentDate.minusDays(1).format(formatter)
+      // val previousDate = currentDate.minusDays(1).format(formatter)
+      val nextMonth = currentDate.plusMonths(1).withDayOfMonth(1).format(formatter)
 
       val rawDf = spark.read
         .format("iceberg")
         .load(s"${icebergConfig.catalog}.${icebergConfig.schema}.${icebergConfig.table}")
-        .filter(to_date(col("tpep_pickup_datetime")).equalTo(previousDate))
+        .filter(
+          to_date(col("tpep_pickup_datetime")).geq(lit(currentDate))
+            && to_date(col("tpep_pickup_datetime")).lt(lit(nextMonth))
+        )
 
-      LOGGER.debug(s"Number of raw records on $previousDate: ${rawDf.count()}\n")
+      LOGGER.debug(s"Number of raw records: ${rawDf.count()}\n")
 
       // Cleaning
       val cleanDf = rawDf
@@ -73,7 +77,7 @@ class YellowCleaningJob(configPath: String, dateRun: String) extends BaseJob {
         .withColumn("congestion_surcharge", when(col("congestion_surcharge") < 0, 0).otherwise(col("congestion_surcharge")))
         .withColumn("airport_fee", when(col("airport_fee") < 0, 0).otherwise(col("airport_fee")))
 
-      LOGGER.debug(s"After cleaning job, number of records on $previousDate: ${cleanDf.count()}\n")
+      LOGGER.debug(s"After cleaning job, number of records: ${cleanDf.count()}\n")
       cleanDf.show(5, truncate = false)
 
       cleanDf.write

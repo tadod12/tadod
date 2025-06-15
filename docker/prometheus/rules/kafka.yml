@@ -11,36 +11,6 @@ groups:
           summary: "Broker {{ $labels.instance }} is not in normal state"
           description: "Broker {{ $labels.instance }}'s state is {{ $value }}, please check and restart if needed"
 
-      - alert: KafkaUnderReplicatedPartitions
-        expr: kafka_server_replicamanager_underreplicatedpartitions{job="$kafka_job_name"} > 0
-        for: 30s
-        labels:
-          severity: critical
-        annotations:
-          summary: "Kafka has under replicated partitions"
-          description: "Broker {{ $labels.instance }} has {{ $value }} under-replicated partition(s). Possible replica failure or network issue."
-
-      - alert: ExistReplicaOffline
-        expr: kafka_server_replicamanager_offlinereplicacount > 2
-        for: 10s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Replica Offline"
-          description: "Broker {{ $labels.instance }} has {{ $value }} offline replica, please check broker's health"
-
-      - alert: MinimumInSyncReplica
-        expr: kafka_server_replicamanager_atminisrpartitioncount > 2
-        for: 10s
-        labels:
-          severity: critical
-        annotations:
-          summary: "Kafka broker has partitions at minimum ISR"
-          description: |
-            One or more partitions on broker {{ $labels.instance }} are currently at the minimum number of in-sync replicas.
-            This means that these partitions have no redundancy left — if another replica goes offline, the partitions will become under-replicated and unwriteable.
-            Investigate broker health, network latency, and disk I/O performance to prevent potential data unavailability or loss.
-
       - alert: BrokerOverload
         expr: kafka_server_brokertopicmetrics_failedproducerequests_total > 0 or kafka_server_brokertopicmetrics_failedfetchrequests_total > 0
         for: 30s
@@ -53,33 +23,11 @@ groups:
             This could indicate performance degradation, I/O issues, full disk, under-replicated partitions, or pressure from clients.
             Check broker logs, monitor system resources (CPU, memory, disk, network), and investigate client-side errors to identify root causes.
 
-      - alert: OfflinePartition
-        expr: kafka_controller_kafkacontroller_offlinepartitionscount > 2
-        for: 10s
-        labels:
-          severity: critical
-        annotations:
-          summary: "Kafka has offline partitions"
-          description: |
-            One or more Kafka partitions are currently offline on controller {{ $labels.instance }}.
-            Offline partitions have no leader, meaning producers and consumers cannot access them, leading to potential data unavailability.
-            This is a critical issue — check broker status, partition replication, and Zookeeper/KRaft controller logs immediately.
-
       - alert: KafkaBrokerDown
-        expr: count(kafka_server_replicamanager_leadercount{job="$kafka_job_name"}) < 3
-        for: 30s
+        expr: count(kafka_server_replicamanager_leadercount{job="kafka"}) < 3
+        for: 20s
         labels:
           severity: critical
         annotations:
           summary: "Kafka broker is down"
           description: "One or more Kafka brokers are down"
-
-      # Multiple Active Controllers (should only be 1)
-      - alert: KafkaMultipleControllers
-        expr: sum(kafka_controller_kafkacontroller_activecontrollercount{job="$kafka_job_name"}) > 1
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Unexpected number of Kafka controllers"
-          description: "There should be only one active controller, found {{ $value }}"

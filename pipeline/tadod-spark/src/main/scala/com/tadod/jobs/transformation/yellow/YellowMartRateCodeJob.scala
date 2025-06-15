@@ -13,7 +13,7 @@ class YellowMartRateCodeJob(configPath: String, dateRun: String) extends BaseMar
   override protected def createMart(sourceDf: DataFrame): DataFrame = {
     val targetDf = sourceDf
       .withColumn("record_date", to_date($"tpep_pickup_datetime"))
-      //      .where($"record_date" === dateRun)
+      // .where($"record_date" === dateRun)
       .groupBy("record_date", "rate_code_id")
       .agg(count("*").as("total_records"))
       .withColumn("record_week", weekofyear($"record_date"))

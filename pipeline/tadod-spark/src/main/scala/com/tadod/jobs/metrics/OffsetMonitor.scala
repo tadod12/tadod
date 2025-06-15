@@ -42,8 +42,8 @@ class OffsetMonitor(port: Int, checkpointBasepath: String, bootstrapServers: Str
 
     while(true) {
       try {
-        kafkaOffset(consumer, offsetGauge)
         sparkOffset(checkpointBasepath, offsetGauge)
+        kafkaOffset(consumer, offsetGauge)
       } catch {
         case e: Exception =>
           e.printStackTrace()
@@ -54,7 +54,7 @@ class OffsetMonitor(port: Int, checkpointBasepath: String, bootstrapServers: Str
 
   private def kafkaOffset(consumer: KafkaConsumer[_, _], offsetGauge: Gauge): Unit = {
     val topics = consumer.listTopics().keySet().asScala
-    topics.filter(_ != "__consumer_offsets").foreach{ topic =>
+    topics.filter(_ == "yellow").foreach{ topic =>
       val partitions = listPartitionInfo(consumer, topic) match {
         case None =>
           LOGGER.info(s"Topic $topic does not exist")

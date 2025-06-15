@@ -569,7 +569,7 @@
                         "uid": "${datasource}"
                     },
                     "exemplar": true,
-                    "expr": "sum (rate(kafka_server_brokertopicmetrics_bytesout_total{job=\"$kafka_job_name\",instance=~\"$broker\",topic!=\"\"}[2m]))by(instance)",
+                    "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesout_total{job=\"$kafka_job_name\",instance=~\"$broker\",topic!=\"\"}[2m]))by(instance)",
                     "format": "time_series",
                     "instant": false,
                     "interval": "",
@@ -594,7 +594,7 @@
             ],
             "thresholds": [],
             "timeRegions": [],
-            "title": "Bytes In / Out Per Broker",
+            "title": "Bytes In / Out Speed Per Broker",
             "tooltip": {
                 "shared": true,
                 "sort": 0,
@@ -1945,7 +1945,7 @@
                 {
                     "$$hashKey": "object:1050",
                     "format": "ms",
-                    "label": "Time/ms",
+                    "label": "Sessions/ms",
                     "logBase": 1,
                     "show": true
                 },
