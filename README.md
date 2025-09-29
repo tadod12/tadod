@@ -30,7 +30,7 @@ This project presents a comprehensive Data Lake Monitoring Module designed to pr
 ## Quickstart
 
 Follow this [INSTRUCTIONS](assets/docs/instructions.md)
-
+Create an issue for any problem, may be I can help ^^
 
 ## License
 
