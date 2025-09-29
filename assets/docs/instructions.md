@@ -43,6 +43,7 @@ docker-compose -f docker-compose.yml up -d
 - Airflow: Editing dags at `/dags`
 - Prometheus AlertManager: `/docker/prometheus/rules`
 - Grafana dashboard: `docker/grafana/provisioning/dashboards`
+- Remember to change `[stmp]` in `docker/grafana/grafana.ini` to config alert for your personal email
 
 4. To stop the pipeline, run:
 
