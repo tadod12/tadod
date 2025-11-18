@@ -32,6 +32,12 @@ This project presents a comprehensive Data Lake Monitoring Module designed to pr
 Follow this [INSTRUCTIONS](assets/docs/instructions.md)
 Create an issue for any problem, may be I can help ^^
 
+## References
+- [Setting Up Prometheus & Grafana for Kafka on Docker- Oredata Engineering](https://medium.com/@oredata-engineering/setting-up-prometheus-grafana-for-kafka-on-docker-8a692a45966c)
+- [Monitoring Apache Spark Metrics with Prometheus - Bhavya Joshi](https://medium.com/@bhavya.joshi1901/monitoring-apache-spark-metrics-with-prometheus-a2846fe94028)
+- [Setting up a Spark standalone cluster on Docker in layman terms - Marin Aglić](https://medium.com/@MarinAgli1/setting-up-a-spark-standalone-cluster-on-docker-in-layman-terms-8cbdc9fdd14b)
+- [Zookeeper Setup with Kafka Cluster - Sarah M.](https://medium.com/@mengineer/zookeeper-setup-with-kafka-cluster-part-1-469dc4671198)
+
 ## License
 
 This project is licensed under the [Apache License](./LICENSE)
